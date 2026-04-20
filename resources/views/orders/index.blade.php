@@ -3,9 +3,11 @@
 @section('title', 'Pesanan Saya | LUMEN')
 
 @section('content')
-
-<div class="relative w-full min-h-[90vh] bg-[#252322] overflow-hidden pt-16 pb-24">
-
+<!-- Wrapper Utama Latar Belakang Gelap -->
+<!-- MENGGUNAKAN pt-navbar AGAR TIDAK NABRAK NAVBAR -->
+<div class="relative w-full min-h-[90vh] bg-[#252322] overflow-hidden pt-navbar pb-24">
+    
+    <!-- Efek Cahaya Ambient (Glassmorphism Background) -->
     <div class="absolute top-1/4 right-[10%] w-[30%] h-[40%] bg-brand-olive rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-pulse pointer-events-none"></div>
     <div class="absolute bottom-[-10%] left-[-5%] w-[40%] h-[30%] bg-brand-sage rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none"></div>
 
@@ -17,6 +19,7 @@
         </div>
 
         @if($orders->count() === 0)
+            <!-- Tampilan Kosong (Glass Card) -->
             <div class="text-center py-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] max-w-2xl mx-auto">
                 <svg class="w-16 h-16 mx-auto mb-6 text-brand-gray opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                 <p class="text-brand-cream font-medium tracking-wide mb-2 uppercase text-sm">Belum Ada Pesanan</p>
@@ -26,6 +29,7 @@
                 </a>
             </div>
         @else
+            <!-- Tabel Pesanan (Glass Container) -->
             <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-brand-warm">
@@ -70,7 +74,7 @@
                 </div>
                 
                 @if($orders->hasPages())
-
+                <!-- Paginasi Glassmorphism -->
                 <div class="px-8 py-5 border-t border-white/10 bg-black/20 glass-pagination">
                     {{ $orders->links() }}
                 </div>
@@ -81,6 +85,7 @@
 </div>
 
 <style>
+    /* Penyesuaian Styling Paginasi Bawaan Laravel untuk Tema Gelap */
     .glass-pagination nav p { color: #AAAB9A; display: none;}
     .glass-pagination nav > div:first-child { display: none; }
     .glass-pagination nav span, .glass-pagination nav a {

@@ -3,14 +3,17 @@
 @section('title', 'Order Details | LUMEN')
 
 @section('content')
-
-<div class="relative w-full min-h-screen bg-[#252322] overflow-hidden pt-12 pb-24">
+<!-- Main Wrapper with Dark Background -->
+<!-- MENGGUNAKAN pt-navbar AGAR TIDAK NABRAK NAVBAR -->
+<div class="relative w-full min-h-screen bg-[#252322] overflow-hidden pt-navbar pb-24">
     
+    <!-- Ambient Light Effects (Glassmorphism Background) -->
     <div class="absolute top-0 left-[-10%] w-[40%] h-[50%] bg-brand-olive rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-pulse pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-5%] w-[30%] h-[40%] bg-brand-sage rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none"></div>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
         
+        <!-- Page Header -->
         <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
             <div>
                 <a href="{{ route('orders.index') }}" class="text-xs uppercase tracking-widest text-brand-gray hover:text-brand-cream mb-4 inline-block transition duration-300">&larr; Back to Orders</a>
@@ -35,7 +38,7 @@
             </div>
         </div>
 
-
+        <!-- Awaiting Payment Warning -->
         @if($order->status === 'pending' && $order->payment_method === 'bank_transfer')
         <div class="bg-yellow-500/10 backdrop-blur-xl border border-yellow-500/20 rounded-[1.5rem] p-6 mb-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
             <div class="flex items-center gap-3 mb-4 border-b border-yellow-500/20 pb-3">
@@ -52,7 +55,7 @@
         @endif
 
         <div class="flex flex-col lg:flex-row gap-8">
-
+            <!-- Left Column: Ordered Items -->
             <div class="w-full lg:w-2/3">
                 <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] rounded-[2rem] p-6 sm:p-8">
                     <h3 class="font-semibold text-brand-cream uppercase tracking-widest text-sm mb-6 border-b border-white/10 pb-4">Items Ordered</h3>
@@ -60,7 +63,7 @@
                     <div class="space-y-6">
                         @foreach($order->items as $item)
                         <div class="flex gap-4 group">
-
+                            <!-- Item Image (Glass Frame) -->
                             <div class="w-20 h-24 bg-black/40 rounded-xl flex-shrink-0 border border-white/10 overflow-hidden shadow-inner relative">
                                 @if($item->product && $item->product->primaryImage)
                                     <img src="{{ Storage::url($item->product->primaryImage->image_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
@@ -70,6 +73,7 @@
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
                             
+                            <!-- Item Info -->
                             <div class="flex-grow flex flex-col justify-center">
                                 <h4 class="text-sm font-medium text-brand-cream tracking-wide">
                                     @if($item->product)
@@ -94,8 +98,10 @@
                 </div>
             </div>
 
+            <!-- Right Column: Summary & Shipping -->
             <div class="w-full lg:w-1/3 space-y-8">
                 
+                <!-- Order Summary -->
                 <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
                     <h3 class="font-semibold text-brand-cream uppercase tracking-widest text-sm mb-6 border-b border-white/10 pb-4">Order Summary</h3>
                     <div class="space-y-4 text-sm font-light tracking-wide">
@@ -114,6 +120,7 @@
                     </div>
                 </div>
 
+                <!-- Shipping Details -->
                 <div class="bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
                     <h3 class="font-semibold text-brand-cream uppercase tracking-widest text-sm mb-4 border-b border-white/10 pb-4">Shipping Details</h3>
                     <div class="text-sm text-brand-gray space-y-3 font-light tracking-wide">
