@@ -25,13 +25,13 @@
                     },
                     colors: {
                         brand: { 
-                            dark: '#252322',    /* Dark charcoal */
-                            olive: '#9A9587',   /* Muted olive */
-                            sage: '#AAAB9A',    /* Light sage */
-                            gray: '#BDBBB9',    /* Light silver-gray */
-                            warm: '#DAD5CC',    /* Light warm gray */
-                            light: '#E5E6D9',   /* Very light green-white */
-                            cream: '#EDE7D4'    /* Cream/ivory */
+                            dark: '#252322',
+                            olive: '#9A9587',
+                            sage: '#AAAB9A',
+                            gray: '#BDBBB9',
+                            warm: '#DAD5CC',
+                            light: '#E5E6D9',
+                            cream: '#EDE7D4'
                         }
                     },
                     fontFamily: {
@@ -50,14 +50,21 @@
         ::-webkit-scrollbar-track { background: #EDE7D4; }
         ::-webkit-scrollbar-thumb { background: #AAAB9A; }
         ::-webkit-scrollbar-thumb:hover { background: #9A9587; }
-        
+
         /* Animasi Notifikasi Floating */
         @keyframes fadeInDown {
             0% { opacity: 0; transform: translateY(-20px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fadeOutUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
         .animate-fade-in-down {
             animation: fadeInDown 0.5s ease-out forwards;
+        }
+        .animate-fade-out-up {
+            animation: fadeOutUp 0.5s ease-in forwards;
         }
     </style>
 </head>
@@ -67,21 +74,20 @@
     @include('partials.navbar')
 
     <!-- Flash Messages (Floating Toast) -->
-    <div class="fixed top-32 left-0 w-full z-[110] flex flex-col items-center pointer-events-none px-4">
+    <div class="fixed top-32 left-0 w-full z-[110] flex flex-col items-center pointer-events-none px-4" id="toast-container">
         @if (session('success'))
-            <div class="bg-brand-sage/90 backdrop-blur-xl border border-white/20 text-brand-dark px-6 py-3.5 rounded-full text-center text-xs sm:text-sm font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mb-3 animate-fade-in-down">
+            <div class="toast-message bg-brand-sage/90 backdrop-blur-xl border border-white/20 text-brand-dark px-6 py-3.5 rounded-full text-center text-xs sm:text-sm font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mb-3 animate-fade-in-down">
                 {{ session('success') }}
             </div>
         @endif
         @if (session('error'))
-            <div class="bg-red-500/90 backdrop-blur-xl border border-white/20 text-white px-6 py-3.5 rounded-full text-center text-xs sm:text-sm font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mb-3 animate-fade-in-down">
+            <div class="toast-message bg-red-500/90 backdrop-blur-xl border border-white/20 text-white px-6 py-3.5 rounded-full text-center text-xs sm:text-sm font-bold tracking-widest uppercase shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mb-3 animate-fade-in-down">
                 {{ session('error') }}
             </div>
         @endif
     </div>
 
     <!-- Main Content -->
-    <!-- Tidak menggunakan pt-navbar di main agar background halaman utama tetap full-screen -->
     <main class="flex-grow">
         @yield('content')
     </main>
@@ -89,5 +95,22 @@
     <!-- Footer -->
     @include('partials.footer')
 
+    <!-- Auto-hide Toast Script (Eksekusi Langsung) -->
+    <script>
+        // Script ini langsung berjalan saat file HTML sampai di baris ini
+        setTimeout(() => {
+            const toasts = document.querySelectorAll('.toast-message');
+            toasts.forEach(toast => {
+                // Ganti animasi dari turun ke naik
+                toast.classList.remove('animate-fade-in-down');
+                toast.classList.add('animate-fade-out-up'); 
+                
+                // Tunggu 500ms sampai animasi naik selesai, lalu hapus dari HTML
+                setTimeout(() => {
+                    toast.remove();
+                }, 500);
+            });
+        }, 3000); // Angka 3000 = Waktu tunggu 3 detik sebelum animasi naik dimulai
+    </script>
 </body>
 </html>
