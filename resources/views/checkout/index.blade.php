@@ -3,10 +3,11 @@
 @section('title', 'Checkout | LUMEN')
 
 @section('content')
-
-<div class="relative w-full min-h-screen bg-[#252322] overflow-hidden pt-12 pb-24">
+<!-- Main Wrapper with Dark Background & Glassmorphism -->
+<div class="relative w-full min-h-screen bg-[#252322] overflow-hidden pt-navbar pb-24">
     
-    <div class="absolute top-0 left-[-10%] w-[40%] h-[50%] bg-brand-olive rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-pulse pointer-events-none"></div>
+    <!-- Ambient Light Effects -->
+    <div class="absolute top-0 left-[-10%] w-[40%] h-[50%] bg-brand-olive rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none"></div>
     <div class="absolute bottom-[-10%] right-[-5%] w-[30%] h-[40%] bg-brand-sage rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
@@ -18,8 +19,10 @@
         <form action="{{ route('checkout.process') }}" method="POST" class="flex flex-col lg:flex-row gap-8 lg:gap-12">
             @csrf
 
+            <!-- Shipping & Payment Details -->
             <div class="w-full lg:w-2/3 space-y-8">
                 
+                <!-- Customer Information (Glass Card) -->
                 <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
                     <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-cream mb-6 border-b border-white/10 pb-4">1. Shipping Information</h2>
                     
@@ -48,6 +51,7 @@
                     </div>
                 </div>
 
+                <!-- Payment Method (Glass Card) -->
                 <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
                     <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-cream mb-6 border-b border-white/10 pb-4">2. Payment Method</h2>
                     
@@ -73,6 +77,7 @@
 
             </div>
 
+            <!-- Order Review -->
             <div class="w-full lg:w-1/3">
                 <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] sticky top-28">
                     <h2 class="text-sm font-semibold uppercase tracking-widest text-brand-cream mb-6 border-b border-white/10 pb-4">Order Review</h2>
@@ -80,6 +85,7 @@
                     <div class="space-y-6 mb-6 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
                         @foreach($cart->items as $item)
                         <div class="flex gap-4">
+                            <!-- Image Glass Frame -->
                             <div class="w-16 h-20 bg-black/40 border border-white/10 rounded-lg flex-shrink-0 overflow-hidden shadow-inner relative">
                                 @if($item->product->primaryImage)
                                     <img src="{{ Storage::url($item->product->primaryImage->image_path) }}" class="w-full h-full object-cover">
@@ -127,6 +133,7 @@
 </div>
 
 <style>
+    /* Custom Scrollbar for Order Review Box */
     .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
