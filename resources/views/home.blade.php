@@ -19,7 +19,6 @@
         overflow-x: hidden;
     }
 
-    /* OPTIMASI SMOOTH SCROLL: Hardware Acceleration */
     .pinstack-container .panel {
         position: relative;
         min-height: 100vh;
@@ -28,7 +27,7 @@
         justify-content: center;
         padding: 40px 24px;
         overflow: hidden;
-        will-change: transform, opacity; 
+        /* Dihapus will-change agar tidak memenuhi RAM GPU */
     }
 
     .pinstack-container .panel-bg {
@@ -54,7 +53,6 @@
         filter: blur(80px);
         opacity: 0.15;
         transform: translate3d(0, 0, 0);
-        will-change: transform;
     }
     
     .pinstack-container .b1 { left: -10%; top: -10%; background: #9A9587; }
@@ -109,7 +107,6 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 24px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        will-change: transform, opacity;
     }
 
     .panel--gallery {
@@ -129,7 +126,6 @@
         padding-left: calc(50vw - 240px); 
         padding-right: 50vw; 
         gap: 6rem;
-        will-change: transform;
     }
 
     .gallery-item {
@@ -144,7 +140,6 @@
         max-width: 480px;
         transform: translateZ(0);
         opacity: 0;
-        will-change: transform, opacity;
     }
 
     .gallery-img {
@@ -159,7 +154,8 @@
         filter: brightness(1.2);
     }
 
-    @media (max-width: 980px) {
+    /* OPTIMASI EKSTRIM UNTUK MOBILE (HP) */
+    @media (max-width: 768px) {
         .gallery-track { 
             padding-left: 12vw; 
             gap: 2rem; 
@@ -167,6 +163,20 @@
         .gallery-item { 
             width: 76vw; 
             aspect-ratio: 3 / 4 !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important; /* Kurangi bayangan */
+        }
+        
+        /* Matikan efek kaca dan bayangan berat yang menyiksa GPU HP */
+        .glass-text-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background: rgba(30, 28, 27, 0.98) !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+        }
+
+        /* Matikan elemen latar belakang yang berlebihan di HP */
+        .pinstack-container .blob {
+            display: none !important;
         }
     }
 </style>
@@ -180,35 +190,35 @@
 
         <div class="absolute bottom-[30%] left-1/2 -translate-x-1/2 w-[80%] max-w-4xl h-24 bg-brand-sage/30 mix-blend-screen filter blur-[70px] rounded-full pointer-events-none z-10"></div>
 
-        <div class="relative z-20 w-[95%] max-w-[1600px] mx-auto px-4 flex flex-col items-center pt-36 pb-16">
+        <div class="relative z-20 w-[95%] max-w-[1600px] mx-auto px-4 flex flex-col items-center pt-navbar pb-16">
 
             <div class="flex flex-nowrap justify-center items-center -space-x-3 sm:space-x-0 sm:gap-6 lg:gap-8 w-full mb-6 lg:mb-12 px-2 sm:px-0">
                 <div class="relative z-0 transform hover:-translate-y-2 transition-transform duration-500 w-[18%] sm:w-28 lg:w-40 final-img">
-                    <div class="w-full aspect-square rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <div class="w-full aspect-square rounded-lg sm:rounded-2xl overflow-hidden shadow-xl border border-white/10">
                         <img src="{{ asset('assets/images/vs-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-10 transform hover:-translate-y-2 transition-transform duration-500 w-[26%] sm:w-36 lg:w-52 final-img">
-                    <div class="w-full aspect-[4/5] rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <div class="w-full aspect-[4/5] rounded-lg sm:rounded-2xl overflow-hidden shadow-xl border border-white/10">
                         <img src="{{ asset('assets/images/an-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-20 transform hover:-translate-y-2 transition-transform duration-500 w-[38%] sm:w-48 lg:w-64 final-img">
-                    <div class="w-full aspect-[3/4] rounded-lg sm:rounded-2xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-brand-sage/40">
+                    <div class="w-full aspect-[3/4] rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-brand-sage/40">
                         <img src="{{ asset('assets/images/fc-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-10 transform hover:-translate-y-2 transition-transform duration-500 w-[26%] sm:w-36 lg:w-52 final-img">
-                    <div class="w-full aspect-[4/5] rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <div class="w-full aspect-[4/5] rounded-lg sm:rounded-2xl overflow-hidden shadow-xl border border-white/10">
                         <img src="{{ asset('assets/images/Pic-33.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-0 transform hover:-translate-y-2 transition-transform duration-500 w-[18%] sm:w-28 lg:w-40 final-img">
-                    <div class="w-full aspect-square rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <div class="w-full aspect-square rounded-lg sm:rounded-2xl overflow-hidden shadow-xl border border-white/10">
                         <img src="{{ asset('assets/images/lv-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
@@ -275,7 +285,7 @@
                 </div>
             </div>
             
-            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:right-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pl-40 xl:pl-56 pt-24 lg:pt-16">
+            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:right-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pl-40 xl:pl-56 pt-navbar lg:pt-16">
                 <div class="kicker">Strength Embodied</div>
                 <h2 class="title font-serif">Fortem Corpus</h2>
                 <p class="desc">A symbol of resilience and discipline. Fortem Corpus reflects the man who stands firm through silence, grounded, unwavering, and whole. His strength is not loud, but felt in presence.</p>
@@ -288,7 +298,7 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span></div>
         
-        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <div class="absolute top-navbar w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Fortem Corpus</h2>
         </div>
 
@@ -326,7 +336,7 @@
                 </div>
             </div>
             
-            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:left-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pr-40 xl:pr-56 pt-24 lg:pt-16 order-2">
+            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:left-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pr-40 xl:pr-56 pt-navbar lg:pt-16 order-2">
                 <div class="kicker">Purpose Connected</div>
                 <h2 class="title font-serif">Ardent Nexum</h2>
                 <p class="desc">Born from clarity and intent, Ardent Nexum represents passion guided by direction. It reminds men that connection gives meaning to ambition, fire with reason, drive with soul.</p>
@@ -339,7 +349,7 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b2" style="right: 20%; top: 10%;"></span></div>
         
-        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <div class="absolute top-navbar w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Ardent Nexum</h2>
         </div>
 
@@ -377,7 +387,7 @@
                 </div>
             </div>
             
-            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:right-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pl-40 xl:pl-56 pt-24 lg:pt-16">
+            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:right-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pl-40 xl:pl-56 pt-navbar lg:pt-16">
                 <div class="kicker">The Golden Soul</div>
                 <h2 class="title font-serif">Aurum Anima</h2>
                 <p class="desc">Light within movement, grace within creation. Aurum Anima embodies the man whose emotions turn into craftsmanship, whose inner brilliance defines his outer elegance.</p>
@@ -390,7 +400,7 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b1" style="left: 30%; bottom: 10%;"></span></div>
         
-        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <div class="absolute top-navbar w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Aurum Anima</h2>
         </div>
 
@@ -428,7 +438,7 @@
                 </div>
             </div>
             
-            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:left-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pr-40 xl:pr-56 pt-24 lg:pt-16 order-2">
+            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:left-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pr-40 xl:pr-56 pt-navbar lg:pt-16 order-2">
                 <div class="kicker">Authority in Clarity</div>
                 <h2 class="title font-serif">Lucem Vitrum</h2>
                 <p class="desc">Clear as glass, yet unbreakable. Lucem Vitrum captures composure — the mastery of stillness that commands respect. True authority needs no noise; it shines in quiet clarity.</p>
@@ -441,7 +451,7 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b2" style="right: 20%; top: 10%;"></span></div>
         
-        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <div class="absolute top-navbar w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Lucem Vitrum</h2>
         </div>
 
@@ -479,7 +489,7 @@
                 </div>
             </div>
             
-            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:right-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pl-40 xl:pl-56 pt-24 lg:pt-16">
+            <div class="glass-text-card w-full lg:w-[65%] lg:absolute lg:top-0 lg:right-0 lg:h-full relative z-10 -mt-16 lg:mt-0 flex flex-col justify-center p-8 sm:p-12 lg:p-16 lg:pl-40 xl:pl-56 pt-navbar lg:pt-16">
                 <div class="kicker">The Free-Spirited Soul</div>
                 <h2 class="title font-serif">Vagus Spiritus</h2>
                 <p class="desc">A reflection of adaptability and courage. Vagus Spiritus belongs to men who walk unknown paths with calm determination, ever-changing, yet always whole.</p>
@@ -492,7 +502,7 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b1" style="left: 30%; bottom: 10%;"></span></div>
         
-        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <div class="absolute top-navbar w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Vagus Spiritus</h2>
         </div>
 
@@ -516,7 +526,7 @@
     </section>
 
     <!-- SECTION AKHIR: VIDEO INTRO & CTA -->
-    <section class="panel panel--intro flex-col justify-center py-16" style="padding-top: 80px; padding-bottom: 80px;">
+    <section class="panel panel--intro flex-col justify-center py-16 pt-navbar pb-24">
         
         <!-- Video Clean -->
         <div class="relative w-[95%] max-w-[1600px] aspect-[9/16] md:aspect-video mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-white/10 bg-black/20 mb-12">
@@ -563,6 +573,10 @@
     let isDiscoverVisible = true;
     let isAboutVisible = false;
 
+    // OPTIMASI: Batas Frame Rate untuk Graphic Halaman agar tidak menguras GPU
+    const TARGET_FPS = 30;
+    const FRAME_INTERVAL = 1000 / TARGET_FPS;
+
     function initGLSLBackground() {
         const canvas = document.getElementById("glcanvas");
         if (!canvas) return;
@@ -577,7 +591,8 @@
         observer.observe(document.getElementById("discover-section"));
 
         function resize() {
-            const d = Math.min(window.devicePixelRatio || 1, 1.25);
+            // Pada HP, turunkan resolusi bayangan (d=1) agar ringan
+            const d = Math.min(window.devicePixelRatio || 1, 1.0);
             const parent = canvas.parentElement;
             canvas.width = parent.clientWidth * d;
             canvas.height = parent.clientHeight * d;
@@ -592,7 +607,7 @@
             void main() {
                 vec2 FC = gl_FragCoord.xy; float t = u_time * u_speed; vec2 r = u_res;
                 vec2 p = (FC * 2.0 - r) / r.y; vec3 c = vec3(0.0);
-                for (float i = 0.0; i < 22.0; i++) {
+                for (float i = 0.0; i < 20.0; i++) {
                     float a = i / 1.5 + t * 0.5; vec2 q = p;
                     q.x = q.x + sin(q.y * 19.0 + t * 2.0 + i) * 29.0 * smoothstep(0.0, -2.0, q.y);
                     float d = length(q - vec2(cos(a), sin(a)) * (0.4 * smoothstep(0.0, 0.5, -q.y)));
@@ -613,13 +628,24 @@
         gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
         const u_res = gl.getUniformLocation(program, "u_res"); const u_time = gl.getUniformLocation(program, "u_time");
+        
         let start = performance.now();
+        let then = performance.now();
+
         function draw() {
             requestAnimationFrame(draw);
             if (!isDiscoverVisible) return;
 
-            gl.uniform2f(u_res, canvas.width, canvas.height); gl.uniform1f(u_time, (performance.now() - start) * 0.001);
-            gl.drawArrays(gl.TRIANGLES, 0, 3); 
+            // OPTIMASI: Batasi render di 30 FPS
+            const now = performance.now();
+            const elapsed = now - then;
+            
+            if (elapsed > FRAME_INTERVAL) {
+                then = now - (elapsed % FRAME_INTERVAL);
+                gl.uniform2f(u_res, canvas.width, canvas.height); 
+                gl.uniform1f(u_time, (now - start) * 0.001);
+                gl.drawArrays(gl.TRIANGLES, 0, 3); 
+            }
         }
         draw();
     }
@@ -640,7 +666,7 @@
         const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
         
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.0)); // Batasi Pixel Ratio HP
 
         var textureLoader = new THREE.TextureLoader();
         var textureURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg";
@@ -651,10 +677,10 @@
         var displacementMap = textureLoader.load( displacementURL );
         
         var worldTexture = textureLoader.load( worldURL );
-        worldTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        worldTexture.anisotropy = 1; // Kurangi Filter untuk performa
         worldTexture.minFilter = THREE.LinearFilter;
 
-        var innerGeo = new THREE.SphereGeometry( 1.2, 32, 32 );
+        var innerGeo = new THREE.SphereGeometry( 1.2, 24, 24 ); // Poligon dikurangi
         var innerMat = new THREE.MeshPhongMaterial({
             color: 0xffffff,
             map: texture,
@@ -691,7 +717,7 @@
         hemiLight.position.set(0, 0, 0);
         scene.add(hemiLight);
 
-        var worldGeometry = new THREE.SphereGeometry( 500, 32, 32 );
+        var worldGeometry = new THREE.SphereGeometry( 500, 24, 24 );
         var worldMaterial = new THREE.MeshBasicMaterial({
             color: 0xffffff,
             map: worldTexture,
@@ -705,17 +731,28 @@
 
         camera.position.z = 6; 
 
+        let thenThree = performance.now();
+
         function animate() {
             requestAnimationFrame(animate);
             if (!isAboutVisible) return;
 
-            innerSphere.rotation.y += 0.002;
-            innerSphere.rotation.x += 0.0001;
-            world.rotation.y += 0.0001;
-            world.rotation.x += 0.0005;
-            outerSphere.rotation.x += 0.001;
-            outerSphere.rotation.y += 0.0015;
-            renderer.render(scene, camera);
+            // OPTIMASI: Batasi render di 30 FPS
+            const now = performance.now();
+            const elapsed = now - thenThree;
+
+            if (elapsed > FRAME_INTERVAL) {
+                thenThree = now - (elapsed % FRAME_INTERVAL);
+                
+                innerSphere.rotation.y += 0.002;
+                innerSphere.rotation.x += 0.0001;
+                world.rotation.y += 0.0001;
+                world.rotation.x += 0.0005;
+                outerSphere.rotation.x += 0.001;
+                outerSphere.rotation.y += 0.0015;
+                
+                renderer.render(scene, camera);
+            }
         }
         animate();
 
@@ -774,7 +811,7 @@
                 
                 const blobs = panel.querySelectorAll(".blob");
                 if (blobs.length) {
-                    gsap.to(blobs, { yPercent: () => gsap.utils.random(-15, 15), xPercent: () => gsap.utils.random(-15, 15), ease: "none", scrollTrigger: { trigger: panel, start: "top bottom", end: "bottom top", scrub: 1.5 }});
+                    gsap.to(blobs, { yPercent: () => gsap.utils.random(-15, 15), xPercent: () => gsap.utils.random(-15, 15), ease: "none", scrollTrigger: { trigger: panel, start: "top bottom", end: "bottom top", scrub: 1 }});
                 }
 
                 if (isDiscover) {
@@ -791,7 +828,6 @@
                     const texts = panel.querySelectorAll('.about-text');
                     const kicker = panel.querySelector('.about-kicker');
 
-                    // OPTIMASI: Tambah scrub 1.5 dan anticipatePin agar mulus saat panel tertahan
                     const tlAbout = gsap.timeline({
                         scrollTrigger: {
                             trigger: panel,
@@ -799,8 +835,7 @@
                             end: "+=300%", 
                             pin: true,
                             pinSpacing: false, 
-                            scrub: 1.5,
-                            anticipatePin: 1
+                            scrub: 1
                         }
                     });
 
@@ -836,7 +871,6 @@
                     
                     let scrollWidth = track.scrollWidth - window.innerWidth;
 
-                    // OPTIMASI: scrub diubah jadi 1.5, ditambah anticipatePin
                     const tlGallery = gsap.timeline({
                         scrollTrigger: { 
                             trigger: panel, 
@@ -844,8 +878,7 @@
                             end: () => "+=" + (scrollWidth + window.innerHeight), 
                             pin: true, 
                             pinSpacing: true, 
-                            scrub: 1.5, 
-                            anticipatePin: 1,
+                            scrub: 1,
                             invalidateOnRefresh: true 
                         }
                     });
@@ -878,15 +911,13 @@
                     if (textCards.length) gsap.fromTo(textCards, { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power2.out", delay: 0.3, scrollTrigger: { trigger: panel, start: "top 80%" }});
                     if (copyBits.length) gsap.fromTo(copyBits, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "power3.out", delay: 0.5, scrollTrigger: { trigger: panel, start: "top 80%" }});
 
-                    // OPTIMASI: scrub 1.5 dan anticipatePin 1
                     const tlStack = gsap.timeline({
                         scrollTrigger: { 
                             trigger: panel, 
                             start: "bottom bottom", 
                             pin: true, 
                             pinSpacing: false, 
-                            scrub: 1.5, 
-                            anticipatePin: 1,
+                            scrub: 1,
                             onRefresh: () => gsap.set(panel, { transformOrigin: "center " + (panel.offsetHeight - window.innerHeight / 2) + "px" }) 
                         }
                     });

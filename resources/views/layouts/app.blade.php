@@ -5,21 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'LUMEN | Elegance in Every Detail')</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (Using Vite in Laravel 12) -->
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- CDN Fallback -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    // GLOBAL SAFE AREA: Tambahan khusus untuk menghindari elemen nabrak navbar
+
                     spacing: {
                         'navbar': '120px', 
                     },
@@ -45,7 +42,7 @@
     <style>
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-sans { font-family: 'Lato', sans-serif; }
-        /* Custom scrollbar */
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #EDE7D4; }
         ::-webkit-scrollbar-thumb { background: #AAAB9A; }
@@ -69,8 +66,6 @@
         </div>
     @endif
 
-    <!-- Main Content -->
-    <!-- Tidak menggunakan pt-navbar di main agar background halaman utama tetap full-screen -->
     <main class="flex-grow">
         @yield('content')
     </main>
