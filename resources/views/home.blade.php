@@ -19,6 +19,7 @@
         overflow-x: hidden;
     }
 
+    /* OPTIMASI SMOOTH SCROLL: Hardware Acceleration */
     .pinstack-container .panel {
         position: relative;
         min-height: 100vh;
@@ -27,6 +28,7 @@
         justify-content: center;
         padding: 40px 24px;
         overflow: hidden;
+        will-change: transform, opacity; 
     }
 
     .pinstack-container .panel-bg {
@@ -52,6 +54,7 @@
         filter: blur(80px);
         opacity: 0.15;
         transform: translate3d(0, 0, 0);
+        will-change: transform;
     }
     
     .pinstack-container .b1 { left: -10%; top: -10%; background: #9A9587; }
@@ -106,6 +109,7 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 24px;
         box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        will-change: transform, opacity;
     }
 
     .panel--gallery {
@@ -125,6 +129,7 @@
         padding-left: calc(50vw - 240px); 
         padding-right: 50vw; 
         gap: 6rem;
+        will-change: transform;
     }
 
     .gallery-item {
@@ -139,6 +144,7 @@
         max-width: 480px;
         transform: translateZ(0);
         opacity: 0;
+        will-change: transform, opacity;
     }
 
     .gallery-img {
@@ -174,37 +180,36 @@
 
         <div class="absolute bottom-[30%] left-1/2 -translate-x-1/2 w-[80%] max-w-4xl h-24 bg-brand-sage/30 mix-blend-screen filter blur-[70px] rounded-full pointer-events-none z-10"></div>
 
-        <!-- pt-36 ditambahkan agar tidak nabrak navbar di awal -->
         <div class="relative z-20 w-[95%] max-w-[1600px] mx-auto px-4 flex flex-col items-center pt-36 pb-16">
 
             <div class="flex flex-nowrap justify-center items-center -space-x-3 sm:space-x-0 sm:gap-6 lg:gap-8 w-full mb-6 lg:mb-12 px-2 sm:px-0">
                 <div class="relative z-0 transform hover:-translate-y-2 transition-transform duration-500 w-[18%] sm:w-28 lg:w-40 final-img">
                     <div class="w-full aspect-square rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                        <img src="{{ asset('assets/images/vs-1.jpg') }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('assets/images/vs-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-10 transform hover:-translate-y-2 transition-transform duration-500 w-[26%] sm:w-36 lg:w-52 final-img">
                     <div class="w-full aspect-[4/5] rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                        <img src="{{ asset('assets/images/an-1.jpg') }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('assets/images/an-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-20 transform hover:-translate-y-2 transition-transform duration-500 w-[38%] sm:w-48 lg:w-64 final-img">
                     <div class="w-full aspect-[3/4] rounded-lg sm:rounded-2xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.8)] border border-brand-sage/40">
-                        <img src="{{ asset('assets/images/fc-1.jpg') }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('assets/images/fc-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-10 transform hover:-translate-y-2 transition-transform duration-500 w-[26%] sm:w-36 lg:w-52 final-img">
                     <div class="w-full aspect-[4/5] rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                        <img src="{{ asset('assets/images/Pic-33.jpg') }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('assets/images/Pic-33.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
                 
                 <div class="relative z-0 transform hover:-translate-y-2 transition-transform duration-500 w-[18%] sm:w-28 lg:w-40 final-img">
                     <div class="w-full aspect-square rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10">
-                        <img src="{{ asset('assets/images/lv-1.jpg') }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('assets/images/lv-1.jpg') }}" class="w-full h-full object-cover" decoding="async">
                     </div>
                 </div>
             </div>
@@ -266,7 +271,7 @@
         <div class="relative w-[95%] max-w-[1600px] mx-auto flex flex-col lg:block z-10">
             <div class="media w-[85%] sm:w-[75%] lg:w-[40%] mx-auto lg:mx-0 relative z-20">
                 <div class="frame">
-                    <img src="{{ asset('assets/images/fortem-corpus.jpg') }}" alt="Fortem Corpus" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1617038220319-276d3cfab638?q=80&w=800';" />
+                    <img src="{{ asset('assets/images/fortem-corpus.jpg') }}" alt="Fortem Corpus" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1617038220319-276d3cfab638?q=80&w=800';" />
                 </div>
             </div>
             
@@ -283,20 +288,19 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span></div>
         
-        <!-- FIX: top-16 diganti jadi top-28 agar tidak nabrak navbar -->
         <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Fortem Corpus</h2>
         </div>
 
         <div class="gallery-track relative z-10">
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/fc-1.jpg') }}" class="gallery-img" alt="Fortem Corpus Detail">
+                <img src="{{ asset('assets/images/fc-1.jpg') }}" class="gallery-img" alt="Fortem Corpus Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/fc-2.jpg') }}" class="gallery-img" alt="Fortem Corpus Detail">
+                <img src="{{ asset('assets/images/fc-2.jpg') }}" class="gallery-img" alt="Fortem Corpus Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/fc-3.jpg') }}" class="gallery-img" alt="Fortem Corpus Detail">
+                <img src="{{ asset('assets/images/fc-3.jpg') }}" class="gallery-img" alt="Fortem Corpus Detail" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -318,7 +322,7 @@
         <div class="relative w-[95%] max-w-[1600px] mx-auto flex flex-col lg:block z-10">
             <div class="media w-[85%] sm:w-[75%] lg:w-[40%] mx-auto lg:ml-auto lg:mr-0 relative z-20 order-1">
                 <div class="frame">
-                    <img src="{{ asset('assets/images/an-2.jpg') }}" alt="Ardent Nexum" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800';" />
+                    <img src="{{ asset('assets/images/an-2.jpg') }}" alt="Ardent Nexum" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800';" />
                 </div>
             </div>
             
@@ -335,20 +339,19 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b2" style="right: 20%; top: 10%;"></span></div>
         
-        <!-- FIX: top-16 diganti jadi top-28 -->
         <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Ardent Nexum</h2>
         </div>
 
         <div class="gallery-track relative z-10">
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/an-1.jpg') }}" class="gallery-img" alt="Ardent Nexum Detail">
+                <img src="{{ asset('assets/images/an-1.jpg') }}" class="gallery-img" alt="Ardent Nexum Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/an-3.jpg') }}" class="gallery-img" alt="Ardent Nexum Detail">
+                <img src="{{ asset('assets/images/an-3.jpg') }}" class="gallery-img" alt="Ardent Nexum Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/an-4.jpg') }}" class="gallery-img" alt="Ardent Nexum Detail">
+                <img src="{{ asset('assets/images/an-4.jpg') }}" class="gallery-img" alt="Ardent Nexum Detail" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -370,7 +373,7 @@
         <div class="relative w-[95%] max-w-[1600px] mx-auto flex flex-col lg:block z-10">
             <div class="media w-[85%] sm:w-[75%] lg:w-[40%] mx-auto lg:mx-0 relative z-20">
                 <div class="frame">
-                    <img src="{{ asset('assets/images/aurumanima.jpg') }}" alt="Aurum Anima" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531995035304-bf9db167a799?q=80&w=1000';" />
+                    <img src="{{ asset('assets/images/aurumanima.jpg') }}" alt="Aurum Anima" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531995035304-bf9db167a799?q=80&w=1000';" />
                 </div>
             </div>
             
@@ -387,20 +390,19 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b1" style="left: 30%; bottom: 10%;"></span></div>
         
-        <!-- FIX: top-16 diganti jadi top-28 -->
         <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Aurum Anima</h2>
         </div>
 
         <div class="gallery-track relative z-10">
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/aa-1.jpg') }}" class="gallery-img" alt="Aurum Anima Detail">
+                <img src="{{ asset('assets/images/aa-1.jpg') }}" class="gallery-img" alt="Aurum Anima Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/aa-2.jpg') }}" class="gallery-img" alt="Aurum Anima Detail">
+                <img src="{{ asset('assets/images/aa-2.jpg') }}" class="gallery-img" alt="Aurum Anima Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/aa-3.jpg') }}" class="gallery-img" alt="Aurum Anima Detail">
+                <img src="{{ asset('assets/images/aa-3.jpg') }}" class="gallery-img" alt="Aurum Anima Detail" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -422,7 +424,7 @@
         <div class="relative w-[95%] max-w-[1600px] mx-auto flex flex-col lg:block z-10">
             <div class="media w-[85%] sm:w-[75%] lg:w-[40%] mx-auto lg:ml-auto lg:mr-0 relative z-20 order-1">
                 <div class="frame">
-                    <img src="{{ asset('assets/images/lv3.jpg') }}" alt="Lucem Vitrum" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800';" />
+                    <img src="{{ asset('assets/images/lv3.jpg') }}" alt="Lucem Vitrum" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1598560917505-59a3ad559071?w=800';" />
                 </div>
             </div>
             
@@ -439,20 +441,19 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b2" style="right: 20%; top: 10%;"></span></div>
         
-        <!-- FIX: top-16 diganti jadi top-28 -->
         <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Lucem Vitrum</h2>
         </div>
 
         <div class="gallery-track relative z-10">
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/lv-1.jpg') }}" class="gallery-img" alt="Lucem Vitrum Detail">
+                <img src="{{ asset('assets/images/lv-1.jpg') }}" class="gallery-img" alt="Lucem Vitrum Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/lv2.jpg') }}" class="gallery-img" alt="Lucem Vitrum Detail">
+                <img src="{{ asset('assets/images/lv2.jpg') }}" class="gallery-img" alt="Lucem Vitrum Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/lv4.jpg') }}" class="gallery-img" alt="Lucem Vitrum Detail">
+                <img src="{{ asset('assets/images/lv4.jpg') }}" class="gallery-img" alt="Lucem Vitrum Detail" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -474,7 +475,7 @@
         <div class="relative w-[95%] max-w-[1600px] mx-auto flex flex-col lg:block z-10">
             <div class="media w-[85%] sm:w-[75%] lg:w-[40%] mx-auto lg:mx-0 relative z-20">
                 <div class="frame">
-                    <img src="{{ asset('assets/images/vs-4.jpg') }}" alt="Vagus Spiritus" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531995035304-bf9db167a799?q=80&w=1000';" />
+                    <img src="{{ asset('assets/images/vs-4.jpg') }}" alt="Vagus Spiritus" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531995035304-bf9db167a799?q=80&w=1000';" />
                 </div>
             </div>
             
@@ -491,20 +492,19 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b1" style="left: 30%; bottom: 10%;"></span></div>
         
-        <!-- FIX: top-16 diganti jadi top-28 -->
         <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Vagus Spiritus</h2>
         </div>
 
         <div class="gallery-track relative z-10">
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/v2-3.jpg') }}" class="gallery-img" alt="Vagus Spiritus Detail">
+                <img src="{{ asset('assets/images/v2-3.jpg') }}" class="gallery-img" alt="Vagus Spiritus Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/vs-1.jpg') }}" class="gallery-img" alt="Vagus Spiritus Detail">
+                <img src="{{ asset('assets/images/vs-1.jpg') }}" class="gallery-img" alt="Vagus Spiritus Detail" loading="lazy" decoding="async">
             </div>
             <div class="gallery-item">
-                <img src="{{ asset('assets/images/vs-2.jpg') }}" class="gallery-img" alt="Vagus Spiritus Detail">
+                <img src="{{ asset('assets/images/vs-2.jpg') }}" class="gallery-img" alt="Vagus Spiritus Detail" loading="lazy" decoding="async">
             </div>
         </div>
 
@@ -560,18 +560,15 @@
 </div>
 
 <script>
-    // OPTIMASI: Variabel global untuk mendeteksi apakah area efek sedang terlihat di layar
     let isDiscoverVisible = true;
     let isAboutVisible = false;
 
-    // GLSL Background Script (Sudah Dioptimasi untuk Mobile)
     function initGLSLBackground() {
         const canvas = document.getElementById("glcanvas");
         if (!canvas) return;
         const gl = canvas.getContext("webgl");
         if (!gl) return;
 
-        // Intersection Observer agar animasi WebGL berhenti saat tidak terlihat
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 isDiscoverVisible = entry.isIntersecting;
@@ -580,7 +577,6 @@
         observer.observe(document.getElementById("discover-section"));
 
         function resize() {
-            // OPTIMASI: Membatasi pixel ratio maksimal 1.25 untuk HP agar GPU tidak kepanasan
             const d = Math.min(window.devicePixelRatio || 1, 1.25);
             const parent = canvas.parentElement;
             canvas.width = parent.clientWidth * d;
@@ -591,7 +587,6 @@
         window.addEventListener("resize", resize);
 
         const vert = `attribute vec2 pos; void main() { gl_Position = vec4(pos, 0.0, 1.0); }`;
-        // OPTIMASI: Mengurangi jumlah iterasi shader dari 42 ke 22 dan menggunakan mediump
         const frag = `
             precision mediump float; uniform vec2 u_res; uniform float u_time; uniform float u_speed;
             void main() {
@@ -621,7 +616,6 @@
         let start = performance.now();
         function draw() {
             requestAnimationFrame(draw);
-            // OPTIMASI: Jika section terlewat, jangan hitung grafis
             if (!isDiscoverVisible) return;
 
             gl.uniform2f(u_res, canvas.width, canvas.height); gl.uniform1f(u_time, (performance.now() - start) * 0.001);
@@ -630,12 +624,10 @@
         draw();
     }
 
-    // Three.js Initializer (Sudah Dioptimasi untuk Mobile)
     function initThreeJSAbout() {
         const canvas = document.getElementById("three-canvas");
         if (!canvas) return;
 
-        // Intersection Observer agar 3D bola mati saat tidak terlihat
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 isAboutVisible = entry.isIntersecting;
@@ -645,10 +637,9 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false }); // Antialias dimatikan untuk ringankan GPU
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
         
         renderer.setSize(window.innerWidth, window.innerHeight);
-        // OPTIMASI: Batasi pixel ratio
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
 
         var textureLoader = new THREE.TextureLoader();
@@ -663,7 +654,6 @@
         worldTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         worldTexture.minFilter = THREE.LinearFilter;
 
-        // OPTIMASI: Poligon dikurangi drastis (dari 60 ke 32)
         var innerGeo = new THREE.SphereGeometry( 1.2, 32, 32 );
         var innerMat = new THREE.MeshPhongMaterial({
             color: 0xffffff,
@@ -701,7 +691,6 @@
         hemiLight.position.set(0, 0, 0);
         scene.add(hemiLight);
 
-        // OPTIMASI: Mengurangi poligon bintang/luar
         var worldGeometry = new THREE.SphereGeometry( 500, 32, 32 );
         var worldMaterial = new THREE.MeshBasicMaterial({
             color: 0xffffff,
@@ -718,7 +707,6 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            // OPTIMASI: Matikan proses rotasi dan rendering jika section About terlewat
             if (!isAboutVisible) return;
 
             innerSphere.rotation.y += 0.002;
@@ -741,7 +729,6 @@
         window.threeInner = innerSphere;
     }
 
-    // Fungsi untuk memecah teks paragraf menjadi span-span (kata per kata) untuk efek typewriter saat scroll
     function setupScrollTypewriter() {
         const elements = document.querySelectorAll('.scroll-typewriter');
         elements.forEach(el => {
@@ -751,7 +738,7 @@
             words.forEach(word => {
                 const span = document.createElement('span');
                 span.innerText = word + ' ';
-                span.style.opacity = '0.2'; // Opacity awal (redup)
+                span.style.opacity = '0.2'; 
                 span.style.transition = 'opacity 0.1s ease';
                 el.appendChild(span);
             });
@@ -774,8 +761,6 @@
             await loadScript("https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js");
 
             gsap.registerPlugin(ScrollTrigger);
-
-            // Set up typewriter spans BEFORE initializing GSAP
             setupScrollTypewriter();
 
             const panels = gsap.utils.toArray(".panel");
@@ -789,7 +774,7 @@
                 
                 const blobs = panel.querySelectorAll(".blob");
                 if (blobs.length) {
-                    gsap.to(blobs, { yPercent: () => gsap.utils.random(-15, 15), xPercent: () => gsap.utils.random(-15, 15), ease: "none", scrollTrigger: { trigger: panel, start: "top bottom", end: "bottom top", scrub: true }});
+                    gsap.to(blobs, { yPercent: () => gsap.utils.random(-15, 15), xPercent: () => gsap.utils.random(-15, 15), ease: "none", scrollTrigger: { trigger: panel, start: "top bottom", end: "bottom top", scrub: 1.5 }});
                 }
 
                 if (isDiscover) {
@@ -806,6 +791,7 @@
                     const texts = panel.querySelectorAll('.about-text');
                     const kicker = panel.querySelector('.about-kicker');
 
+                    // OPTIMASI: Tambah scrub 1.5 dan anticipatePin agar mulus saat panel tertahan
                     const tlAbout = gsap.timeline({
                         scrollTrigger: {
                             trigger: panel,
@@ -813,7 +799,8 @@
                             end: "+=300%", 
                             pin: true,
                             pinSpacing: false, 
-                            scrub: 1,
+                            scrub: 1.5,
+                            anticipatePin: 1
                         }
                     });
 
@@ -849,8 +836,18 @@
                     
                     let scrollWidth = track.scrollWidth - window.innerWidth;
 
+                    // OPTIMASI: scrub diubah jadi 1.5, ditambah anticipatePin
                     const tlGallery = gsap.timeline({
-                        scrollTrigger: { trigger: panel, start: "top top", end: () => "+=" + (scrollWidth + window.innerHeight), pin: true, pinSpacing: true, scrub: 1, invalidateOnRefresh: true }
+                        scrollTrigger: { 
+                            trigger: panel, 
+                            start: "top top", 
+                            end: () => "+=" + (scrollWidth + window.innerHeight), 
+                            pin: true, 
+                            pinSpacing: true, 
+                            scrub: 1.5, 
+                            anticipatePin: 1,
+                            invalidateOnRefresh: true 
+                        }
                     });
 
                     if (titleWrap) tlGallery.fromTo(titleWrap, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0);
@@ -859,14 +856,13 @@
                     tlGallery.fromTo(items, { opacity: 0, scale: 0.8, y: 100 }, { opacity: 1, scale: 1, y: 0, duration: 1, stagger: 0.2, ease: "power2.out" }, 0);
                     tlGallery.to(track, { x: () => -scrollWidth, ease: "none", duration: 3 }, "+=0.2");
                     
-                    // Efek Typewriter Menyala sinkron dengan durasi scroll horizontal (3 detik)
                     if (typeWriterSpans.length > 0) {
                         tlGallery.to(typeWriterSpans, {
                             opacity: 1,
-                            stagger: { amount: 3 }, // Durasi stagger disebar merata selama 3 detik
+                            stagger: { amount: 3 }, 
                             ease: "none",
                             duration: 0.1
-                        }, "<"); // "<" artinya dimulai bersamaan dengan animasi slide track sebelumnya
+                        }, "<"); 
                     }
 
                     if (images.length) {
@@ -882,8 +878,17 @@
                     if (textCards.length) gsap.fromTo(textCards, { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power2.out", delay: 0.3, scrollTrigger: { trigger: panel, start: "top 80%" }});
                     if (copyBits.length) gsap.fromTo(copyBits, { y: 20, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 1, ease: "power3.out", delay: 0.5, scrollTrigger: { trigger: panel, start: "top 80%" }});
 
+                    // OPTIMASI: scrub 1.5 dan anticipatePin 1
                     const tlStack = gsap.timeline({
-                        scrollTrigger: { trigger: panel, start: "bottom bottom", pin: true, pinSpacing: false, scrub: true, onRefresh: () => gsap.set(panel, { transformOrigin: "center " + (panel.offsetHeight - window.innerHeight / 2) + "px" }) }
+                        scrollTrigger: { 
+                            trigger: panel, 
+                            start: "bottom bottom", 
+                            pin: true, 
+                            pinSpacing: false, 
+                            scrub: 1.5, 
+                            anticipatePin: 1,
+                            onRefresh: () => gsap.set(panel, { transformOrigin: "center " + (panel.offsetHeight - window.innerHeight / 2) + "px" }) 
+                        }
                     });
                     tlStack.to(panel, { scale: 0.92, opacity: 0.8, duration: 0.6, ease: "none" }, 0).to(panel, { scale: 0.85, opacity: 0.2, duration: 0.6, ease: "none" }, 0.6).to(panel, { opacity: 0, duration: 0.12, ease: "none" }, 1.2);
                 }
