@@ -168,13 +168,14 @@
 <div class="pinstack-container" id="wrap">
     
     <!-- SECTION 1: DISCOVER YOUR ARCHETYPE (Halaman Pertama) -->
-    <section class="panel panel--discover relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black" style="padding: 0;">
+    <section id="discover-section" class="panel panel--discover relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-black" style="padding: 0;">
         <canvas id="glcanvas" class="absolute inset-0 w-full h-full opacity-60"></canvas>
         <div class="absolute inset-0 bg-gradient-to-b from-[#252322] via-transparent to-[#252322] z-10 pointer-events-none"></div>
 
         <div class="absolute bottom-[30%] left-1/2 -translate-x-1/2 w-[80%] max-w-4xl h-24 bg-brand-sage/30 mix-blend-screen filter blur-[70px] rounded-full pointer-events-none z-10"></div>
 
-        <div class="relative z-20 w-[95%] max-w-[1600px] mx-auto px-4 flex flex-col items-center pt-32 pb-16">
+        <!-- pt-36 ditambahkan agar tidak nabrak navbar di awal -->
+        <div class="relative z-20 w-[95%] max-w-[1600px] mx-auto px-4 flex flex-col items-center pt-36 pb-16">
 
             <div class="flex flex-nowrap justify-center items-center -space-x-3 sm:space-x-0 sm:gap-6 lg:gap-8 w-full mb-6 lg:mb-12 px-2 sm:px-0">
                 <div class="relative z-0 transform hover:-translate-y-2 transition-transform duration-500 w-[18%] sm:w-28 lg:w-40 final-img">
@@ -226,7 +227,7 @@
     </section>
 
     <!-- SECTION ABOUT LU.MEN -->
-    <section class="panel panel--about relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#252322]" style="padding: 0;">
+    <section id="about-section" class="panel panel--about relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#252322]" style="padding: 0;">
         <canvas id="three-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
         <div class="absolute inset-0 bg-gradient-to-b from-[#252322]/40 via-[#252322]/80 to-[#252322] z-10 pointer-events-none"></div>
 
@@ -282,7 +283,8 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span></div>
         
-        <div class="absolute top-16 md:top-24 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <!-- FIX: top-16 diganti jadi top-28 agar tidak nabrak navbar -->
+        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Fortem Corpus</h2>
         </div>
 
@@ -333,7 +335,8 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b2" style="right: 20%; top: 10%;"></span></div>
         
-        <div class="absolute top-16 md:top-24 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <!-- FIX: top-16 diganti jadi top-28 -->
+        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Ardent Nexum</h2>
         </div>
 
@@ -384,7 +387,8 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b1" style="left: 30%; bottom: 10%;"></span></div>
         
-        <div class="absolute top-16 md:top-24 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <!-- FIX: top-16 diganti jadi top-28 -->
+        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Aurum Anima</h2>
         </div>
 
@@ -435,7 +439,8 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b2" style="right: 20%; top: 10%;"></span></div>
         
-        <div class="absolute top-16 md:top-24 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <!-- FIX: top-16 diganti jadi top-28 -->
+        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Lucem Vitrum</h2>
         </div>
 
@@ -486,7 +491,8 @@
     <section class="panel panel--gallery">
         <div class="panel-bg"><span class="grid-bg"></span><span class="blob b1" style="left: 30%; bottom: 10%;"></span></div>
         
-        <div class="absolute top-16 md:top-24 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
+        <!-- FIX: top-16 diganti jadi top-28 -->
+        <div class="absolute top-28 md:top-32 w-full text-center z-20 pointer-events-none px-4 gallery-title-wrap">
             <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-cream drop-shadow-2xl">Vagus Spiritus</h2>
         </div>
 
@@ -512,6 +518,7 @@
     <!-- SECTION AKHIR: VIDEO INTRO & CTA -->
     <section class="panel panel--intro flex-col justify-center py-16" style="padding-top: 80px; padding-bottom: 80px;">
         
+        <!-- Video Clean -->
         <div class="relative w-[95%] max-w-[1600px] aspect-[9/16] md:aspect-video mx-auto rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-white/10 bg-black/20 mb-12">
             <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-90 md:hidden">
                 <source src="{{ asset('assets/videos/discover-mobile.mp4') }}" type="video/mp4">
@@ -521,6 +528,7 @@
             </video>
         </div>
 
+        <!-- CTA Button & Marketplaces -->
         <div class="text-center z-20 relative flex flex-col items-center w-full">
             <a href="{{ route('shop.index') }}" class="inline-block bg-brand-sage/10 border border-brand-sage text-brand-sage px-12 py-4 uppercase tracking-[0.2em] text-xs font-bold hover:bg-brand-sage hover:text-brand-dark transition duration-300 backdrop-blur-sm shadow-[0_0_20px_rgba(170,171,154,0.1)] mb-10">
                 Discover The Collection
@@ -530,14 +538,17 @@
                 <span class="text-[10px] text-brand-gray uppercase tracking-[0.2em] font-semibold">Also Available On</span>
                 
                 <div class="flex items-center gap-8 text-brand-cream/60">
+                    <!-- Tokopedia Logo -->
                     <a href="https://www.tokopedia.com/lumen-7" target="_blank" class="hover:text-brand-sage hover:-translate-y-1 transform transition duration-300" aria-label="Tokopedia">
                         <svg class="w-7 h-7 fill-current" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.141 11.141c.42.42.659.981.659 1.564 0 .584-.239 1.145-.659 1.565-.42.42-.981.659-1.565.659-.583 0-1.144-.239-1.564-.659-.42-.42-.659-.981-.659-1.565s.239-1.144.659-1.564c.42-.42.981-.659 1.564-.659.584 0 1.145.239 1.565.659zm-12.723 0c.42.42.659.981.659 1.564s-.239 1.145-.659 1.565c-.42.42-.981.659-1.564.659s-1.145-.239-1.565-.659c-.42-.42-.659-.981-.659-1.565s.239-1.144.659-1.564c.42-.42.981-.659 1.565-.659.583 0 1.144.239 1.564.659zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm7.141 14.282c-1.928 1.928-5.213 1.928-7.141 0-1.928-1.928-1.928-5.213 0-7.141s5.213-1.928 7.141 0 1.928 5.213 0 7.141z"/></svg>
                     </a>
                     
+                    <!-- Shopee Logo -->
                     <a href="https://shopee.co.id/lu.men" target="_blank" class="hover:text-brand-sage hover:-translate-y-1 transform transition duration-300" aria-label="Shopee">
                         <svg class="w-7 h-7 fill-current" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.467 6.84a.433.433 0 0 0-.342-.236h-3.411a4.289 4.289 0 0 0-7.428 0H4.875a.434.434 0 0 0-.342.236l-1.928 11.9a.433.433 0 0 0 .093.364.434.434 0 0 0 .34.16h17.924c.143 0 .27-.067.341-.16a.433.433 0 0 0 .092-.364l-1.928-11.9ZM12 3.86a3.42 3.42 0 0 1 2.97 1.714H9.03A3.42 3.42 0 0 1 12 3.86Zm-2.887 9.873c0-.622.504-1.127 1.127-1.127h2.253a.282.282 0 1 1 0 .563h-2.253a.564.564 0 1 0 0 1.127h2.253c.622 0 1.127.505 1.127 1.127s-.505 1.127-1.127 1.127h-2.253a.282.282 0 1 1 0-.563h2.253a.564.564 0 1 0 0-1.127h-2.253a1.127 1.127 0 0 1-1.127-1.127Z"/></svg>
                     </a>
                     
+                    <!-- TikTok Logo -->
                     <a href="https://www.tiktok.com/@lu.men___" target="_blank" class="hover:text-brand-sage hover:-translate-y-1 transform transition duration-300" aria-label="TikTok Shop">
                         <svg class="w-7 h-7 fill-current" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.28-2.26.74-4.63 2.58-5.91 1.18-.87 2.63-1.31 4.1-1.27.33.01.67.03.99.08v4.16c-.57-.17-1.19-.21-1.76-.11-1.06.2-1.95.89-2.4 1.86-.45.97-.39 2.13.15 3.04.54.91 1.52 1.5 2.57 1.55 1.05.04 2.06-.41 2.71-1.23.51-.64.71-1.47.69-2.28-.02-2.92-.01-5.83-.02-8.75-.01-4.32-.01-8.64 0-12.97z"/></svg>
                     </a>
@@ -549,15 +560,28 @@
 </div>
 
 <script>
-    // GLSL Background Script
+    // OPTIMASI: Variabel global untuk mendeteksi apakah area efek sedang terlihat di layar
+    let isDiscoverVisible = true;
+    let isAboutVisible = false;
+
+    // GLSL Background Script (Sudah Dioptimasi untuk Mobile)
     function initGLSLBackground() {
         const canvas = document.getElementById("glcanvas");
         if (!canvas) return;
         const gl = canvas.getContext("webgl");
         if (!gl) return;
 
+        // Intersection Observer agar animasi WebGL berhenti saat tidak terlihat
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isDiscoverVisible = entry.isIntersecting;
+            });
+        }, { threshold: 0.01 });
+        observer.observe(document.getElementById("discover-section"));
+
         function resize() {
-            const d = window.devicePixelRatio || 1;
+            // OPTIMASI: Membatasi pixel ratio maksimal 1.25 untuk HP agar GPU tidak kepanasan
+            const d = Math.min(window.devicePixelRatio || 1, 1.25);
             const parent = canvas.parentElement;
             canvas.width = parent.clientWidth * d;
             canvas.height = parent.clientHeight * d;
@@ -567,12 +591,13 @@
         window.addEventListener("resize", resize);
 
         const vert = `attribute vec2 pos; void main() { gl_Position = vec4(pos, 0.0, 1.0); }`;
+        // OPTIMASI: Mengurangi jumlah iterasi shader dari 42 ke 22 dan menggunakan mediump
         const frag = `
-            precision highp float; uniform vec2 u_res; uniform float u_time; uniform float u_speed;
+            precision mediump float; uniform vec2 u_res; uniform float u_time; uniform float u_speed;
             void main() {
                 vec2 FC = gl_FragCoord.xy; float t = u_time * u_speed; vec2 r = u_res;
                 vec2 p = (FC * 2.0 - r) / r.y; vec3 c = vec3(0.0);
-                for (float i = 0.0; i < 42.0; i++) {
+                for (float i = 0.0; i < 22.0; i++) {
                     float a = i / 1.5 + t * 0.5; vec2 q = p;
                     q.x = q.x + sin(q.y * 19.0 + t * 2.0 + i) * 29.0 * smoothstep(0.0, -2.0, q.y);
                     float d = length(q - vec2(cos(a), sin(a)) * (0.4 * smoothstep(0.0, 0.5, -q.y)));
@@ -595,22 +620,36 @@
         const u_res = gl.getUniformLocation(program, "u_res"); const u_time = gl.getUniformLocation(program, "u_time");
         let start = performance.now();
         function draw() {
+            requestAnimationFrame(draw);
+            // OPTIMASI: Jika section terlewat, jangan hitung grafis
+            if (!isDiscoverVisible) return;
+
             gl.uniform2f(u_res, canvas.width, canvas.height); gl.uniform1f(u_time, (performance.now() - start) * 0.001);
-            gl.drawArrays(gl.TRIANGLES, 0, 3); requestAnimationFrame(draw);
+            gl.drawArrays(gl.TRIANGLES, 0, 3); 
         }
         draw();
     }
 
+    // Three.js Initializer (Sudah Dioptimasi untuk Mobile)
     function initThreeJSAbout() {
         const canvas = document.getElementById("three-canvas");
         if (!canvas) return;
 
+        // Intersection Observer agar 3D bola mati saat tidak terlihat
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isAboutVisible = entry.isIntersecting;
+            });
+        }, { threshold: 0.01 });
+        observer.observe(document.getElementById("about-section"));
+
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false }); // Antialias dimatikan untuk ringankan GPU
         
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        // OPTIMASI: Batasi pixel ratio
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
 
         var textureLoader = new THREE.TextureLoader();
         var textureURL = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg";
@@ -624,7 +663,8 @@
         worldTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
         worldTexture.minFilter = THREE.LinearFilter;
 
-        var innerGeo = new THREE.SphereGeometry( 1.2, 60, 60 );
+        // OPTIMASI: Poligon dikurangi drastis (dari 60 ke 32)
+        var innerGeo = new THREE.SphereGeometry( 1.2, 32, 32 );
         var innerMat = new THREE.MeshPhongMaterial({
             color: 0xffffff,
             map: texture,
@@ -661,7 +701,8 @@
         hemiLight.position.set(0, 0, 0);
         scene.add(hemiLight);
 
-        var worldGeometry = new THREE.SphereGeometry( 500, 60, 60 );
+        // OPTIMASI: Mengurangi poligon bintang/luar
+        var worldGeometry = new THREE.SphereGeometry( 500, 32, 32 );
         var worldMaterial = new THREE.MeshBasicMaterial({
             color: 0xffffff,
             map: worldTexture,
@@ -677,6 +718,9 @@
 
         function animate() {
             requestAnimationFrame(animate);
+            // OPTIMASI: Matikan proses rotasi dan rendering jika section About terlewat
+            if (!isAboutVisible) return;
+
             innerSphere.rotation.y += 0.002;
             innerSphere.rotation.x += 0.0001;
             world.rotation.y += 0.0001;
@@ -697,6 +741,7 @@
         window.threeInner = innerSphere;
     }
 
+    // Fungsi untuk memecah teks paragraf menjadi span-span (kata per kata) untuk efek typewriter saat scroll
     function setupScrollTypewriter() {
         const elements = document.querySelectorAll('.scroll-typewriter');
         elements.forEach(el => {
@@ -818,10 +863,10 @@
                     if (typeWriterSpans.length > 0) {
                         tlGallery.to(typeWriterSpans, {
                             opacity: 1,
-                            stagger: { amount: 3 },
+                            stagger: { amount: 3 }, // Durasi stagger disebar merata selama 3 detik
                             ease: "none",
                             duration: 0.1
-                        }, "<");
+                        }, "<"); // "<" artinya dimulai bersamaan dengan animasi slide track sebelumnya
                     }
 
                     if (images.length) {
