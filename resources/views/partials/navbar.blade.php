@@ -31,7 +31,8 @@
             <!-- Center Logo (Absolute Inset Centering) -->
             <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                 <a href="{{ route('home') }}" class="block transform hover:scale-105 transition duration-500 pointer-events-auto">
-                    <img src="{{ asset('assets/logo/logo-lumen-white.png') }}" alt="LUMEN Logo" class="h-5 sm:h-7 w-auto object-contain drop-shadow-[0_0_10px_rgba(237,231,212,0.3)]">
+                    <!-- GANTI LOGO LUMEN KE WILLSPORTS DENGAN UKURAN EKSTRA BESAR (SCALE) -->
+                    <img src="{{ asset('assets/logo/will-sport-fix-transparant-logo-white-LFQ3FxNE1UZhtkMe.webp') }}" alt="WILLSPORTS Logo" class="h-14 sm:h-20 w-auto object-contain scale-125 sm:scale-150 drop-shadow-[0_0_10px_rgba(237,231,212,0.3)]">
                 </a>
             </div>
 
@@ -92,10 +93,10 @@
                 </nav>
 
                 <div class="pt-4 flex justify-between items-center text-xs text-brand-gray tracking-widest uppercase font-bold opacity-50">
-                    <span>LUMEN Fine Jewelry</span>
+                    <span>WILLSPORTS Gear</span>
                     <div class="flex space-x-4">
-                        <a href="https://www.instagram.com/lu.men___/" target="_blank">IG</a>
-                        <a href="https://www.tiktok.com/@lu.men___" target="_blank">TT</a>
+                        <a href="https://www.instagram.com/willsports___/" target="_blank">IG</a>
+                        <a href="https://www.tiktok.com/@willsports___" target="_blank">TT</a>
                     </div>
                 </div>
             </div>

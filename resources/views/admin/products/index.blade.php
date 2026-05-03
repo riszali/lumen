@@ -4,12 +4,14 @@
 @section('header_title', 'Products Management')
 
 @section('content')
-
+<!-- Ambient Background Wrapper for Glassmorphism -->
 <div class="relative w-full min-h-[85vh] rounded-[2.5rem] overflow-hidden bg-white/[0.02] p-4 sm:p-6 lg:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/10 backdrop-blur-sm">
     
+    <!-- Animated Glow/Blobs behind the glass -->
     <div class="absolute top-0 right-10 w-96 h-96 bg-brand-olive rounded-full mix-blend-screen filter blur-[120px] opacity-20"></div>
     <div class="absolute bottom-10 left-10 w-80 h-80 bg-brand-sage rounded-full mix-blend-screen filter blur-[100px] opacity-15"></div>
 
+    <!-- Main Content Layer -->
     <div class="relative z-10 space-y-8">
         
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-2">
@@ -22,6 +24,7 @@
             </a>
         </div>
 
+        <!-- Glass Table Container -->
         <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-brand-warm">
@@ -96,6 +99,7 @@
 </div>
 
 <style>
+    /* Styling adjustment for Laravel Default Pagination in Dark Mode */
     .glass-pagination nav p { color: #AAAB9A; }
     .glass-pagination nav span, .glass-pagination nav a {
         background-color: rgba(255, 255, 255, 0.05);

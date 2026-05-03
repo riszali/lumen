@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Order Details | LUMEN')
+@section('title', 'Order Details | WILLSPORTS')
 
 @section('content')
 <!-- Main Wrapper with Dark Background -->
@@ -47,8 +47,8 @@
             </div>
             <p class="text-sm text-brand-cream mb-4 font-light leading-relaxed">Please transfer the exact amount of <strong class="text-yellow-400 font-bold">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</strong> to one of the following accounts:</p>
             <ul class="text-sm text-brand-cream space-y-3 mb-4 font-medium bg-black/30 p-4 rounded-xl border border-white/5">
-                <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-yellow-400"></span> BCA: 1234567890 a.n LUMEN JEWELRY</li>
-                <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-yellow-400"></span> Mandiri: 0987654321 a.n LUMEN JEWELRY</li>
+                <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-yellow-400"></span> BCA: 1234567890 a.n WILLSPORTS APPAREL</li>
+                <li class="flex items-center gap-3"><span class="w-2 h-2 rounded-full bg-yellow-400"></span> Mandiri: 0987654321 a.n WILLSPORTS APPAREL</li>
             </ul>
             <p class="text-xs text-brand-gray font-light">Once paid, our team will verify your payment and process your order.</p>
         </div>

@@ -11,9 +11,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Memanggil seeder untuk Admin, Kategori, dan Produk Olahraga
         $this->call([
             UserSeeder::class,
             CategorySeeder::class,
+            ProductSeeder::class, // <-- Diaktifkan agar produk Padel dll masuk ke database
         ]);
     }
 }

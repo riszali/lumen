@@ -4,9 +4,10 @@
 @section('header_title', 'Account Settings')
 
 @section('content')
-
+<!-- Ambient Background Wrapper for Glassmorphism -->
 <div class="relative w-full min-h-[85vh] rounded-[2.5rem] overflow-hidden bg-white/[0.02] p-4 sm:p-6 lg:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/10 backdrop-blur-sm">
     
+    <!-- Main Content Layer (Lampu statis sudah diurus oleh layout utama) -->
     <div class="relative z-10 max-w-4xl mx-auto space-y-8">
         
         <div>
@@ -15,12 +16,13 @@
         </div>
 
         <div class="flex flex-col lg:flex-row gap-8">
-
+            <!-- Glass Form Container -->
             <div class="w-full lg:w-2/3 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] p-8">
                 <form action="{{ route('admin.profile.update') }}" method="POST" class="space-y-8">
                     @csrf
                     @method('PUT')
 
+                    <!-- Informasi Dasar -->
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-widest text-brand-cream mb-6 border-b border-white/10 pb-4">Basic Information</h3>
                         <div class="space-y-6">
@@ -38,6 +40,7 @@
                         </div>
                     </div>
 
+                    <!-- Ganti Kata Sandi -->
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-widest text-brand-cream mb-6 border-b border-white/10 pb-4">Update Password</h3>
                         <p class="text-xs text-brand-olive mb-6 font-light tracking-wide">Leave these fields blank if you do not want to change your password.</p>
@@ -68,6 +71,7 @@
                 </form>
             </div>
 
+            <!-- Petunjuk Admin -->
             <div class="w-full lg:w-1/3">
                 <div class="bg-brand-olive/10 border border-brand-olive/20 rounded-[2rem] p-8 shadow-inner">
                     <div class="flex items-center gap-3 mb-4">
@@ -75,7 +79,7 @@
                         <h3 class="font-semibold text-brand-sage uppercase tracking-widest text-sm">Security Notice</h3>
                     </div>
                     <p class="text-sm text-brand-warm font-light leading-relaxed mb-4">
-                        Always use a strong, unique password to protect the LUMEN Admin Dashboard from unauthorized access.
+                        Always use a strong, unique password to protect the WILLSPORTS Admin Dashboard from unauthorized access.
                     </p>
                     <ul class="text-xs text-brand-gray space-y-2 list-disc pl-4 opacity-80">
                         <li>Minimum 8 characters length</li>

@@ -41,16 +41,17 @@ class CheckoutController extends Controller
 
         DB::beginTransaction();
         try {
-
+            // Create Order
             $order = Order::create([
                 'user_id' => Auth::id(),
-                'order_number' => 'LMN-' . strtoupper(Str::random(8)),
+                'order_number' => 'WSP-' . strtoupper(Str::random(8)), // Diubah dari LMN menjadi WSP (Willsports)
                 'total_amount' => $cart->total,
                 'status' => 'pending',
                 'shipping_address' => $request->address,
                 'payment_method' => $request->payment_method
             ]);
 
+            // Create Order Items and Deduct Stock
             foreach ($cart->items as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -61,6 +62,7 @@ class CheckoutController extends Controller
                     'quantity' => $item->quantity
                 ]);
 
+                // Deduct Stock
                 if ($item->product_variant_id) {
                     $item->variant->decrement('stock', $item->quantity);
                 } else {
@@ -68,10 +70,12 @@ class CheckoutController extends Controller
                 }
             }
 
+            // Update user profile with latest phone/address if empty
             $user = Auth::user();
             if (!$user->phone) $user->update(['phone' => $request->phone]);
             if (!$user->address) $user->update(['address' => $request->address]);
 
+            // Clear Cart
             $cart->items()->delete();
 
             DB::commit();

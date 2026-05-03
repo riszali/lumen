@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pesanan Saya | LUMEN')
+@section('title', 'Pesanan Saya | WILLSPORTS')
 
 @section('content')
 <!-- Wrapper Utama Latar Belakang Gelap -->
@@ -23,7 +23,7 @@
             <div class="text-center py-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] max-w-2xl mx-auto">
                 <svg class="w-16 h-16 mx-auto mb-6 text-brand-gray opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                 <p class="text-brand-cream font-medium tracking-wide mb-2 uppercase text-sm">Belum Ada Pesanan</p>
-                <p class="text-brand-gray text-xs font-light mb-8">Anda belum melakukan pembelian apapun.</p>
+                <p class="text-brand-gray text-xs font-light mb-8">Anda belum melakukan pembelian perlengkapan apapun.</p>
                 <a href="{{ route('shop.index') }}" class="inline-block bg-brand-sage/20 text-brand-sage border border-brand-sage/30 px-8 py-3 rounded-full uppercase tracking-widest text-[10px] font-bold hover:bg-brand-sage/30 hover:scale-105 transition duration-300 shadow-[0_0_15px_rgba(170,171,154,0.15)]">
                     Mulai Berbelanja
                 </a>

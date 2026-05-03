@@ -11,7 +11,6 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        // Jika sudah login, cegah masuk ke halaman login
         if (Auth::check()) {
             return Auth::user()->role === 'admin' 
                 ? redirect()->route('admin.dashboard') 
@@ -30,12 +29,11 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            // Cek role untuk redirect
             if (Auth::user()->role === 'admin') {
                 return redirect()->intended(route('admin.dashboard'));
             }
 
-            return redirect()->intended(route('home'))->with('success', 'Selamat datang kembali, ' . Auth::user()->name);
+            return redirect()->intended(route('home'))->with('success', 'Welcome back to Willsports, ' . Auth::user()->name);
         }
 
         return back()->withErrors([
@@ -57,18 +55,25 @@ class AuthController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'phone' => ['required', 'string', 'max:20'],
+            'dob' => ['required', 'date'],
+            'gender' => ['required', 'in:male,female,other'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'customer', // Default role
+            'role' => 'customer',
+            'phone' => $request->phone,
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'newsletter_subscribed' => $request->has('newsletter'),
         ]);
 
         Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'Akun berhasil dibuat. Selamat datang di LUMEN!');
+        return redirect()->route('home')->with('success', 'Akun berhasil dibuat. Selamat datang di WILLSPORTS!');
     }
 
     public function logout(Request $request)

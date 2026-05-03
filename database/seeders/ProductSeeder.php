@@ -12,39 +12,39 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $ringCategory = Category::where('slug', 'rings')->first();
-        $necklaceCategory = Category::where('slug', 'necklaces')->first();
+        $footwearCategory = Category::where('slug', 'footwear')->first();
+        $activewearCategory = Category::where('slug', 'activewear')->first();
 
-        // Produk 1: Cincin
+        // Produk 1: Sepatu Lari
         $product1 = Product::create([
-            'category_id' => $ringCategory->id,
-            'name' => 'Eternity Diamond Ring',
-            'slug' => Str::slug('Eternity Diamond Ring') . '-' . time(),
-            'description' => 'Cincin berlian elegan yang dibuat dengan emas 18k murni. Sangat cocok untuk momen spesial Anda.',
-            'price' => 15000000, // Rp 15.000.000
+            'category_id' => $footwearCategory->id,
+            'name' => 'AeroGlide Pro Running Shoes',
+            'slug' => Str::slug('AeroGlide Pro Running Shoes') . '-' . time(),
+            'description' => 'Sepatu lari berkinerja tinggi dengan material super ringan dan bantalan aerodinamis. Sangat cocok untuk marathon dan track harian Anda.',
+            'price' => 2500000, // Rp 2.500.000
             'stock' => 10,
             'is_active' => true,
             'is_featured' => true,
         ]);
 
-        // Variant Cincin
-        ProductVariant::create(['product_id' => $product1->id, 'material' => '18k Yellow Gold', 'size' => 'Size 6', 'stock' => 5]);
-        ProductVariant::create(['product_id' => $product1->id, 'material' => '18k White Gold', 'size' => 'Size 7', 'stock' => 5]);
+        // Variant Sepatu Lari
+        ProductVariant::create(['product_id' => $product1->id, 'material' => 'Neon Green', 'size' => 'Size 42', 'stock' => 5]);
+        ProductVariant::create(['product_id' => $product1->id, 'material' => 'Stealth Black', 'size' => 'Size 43', 'stock' => 5]);
 
-        // Produk 2: Kalung
+        // Produk 2: Jaket Olahraga
         $product2 = Product::create([
-            'category_id' => $necklaceCategory->id,
-            'name' => 'Sapphire Tear Necklace',
-            'slug' => Str::slug('Sapphire Tear Necklace') . '-' . time(),
-            'description' => 'Kalung dengan liontin batu safir biru berbentuk tetesan air mata, dikelilingi berlian kecil yang memukau.',
-            'price' => 22500000, // Rp 22.500.000
+            'category_id' => $activewearCategory->id,
+            'name' => 'EnduroShield Windbreaker',
+            'slug' => Str::slug('EnduroShield Windbreaker') . '-' . time(),
+            'description' => 'Jaket olahraga tahan angin dan air dengan teknologi sirkulasi udara maksimal. Melindungi Anda di kondisi cuaca paling ekstrem.',
+            'price' => 1250000, // Rp 1.250.000
             'stock' => 5,
             'is_active' => true,
             'is_featured' => true,
         ]);
 
-        // Variant Kalung
-        ProductVariant::create(['product_id' => $product2->id, 'material' => 'Platinum', 'size' => '45 cm', 'stock' => 3]);
-        ProductVariant::create(['product_id' => $product2->id, 'material' => '18k Rose Gold', 'size' => '45 cm', 'stock' => 2]);
+        // Variant Jaket
+        ProductVariant::create(['product_id' => $product2->id, 'material' => 'Navy Blue', 'size' => 'Size M', 'stock' => 3]);
+        ProductVariant::create(['product_id' => $product2->id, 'material' => 'Crimson Red', 'size' => 'Size L', 'stock' => 2]);
     }
 }

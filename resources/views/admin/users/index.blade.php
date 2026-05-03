@@ -4,24 +4,27 @@
 @section('header_title', 'Registered Users Database')
 
 @section('content')
-
+<!-- Ambient Background Wrapper for Glassmorphism -->
 <div class="relative w-full min-h-[85vh] rounded-[2.5rem] overflow-hidden bg-white/2 p-4 sm:p-6 lg:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-white/10 backdrop-blur-sm">
     
+    <!-- Animated Glow/Blobs behind the glass -->
     <div class="absolute top-1/4 left-1/3 w-96 h-96 bg-brand-olive rounded-full mix-blend-screen filter blur-[120px] opacity-20"></div>
     <div class="absolute bottom-10 right-10 w-80 h-80 bg-brand-sage rounded-full mix-blend-screen filter blur-[100px] opacity-15"></div>
 
+    <!-- Main Content Layer -->
     <div class="relative z-10 space-y-8">
         
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
             <div>
                 <h2 class="font-serif text-3xl text-brand-cream tracking-wide drop-shadow-md">Registered Accounts</h2>
-                <p class="text-xs text-brand-gray font-light tracking-[0.2em] uppercase mt-1">Lumen Exclusive Database</p>
+                <p class="text-xs text-brand-gray font-light tracking-[0.2em] uppercase mt-1">Willsports Exclusive Database</p>
             </div>
             <div class="px-6 py-3 bg-white/5 rounded-full border border-white/10 backdrop-blur-md shadow-lg">
                 <span class="text-sm text-brand-gray font-medium tracking-wider">Total: <span class="text-brand-cream font-bold">{{ $users->total() }}</span> Users</span>
             </div>
         </div>
 
+        <!-- Glass Table Container -->
         <div class="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-4xl shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-brand-warm">
@@ -81,7 +84,7 @@
 </div>
 
 <style>
-
+    /* Styling adjustment for Laravel Default Pagination in Dark Mode */
     .glass-pagination nav p { color: #AAAB9A; }
     .glass-pagination nav span, .glass-pagination nav a {
         background-color: rgba(255, 255, 255, 0.05);
