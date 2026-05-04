@@ -56,7 +56,6 @@
                                 <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
 
-                            <!-- Custom Glass Dropdown Kategori -->
                             <ul id="category_options" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] max-h-60 overflow-y-auto py-2 transition-colors duration-500">
                                 <li class="px-5 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer transition" onclick="selectCategory('', '-- Select Category --')">-- Select Category --</li>
                                 @foreach(\App\Models\Category::all() as $category)
@@ -90,11 +89,9 @@
                                 <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
 
-                            <!-- Custom Glass Dropdown Brand -->
                             <ul id="brand_options" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] max-h-72 overflow-y-auto py-2 transition-colors duration-500">
                                 <li class="px-5 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer transition" onclick="selectBrand('', '-- Select Brand --')">-- Select Brand --</li>
                                 
-                                <!-- Optgroup Imitation via DIV (No Select/Optgroup tag) -->
                                 <div class="px-5 py-2 mt-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-volt border-y border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/40">Padel Rackets</div>
                                 @foreach(['Babolat', 'Bullpadel', 'HEAD', 'Oxdog', 'Siux', 'Nox', 'StarVie', 'Adidas Padel', 'Kuikma', 'Drop Shot', 'Dunlop', 'Coello Edition'] as $b)
                                     <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition pl-8" onclick="selectBrand('{{ $b }}', '{{ $b }}')">{{ $b }}</li>
@@ -151,13 +148,22 @@
                     @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Image -->
+                <!-- Multiple Images Upload with Preview -->
                 <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Primary Image *</label>
+                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Product Images (Can upload multiple) *</label>
+                    <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Tahan tombol CTRL/SHIFT saat memilih foto untuk upload banyak file. Foto pertama akan otomatis menjadi thumbnail produk.</p>
+                    
                     <div class="relative">
-                        <input type="file" name="image" accept="image/*" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
+                        <!-- 'images[]' and 'multiple' attribute added here -->
+                        <input type="file" name="images[]" id="images_input" multiple accept="image/*" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
                     </div>
-                    @error('image') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                    @error('images') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                    @error('images.*') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+
+                    <!-- Container Preview Multi-Image -->
+                    <div id="image_preview_container" class="mt-4 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <!-- Preview Images will appear here dynamically via JS -->
+                    </div>
                 </div>
 
                 <!-- Options -->
@@ -181,8 +187,43 @@
     </div>
 </div>
 
-<!-- Script untuk Custom Dropdown dan Toggle Input Baru -->
+<!-- Script untuk Multi-Image Preview dan Custom Dropdowns -->
 <script>
+    // --- Logika Live Preview Multiple Images ---
+    document.getElementById('images_input').addEventListener('change', function() {
+        const previewContainer = document.getElementById('image_preview_container');
+        previewContainer.innerHTML = ''; // Kosongkan preview lama
+        
+        if (this.files) {
+            Array.from(this.files).forEach((file, index) => {
+                if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; // Validasi ekstensi
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'relative aspect-square bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm dark:shadow-inner';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-full object-cover';
+                    
+                    div.appendChild(img);
+
+                    // Beri label/badge untuk gambar pertama sebagai Thumbnail (Primary)
+                    if (index === 0) {
+                        const badge = document.createElement('div');
+                        badge.className = 'absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md';
+                        badge.innerText = 'Primary';
+                        div.appendChild(badge);
+                    }
+                    
+                    previewContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+
     // --- Logika Input Kategori Baru ---
     let isNewCategoryMode = false;
     function toggleNewCategoryMode() {
@@ -259,7 +300,7 @@
         }
     }
 
-    // --- Logika Custom Dropdown Murni (Tanpa Select/Optgroup bawaan) ---
+    // --- Logika Custom Dropdown Murni ---
     function toggleCategoryDropdown() {
         document.getElementById('category_options').classList.toggle('hidden');
         document.getElementById('brand_options').classList.add('hidden'); 

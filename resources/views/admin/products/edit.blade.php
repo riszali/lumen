@@ -149,22 +149,40 @@
                     @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Image -->
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Update Primary Image</label>
-                    <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Leave file input blank if you don't want to change the image.</p>
+                <!-- Multi-Image Upload & Preview -->
+                <div class="bg-gray-50/50 dark:bg-black/10 rounded-2xl border border-gray-200 dark:border-white/5 p-6 transition-colors duration-500">
+                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4 font-bold transition-colors duration-500">Product Images Gallery</label>
                     
-                    <div class="flex items-center gap-6">
-                        @if($product->primaryImage)
-                            <div class="w-20 h-24 bg-gray-100 dark:bg-black/40 border border-gray-300 dark:border-white/10 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm dark:shadow-inner">
-                                <img src="{{ Storage::url($product->primaryImage->image_path) }}" class="w-full h-full object-cover">
-                            </div>
-                        @endif
-                        <div class="flex-grow">
-                            <input type="file" name="image" accept="image/*" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
+                    <!-- Menampilkan Gambar yang Sudah Ada -->
+                    @if($product->images->count() > 0)
+                        <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Current Images ({{ $product->images->count() }}):</p>
+                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
+                            @foreach($product->images as $image)
+                                <div class="relative aspect-square bg-gray-100 dark:bg-black/40 border border-gray-300 dark:border-white/10 rounded-xl overflow-hidden shadow-sm dark:shadow-inner">
+                                    <img src="{{ Storage::url($image->image_path) }}" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition duration-300">
+                                    @if($image->is_primary)
+                                        <div class="absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md">Primary</div>
+                                    @endif
+                                </div>
+                            @endforeach
                         </div>
+                    @endif
+
+                    <!-- Upload Gambar Baru -->
+                    <div class="border-t border-gray-200 dark:border-white/10 pt-6">
+                        <p class="text-[10px] font-medium text-yellow-600 dark:text-yellow-500 mb-3 uppercase tracking-widest">
+                            <span class="font-bold">Note:</span> Mengunggah gambar baru akan menimpa (replace) semua gambar lama yang ada di atas. Biarkan kosong jika tidak ingin mengubah gambar.
+                        </p>
+                        <div class="relative">
+                            <!-- Input array 'images[]' -->
+                            <input type="file" name="images[]" id="images_input" multiple accept="image/*" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
+                        </div>
+                        @error('images') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                        @error('images.*') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                        
+                        <!-- Tempat Preview Gambar Baru via JS -->
+                        <div id="image_preview_container" class="mt-4 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4"></div>
                     </div>
-                    @error('image') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                 </div>
 
                 <!-- Options -->
@@ -188,8 +206,43 @@
     </div>
 </div>
 
-<!-- Script untuk Custom Dropdown dan Toggle Input Baru -->
+<!-- Script untuk Multi-Image Preview dan Custom Dropdowns -->
 <script>
+    // --- Logika Live Preview Multiple Images ---
+    document.getElementById('images_input').addEventListener('change', function() {
+        const previewContainer = document.getElementById('image_preview_container');
+        previewContainer.innerHTML = ''; // Kosongkan preview lama
+        
+        if (this.files) {
+            Array.from(this.files).forEach((file, index) => {
+                if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; // Validasi ekstensi
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'relative aspect-square bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm dark:shadow-inner';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-full object-cover';
+                    
+                    div.appendChild(img);
+
+                    // Label/badge untuk gambar pertama
+                    if (index === 0) {
+                        const badge = document.createElement('div');
+                        badge.className = 'absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md';
+                        badge.innerText = 'Primary';
+                        div.appendChild(badge);
+                    }
+                    
+                    previewContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+
     // --- Logika Input Kategori Baru ---
     let isNewCategoryMode = false;
     function toggleNewCategoryMode() {

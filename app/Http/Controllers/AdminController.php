@@ -56,13 +56,14 @@ class AdminController extends Controller
             $request->validate(['brand' => 'required|string|max:255']);
         }
 
-        // 3. Validasi Data Lain
+        // 3. Validasi Data Lain (Diubah untuk multi-image)
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240'
+            'images' => 'required|array|min:1',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240'
         ]);
 
         $product = Product::create([
@@ -77,20 +78,25 @@ class AdminController extends Controller
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $product->images()->create([
-                'image_path' => $path,
-                'is_primary' => true
-            ]);
+        // 4. Proses Upload Multiple Image
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create([
+                    'image_path' => $path,
+                    // Gambar pertama di array otomatis jadi Primary
+                    'is_primary' => $index === 0 ? true : false 
+                ]);
+            }
         }
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan beserta semua gambarnya.');
     }
 
     public function productsEdit(Product $product)
     {
         $categories = Category::all();
+        $product->load('images'); // Load gambar-gambar lama
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -120,7 +126,8 @@ class AdminController extends Controller
             'description' => 'required',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240'
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240'
         ]);
 
         $product->update([
@@ -135,20 +142,25 @@ class AdminController extends Controller
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        if ($request->hasFile('image')) {
-            if ($product->primaryImage) {
-                Storage::disk('public')->delete($product->primaryImage->image_path);
-                $product->primaryImage->delete();
+        // 4. Proses Multi-Image jika ada gambar baru yang diunggah
+        if ($request->hasFile('images')) {
+            // Karena ini sistem simple update: Jika upload baru, hapus semua gambar lama
+            foreach ($product->images as $oldImage) {
+                Storage::disk('public')->delete($oldImage->image_path);
+                $oldImage->delete();
             }
 
-            $path = $request->file('image')->store('products', 'public');
-            $product->images()->create([
-                'image_path' => $path,
-                'is_primary' => true
-            ]);
+            // Simpan gambar baru
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create([
+                    'image_path' => $path,
+                    'is_primary' => $index === 0 ? true : false
+                ]);
+            }
         }
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk diperbarui.');
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function productsDestroy(Product $product)
