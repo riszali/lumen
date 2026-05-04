@@ -138,6 +138,39 @@
         </div>
     </aside>
 
+    <!-- Script Restorasi Status Sidebar Secara Cepat (Menghindari Kedipan saat Ganti Halaman) -->
+    <script>
+        (function() {
+            const savedState = localStorage.getItem('sidebar_state');
+            const isMobile = window.innerWidth <= 768; // Deteksi layar HP/Tablet
+
+            // Jika user sebelumnya mengecilkan sidebar, ATAU user buka lewat HP
+            if (savedState === 'minimized' || (!savedState && isMobile)) {
+                const sidebar = document.getElementById('sidebar');
+                const texts = document.querySelectorAll('.sidebar-text');
+                const logoFull = document.getElementById('logo-full');
+                const logoMini = document.getElementById('logo-mini');
+
+                // Cabut animasi transisi sejenak agar langsung tertutup sempurna tanpa gerakan saat loading
+                sidebar.classList.remove('transition-[width]', 'duration-300', 'ease-in-out');
+                
+                // Set ukuran ke kecil
+                sidebar.classList.remove('w-72');
+                sidebar.classList.add('w-20');
+
+                // Sembunyikan elemen tulisan
+                texts.forEach(text => text.classList.add('hidden'));
+                if(logoFull) logoFull.classList.add('hidden');
+                if(logoMini) logoMini.classList.remove('hidden');
+
+                // Nyalakan kembali animasi transisinya supaya tombol hamburger tetap smooth
+                setTimeout(() => {
+                    sidebar.classList.add('transition-[width]', 'duration-300', 'ease-in-out');
+                }, 50);
+            }
+        })();
+    </script>
+
     <!-- Main Content Area -->
     <!-- OPTIMASI: Hapus class 'transition-all duration-300' dari wrapper utama ini -->
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
@@ -199,14 +232,20 @@
             const isCollapsing = sidebar.classList.contains('w-72');
 
             if (isCollapsing) {
+                // SIMPAN STATE KE MEMORI BROWSER
+                localStorage.setItem('sidebar_state', 'minimized');
+
                 // Sembunyikan teks duluan sebelum sidebar menyusut, biar elemen gak kegencet/maksa baris baru
                 texts.forEach(text => text.classList.add('hidden'));
-                logoFull.classList.add('hidden');
-                logoMini.classList.remove('hidden');
+                if(logoFull) logoFull.classList.add('hidden');
+                if(logoMini) logoMini.classList.remove('hidden');
                 
                 sidebar.classList.remove('w-72');
                 sidebar.classList.add('w-20');
             } else {
+                // SIMPAN STATE KE MEMORI BROWSER
+                localStorage.setItem('sidebar_state', 'expanded');
+
                 // Besarkan ukuran sidebar dulu
                 sidebar.classList.remove('w-20');
                 sidebar.classList.add('w-72');
@@ -214,8 +253,8 @@
                 // Tunggu 300ms (sesuai durasi transisi CSS) sebelum munculin teksnya
                 setTimeout(() => {
                     texts.forEach(text => text.classList.remove('hidden'));
-                    logoFull.classList.remove('hidden');
-                    logoMini.classList.add('hidden');
+                    if(logoFull) logoFull.classList.remove('hidden');
+                    if(logoMini) logoMini.classList.add('hidden');
                 }, 300);
             }
         }
