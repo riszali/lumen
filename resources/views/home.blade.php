@@ -280,63 +280,90 @@
 </section>
 
 <!-- =========================================
-     5. BENTO GRID (KATEGORI PRODUK)
+     5. BRAND PARTNERS & BENTO GRID
      ========================================= -->
-<section class="py-24 bg-[var(--dark)] px-4 sm:px-8 lg:px-12 relative overflow-hidden">
+<section class="pt-16 pb-24 bg-[var(--dark)] relative overflow-hidden">
     
-    <div class="max-w-[1400px] mx-auto relative z-10">
-        <div class="mb-14 gsap-fade-up">
+    <!-- BRAND LOGOS (MARQUEE) -->
+    <div class="w-full mb-12 sm:mb-20 overflow-hidden border-y border-white/5 py-5 sm:py-8 bg-[#080808] relative gsap-fade-up">
+        <!-- Fade Edges -->
+        <div class="absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none"></div>
+        
+        <div class="animate-marquee flex items-center whitespace-nowrap opacity-40">
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BABOLAT</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BULLPADEL</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">HEAD</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">OXDOG</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">SIUX</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NOX</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">ADIDAS</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NIKE</span>
+            <!-- Duplikasi agar efek Infinity Seamless jalan mulus tanpa putus -->
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BABOLAT</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BULLPADEL</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">HEAD</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">OXDOG</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">SIUX</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NOX</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">ADIDAS</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NIKE</span>
+        </div>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+        <div class="mb-8 sm:mb-14 gsap-fade-up">
             <h2 class="font-bebas text-4xl md:text-6xl text-white uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
-            <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
+            <p class="text-gray-500 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
         </div>
         
-        <!-- OPTIMASI HP: auto-rows dikecilkan agar grid card proporsional di layar HP -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-5 auto-rows-[160px] sm:auto-rows-[200px] md:auto-rows-[300px]">
+        <!-- OPTIMASI HP: Card dikecilkan dan dibikin Horizontal Scroll (Sebaris) di HP. Desktop tetap Grid Bento -->
+        <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar md:grid md:grid-cols-4 gap-3 sm:gap-5 md:auto-rows-[300px] pb-6 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
             
             <!-- Card Padel -->
-            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 row-span-1 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto md:col-span-2 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/padel-rack-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=800'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-5 left-5 md:bottom-8 md:left-8 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 md:mb-2 block">Koleksi Raket</span>
-                        <h3 class="font-bebas text-3xl sm:text-4xl md:text-5xl text-white drop-shadow-md">RAKET PADEL</h3>
+                    <div class="absolute bottom-4 left-4 md:bottom-8 md:left-8 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 md:mb-2 block">Koleksi Raket</span>
+                        <h3 class="font-bebas text-2xl sm:text-4xl md:text-5xl text-white drop-shadow-md">RAKET PADEL</h3>
                     </div>
                 </div>
             </a>
 
             <!-- Card Shoes -->
-            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/shoes-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 block">Alas Kaki Profesional</span>
-                        <h3 class="font-bebas text-2xl sm:text-3xl md:text-4xl text-white drop-shadow-md">SEPATU OLAHRAGA</h3>
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Alas Kaki Profesional</span>
+                        <h3 class="font-bebas text-xl sm:text-3xl md:text-4xl text-white drop-shadow-md">SEPATU OLAHRAGA</h3>
                     </div>
                 </div>
             </a>
 
             <!-- Card Supplements -->
-            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/supp-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 block">Nutrisi Olahraga</span>
-                        <h3 class="font-bebas text-xl sm:text-2xl md:text-3xl text-white drop-shadow-md">SUPLEMEN</h3>
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Nutrisi Olahraga</span>
+                        <h3 class="font-bebas text-lg sm:text-2xl md:text-3xl text-white drop-shadow-md">SUPLEMEN</h3>
                     </div>
                 </div>
             </a>
 
             <!-- Card Activewear -->
-            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/wear-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
                     <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 block">Pakaian Performa</span>
-                        <h3 class="font-bebas text-xl sm:text-2xl md:text-3xl text-white drop-shadow-md">ACTIVEWEAR</h3>
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Pakaian Performa</span>
+                        <h3 class="font-bebas text-lg sm:text-2xl md:text-3xl text-white drop-shadow-md">ACTIVEWEAR</h3>
                     </div>
                 </div>
             </a>
