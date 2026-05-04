@@ -110,14 +110,12 @@
      ========================================= -->
 <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[var(--dark)]">
     
-    <!-- Latar Belakang: Video untuk Desktop, Gambar Statis untuk HP -->
+    <!-- Latar Belakang Video (Dikembalikan ke semua device) -->
     <div class="absolute inset-0 z-0">
-        <!-- OPTIMASI: Tambah preload="metadata" agar tidak memblokir render HTML -->
-        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="hidden md:block w-full h-full object-cover opacity-50">
+        <!-- OPTIMASI: preload="metadata" agar tidak memblokir render HTML -->
+        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
-        <!-- Gambar Statis yang Ringan untuk HP -->
-        <div class="block md:hidden w-full h-full bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000')] bg-cover bg-center opacity-30 grayscale"></div>
         
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
