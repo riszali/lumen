@@ -4,15 +4,17 @@
 
 @section('content')
 
+<!-- Font Khusus Sports Premium: Bebas Neue (Headline) & Montserrat (Body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+    /* RESET & TEMA PREMIUM SPORTS MINIMALIST */
     :root {
-        --volt: #ccff00;
-        --dark: #050505;
-        --card-bg: #0c0c0c;
+        --volt: #ccff00;      
+        --dark: #050505;      
+        --card-bg: #0c0c0c;   
         --border: rgba(255, 255, 255, 0.08);
     }
 
@@ -23,16 +25,8 @@
         overflow-x: hidden;
     }
 
-    .font-bebas {
-        font-family: 'Bebas Neue', sans-serif;
-        letter-spacing: 0.02em;
-        line-height: 0.95;
-    }
-
-    .font-montserrat {
-        font-family: 'Montserrat', sans-serif;
-    }
-
+    .font-bebas { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; line-height: 0.95; }
+    .font-montserrat { font-family: 'Montserrat', sans-serif; }
     .text-volt { color: var(--volt); }
     .bg-volt { background-color: var(--volt); }
 
@@ -43,9 +37,7 @@
         box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     }
 
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
+    /* CSS KHUSUS CAROUSEL (GSAP 3D LOOP) */
     .cards {
         position: relative;
         width: 18rem;
@@ -54,7 +46,6 @@
         padding: 0;
         perspective: 1200px;
     }
-    
     .cards li {
         position: absolute;
         top: 0;
@@ -70,19 +61,14 @@
         transform: translateZ(0); 
         backface-visibility: hidden;
     }
-
-    .cards li img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 1 !important; 
-    }
+    .cards li img { width: 100%; height: 100%; object-fit: cover; opacity: 1 !important; }
 
     @media (max-width: 768px) {
         .cards { width: 14rem; height: 18rem; }
         .cards li { width: 14rem; height: 18rem; }
     }
 
+    /* CSS Marquee */
     @keyframes marquee {
         0% { transform: translateX(0); }
         100% { transform: translateX(-50%); }
@@ -96,20 +82,19 @@
     }
 </style>
 
+<!-- 1. HERO SECTION -->
 <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[var(--dark)]">
-    
     <div class="absolute inset-0 z-0">
-        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="hidden md:block w-full h-full object-cover opacity-50">
+        <!-- Video muncul di semua perangkat (Desktop & Mobile) -->
+        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
         
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
-
     <div class="hidden md:block absolute top-[10%] left-[10%] w-[30%] h-[40%] bg-volt rounded-full filter blur-[100px] opacity-10 pointer-events-none z-0"></div>
 
     <div class="relative z-10 w-[95%] max-w-[1200px] mx-auto px-4 flex flex-col items-center text-center pt-24">
-
         <div class="gsap-hero mb-8 w-full">
             <h1 class="font-bebas text-[80px] sm:text-[110px] md:text-[150px] text-white tracking-wide drop-shadow-2xl">
                 ELEVATE YOUR <span class="text-volt">GAME</span>
@@ -118,7 +103,6 @@
                 Perlengkapan padel spesifikasi turnamen untuk atlet yang menuntut kesempurnaan. Rasakan kendali mutlak dan dominasi setiap jengkal lapangan.
             </p>
         </div>
-
         <div class="gsap-hero flex flex-col sm:flex-row justify-center gap-4 mt-6 w-full">
             <a href="{{ route('shop.index') }}" class="bg-volt text-black px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white hover:-translate-y-1 transition-all duration-300 shadow-[0_0_15px_rgba(204,255,0,0.3)]">
                 Lihat Koleksi
@@ -130,6 +114,7 @@
     </div>
 </section>
 
+<!-- 2. MARQUEE BANNER -->
 <div class="w-full bg-[#0a0a0a] border-y border-white/5 py-3 overflow-hidden relative z-20">
     <div class="animate-marquee font-bebas text-2xl text-gray-500 tracking-widest uppercase flex items-center opacity-80">
         <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
@@ -139,6 +124,7 @@
     </div>
 </div>
 
+<!-- 3. FULL-WIDTH BANNER CAROUSEL (DARI ADMIN) -->
 <section class="relative w-full h-[50vh] md:h-[85vh] bg-[#050505] overflow-hidden z-20 group border-b border-white/5">
     @if(isset($banners) && $banners->count() > 0)
         <div id="full-banner-track" class="w-full h-full flex transition-transform duration-700 ease-in-out">
@@ -146,7 +132,6 @@
             <div class="w-full h-full flex-shrink-0 relative">
                 <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover object-center">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                
                 @if($banner->title)
                 <div class="absolute bottom-10 left-6 md:bottom-20 md:left-20 max-w-4xl px-4 md:px-0">
                     <div class="border-l-4 border-volt pl-4 md:pl-6">
@@ -165,35 +150,24 @@
             <button onclick="nextBanner()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 z-30">
                 <svg class="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"></path></svg>
             </button>
-
             <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-30">
                 @foreach($banners as $index => $banner)
                 <button onclick="goToBanner({{ $index }})" class="banner-indicator w-8 sm:w-16 h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-volt' : 'bg-white/30' }}"></button>
                 @endforeach
             </div>
         @endif
-
     @else
         <div class="w-full h-full relative flex items-center justify-center bg-[#0c0c0c]">
             <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000')] bg-cover bg-center grayscale"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
-            
-            <div class="text-center relative z-10 px-4">
-                <div class="w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 md:backdrop-blur-sm">
-                    <svg class="w-8 h-8 md:w-10 md:h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                </div>
-                <h3 class="font-bebas text-4xl md:text-7xl text-gray-500 tracking-wide uppercase drop-shadow-md">BELUM ADA BANNER</h3>
-                <p class="text-[10px] md:text-xs uppercase tracking-widest text-gray-600 mt-3 font-bold font-montserrat">Silakan upload gambar dari menu Admin Panel</p>
-            </div>
         </div>
     @endif
 </section>
 
+<!-- 4. THE SHOWCASE (SCROLL TRIGGER AKTIF) -->
 <section id="showcase-pin" class="w-full h-screen flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
-    
     <div class="w-full md:w-1/2 h-[50vh] md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
         <div class="hidden md:block absolute w-[300px] h-[300px] bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-5"></div>
-        
         <ul class="cards z-20">
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'" loading="lazy" decoding="async"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'" loading="lazy" decoding="async"></li>
@@ -208,10 +182,8 @@
             <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" loading="lazy" decoding="async"></li>
         </ul>
     </div>
-
     <div id="text-container" class="w-full md:w-1/2 h-[50vh] md:h-screen relative overflow-hidden z-10 bg-[#080808]">
         <div id="scroll-text-wrap" class="absolute top-0 left-0 w-full">
-            
             <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
                 <div class="premium-card p-6 md:p-14">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">01 // KENDALI MUTLAK</span>
@@ -219,7 +191,6 @@
                     <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Raket padel premium yang direkayasa dengan serat karbon tingkat aerospace. Memberikan transfer energi maksimal tanpa mengorbankan akurasi pukulan Anda pada saat-saat krusial.</p>
                 </div>
             </div>
-
             <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
                 <div class="premium-card p-6 md:p-14">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">02 // AGILITAS TINGGI</span>
@@ -227,7 +198,6 @@
                     <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Sepatu performa tinggi dengan grip sol inovatif dan bantalan super responsif. Memastikan setiap pijakan, lompatan, dan manuver di lapangan terasa ringan, solid, dan stabil.</p>
                 </div>
             </div>
-
             <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
                 <div class="premium-card p-6 md:p-14">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">03 // DAYA TAHAN</span>
@@ -235,13 +205,54 @@
                     <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Bertahan lebih lama dari lawanmu. Formulasi nutrisi canggih yang dirancang khusus untuk hidrasi instan, menjaga fokus tetap tajam, dan mempercepat proses pemulihan otot pasca tanding.</p>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
-<section class="pt-16 bg-white relative overflow-hidden">
-    
+<!-- 4.5 FEATURED GEAR (MUNCUL JIKA ADA PRODUK YANG DICENTANG FEATURED DI ADMIN) -->
+@if(isset($featuredProducts) && $featuredProducts->count() > 0)
+<section class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+        <div class="mb-14 gsap-fade-up text-center sm:text-left flex flex-col sm:flex-row justify-between items-end gap-4">
+            <div>
+                <h2 class="font-bebas text-5xl md:text-6xl text-white uppercase tracking-wide mb-2">FEATURED <span class="text-volt">GEAR</span></h2>
+                <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase">Pilihan Utama Sang Juara</p>
+            </div>
+            <a href="{{ route('shop.index') }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-6 py-3 rounded-full transition-all">Lihat Semua</a>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            @foreach($featuredProducts as $product)
+            <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group flex flex-col">
+                <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
+                    @if($product->primaryImage)
+                        <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700">
+                    @else
+                        <div class="w-full h-full flex items-center justify-center text-white/30 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
+                    @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-90 pointer-events-none"></div>
+                    <!-- Badge Featured Bintang -->
+                    <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-volt text-black rounded-full p-1.5 shadow-md border border-[#000]">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                    </div>
+                </a>
+                
+                <div class="text-center px-2 pb-3 flex-grow flex flex-col justify-end font-montserrat">
+                    <h4 class="text-white font-bebas text-2xl tracking-wide mb-1 transition group-hover:text-volt line-clamp-1">
+                        <a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a>
+                    </h4>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
+                    <p class="text-volt text-sm font-bold tracking-wider">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
+<!-- 5. BENTO GRID KATEGORI -->
+<section class="pt-16 bg-white relative overflow-hidden z-20">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 pb-16 sm:pb-24">
         <div class="mb-8 sm:mb-14 gsap-fade-up">
             <h2 class="font-bebas text-4xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
@@ -249,7 +260,7 @@
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 auto-rows-[180px] sm:auto-rows-[220px] md:auto-rows-[300px]">
-            
+            <!-- Card Padel -->
             <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/padel-rack-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=800'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
@@ -260,7 +271,7 @@
                     </div>
                 </div>
             </a>
-
+            <!-- Card Shoes -->
             <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/shoes-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
@@ -271,7 +282,7 @@
                     </div>
                 </div>
             </a>
-
+            <!-- Card Supplements -->
             <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/supp-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
@@ -282,7 +293,7 @@
                     </div>
                 </div>
             </a>
-
+            <!-- Card Activewear -->
             <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/wear-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
@@ -293,11 +304,11 @@
                     </div>
                 </div>
             </a>
-            
         </div>
     </div>
 
-    <div class="w-full overflow-hidden py-5 sm:py-8 bg-[#080808] relative gsap-fade-up">
+    <!-- BRAND LOGOS (MARQUEE) -->
+    <div class="w-full overflow-hidden py-5 sm:py-8 bg-[#080808] relative gsap-fade-up border-t border-white/5">
         <div class="absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none"></div>
         <div class="absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none"></div>
         
@@ -322,11 +333,10 @@
     </div>
 </section>
 
-<section class="py-24 md:py-32 w-full relative overflow-hidden flex flex-col items-center justify-center bg-[var(--dark)] border-t border-white/5">
-    
+<!-- 6. FINAL CTA BANNER -->
+<section class="py-24 md:py-32 w-full relative overflow-hidden flex flex-col items-center justify-center bg-[var(--dark)] border-t border-white/5 z-20">
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]"></div>
-        
         <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" loading="lazy" decoding="async" class="w-full h-full object-cover object-top opacity-10 filter grayscale mix-blend-overlay">
         <div class="absolute inset-0 bg-gradient-to-t from-[var(--dark)] via-[var(--dark)]/80 to-[var(--dark)]"></div>
     </div>
@@ -335,14 +345,12 @@
 
     <div class="relative z-10 w-[95%] max-w-[1000px] mx-auto px-4 sm:px-0">
         <div class="bg-[#0c0c0c]/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] md:rounded-[3rem] p-8 sm:p-12 md:p-16 text-center shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative overflow-hidden group">
-            
             <div class="absolute inset-0 bg-gradient-to-br from-volt/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
             
             <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-volt/50 rounded-tl-[2rem] md:rounded-tl-[3rem] opacity-50"></div>
             <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-volt/50 rounded-br-[2rem] md:rounded-br-[3rem] opacity-50"></div>
 
             <div class="gsap-fade-up relative z-10 flex flex-col items-center">
-                
                 <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-6 flex items-center justify-center gap-3">
                     <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
                     Tingkatkan Levelmu
@@ -366,18 +374,17 @@
                         Eksplor Produk
                     </a>
                 </div>
-
             </div>
         </div>
     </div>
 </section>
 
+<!-- SCRIPT GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        
+        // Carousel Admin Banner
         const track = document.getElementById('full-banner-track');
         const indicators = document.querySelectorAll('.banner-indicator');
         let currentBanner = 0;
@@ -388,7 +395,6 @@
             if (!track) return;
             currentBanner = index;
             track.style.transform = `translateX(-${currentBanner * 100}%)`;
-            
             indicators.forEach((ind, i) => {
                 if (i === currentBanner) {
                     ind.classList.remove('bg-white/30');
@@ -401,41 +407,26 @@
             resetInterval();
         };
 
-        window.nextBanner = function() {
-            if (bannerCount > 1) {
-                goToBanner((currentBanner + 1) % bannerCount);
-            }
-        };
-
-        window.prevBanner = function() {
-            if (bannerCount > 1) {
-                goToBanner((currentBanner - 1 + bannerCount) % bannerCount);
-            }
-        };
+        window.nextBanner = function() { if (bannerCount > 1) { goToBanner((currentBanner + 1) % bannerCount); } };
+        window.prevBanner = function() { if (bannerCount > 1) { goToBanner((currentBanner - 1 + bannerCount) % bannerCount); } };
 
         function resetInterval() {
             clearInterval(slideInterval);
-            if (bannerCount > 1) {
-                slideInterval = setInterval(nextBanner, 6000); 
-            }
+            if (bannerCount > 1) { slideInterval = setInterval(nextBanner, 6000); }
         }
 
         if (bannerCount > 1) { resetInterval(); }
 
+        // GSAP ScrollTrigger
         if (typeof gsap !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
 
-            gsap.from(".gsap-hero", {
-                y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1
-            });
-
+            gsap.from(".gsap-hero", { y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1 });
             gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
-                gsap.from(elem, {
-                    scrollTrigger: { trigger: elem, start: "top 85%" },
-                    y: 40, opacity: 0, duration: 1, ease: "power3.out"
-                });
+                gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 40, opacity: 0, duration: 1, ease: "power3.out" });
             });
 
+            // Showcase Slider Scroll
             const showcase = document.getElementById('showcase-pin');
             const textContainer = document.getElementById('text-container');
             const textWrap = document.getElementById('scroll-text-wrap');
@@ -443,7 +434,6 @@
             
             if(showcase && textWrap && cards.length > 0) {
                 const seamlessLoop = buildSeamlessLoop(cards, 0.1);
-
                 let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
 
                 const tlPin = gsap.timeline({
@@ -458,10 +448,7 @@
                 });
 
                 tlPin.to(textWrap, { y: -scrollDist, ease: "none" }, 0);
-                tlPin.fromTo(seamlessLoop, 
-                    { totalTime: seamlessLoop.duration() }, 
-                    { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0
-                );
+                tlPin.fromTo(seamlessLoop, { totalTime: seamlessLoop.duration() }, { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0);
             }
         }
     });
@@ -474,36 +461,23 @@
             seamlessLoop = gsap.timeline({
                 paused: true,
                 repeat: -1,
-                onRepeat() {
-                    this._time === this._dur && (this._tTime += this._dur - 0.01);
-                }
+                onRepeat() { this._time === this._dur && (this._tTime += this._dur - 0.01); }
             }),
             l = items.length + overlap * 2,
-            time = 0,
-            i, index, item;
+            time = 0, i, index, item;
 
         gsap.set(items, {xPercent: 400, opacity: 0, scale: 0, force3D: true, rotationZ: 0.01});
 
         for (i = 0; i < l; i++) {
-            index = i % items.length;
-            item = items[index];
-            time = i * spacing;
+            index = i % items.length; item = items[index]; time = i * spacing;
             rawSequence.fromTo(item, {scale: 0, opacity: 0}, {scale: 1, opacity: 1, zIndex: 100, duration: 0.5, yoyo: true, repeat: 1, ease: "power1.in", immediateRender: false}, time)
                        .fromTo(item, {xPercent: 400}, {xPercent: -400, duration: 1, ease: "none", immediateRender: false}, time);
             i <= items.length && seamlessLoop.add("label" + i, time);
         }
 
         rawSequence.time(startTime);
-        seamlessLoop.to(rawSequence, {
-            time: loopTime,
-            duration: loopTime - startTime,
-            ease: "none"
-        }).fromTo(rawSequence, {time: overlap * spacing + 1}, {
-            time: startTime,
-            duration: startTime - (overlap * spacing + 1),
-            immediateRender: false,
-            ease: "none"
-        });
+        seamlessLoop.to(rawSequence, { time: loopTime, duration: loopTime - startTime, ease: "none" })
+                    .fromTo(rawSequence, {time: overlap * spacing + 1}, { time: startTime, duration: startTime - (overlap * spacing + 1), immediateRender: false, ease: "none" });
         return seamlessLoop;
     }
 </script>
