@@ -38,12 +38,12 @@
     .text-volt { color: var(--volt); }
     .bg-volt { background-color: var(--volt); }
 
-    /* Desain Card Baru: Solid, Gelap, Premium (Sesuai Referensi Gambar) */
+    /* Desain Card Baru: Solid, Gelap, Premium */
     .premium-card {
         background-color: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: 24px;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     }
 
     /* Custom Scrollbar buat Slider Banners Tambahan Admin */
@@ -75,7 +75,10 @@
         overflow: hidden;
         border: 1px solid rgba(255,255,255,0.1);
         background: #000;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        /* OPTIMASI: Paksa browser pakai GPU (Hardware Acceleration) */
+        will-change: transform, opacity;
+        transform: translateZ(0); 
     }
 
     .cards li img {
@@ -83,7 +86,7 @@
         height: 100%;
         object-fit: cover;
         opacity: 1 !important; 
-        filter: grayscale(15%) contrast(1.1);
+        /* OPTIMASI: Hapus filter bawaan yang memberatkan CPU */
     }
 
     @media (max-width: 768px) {
@@ -100,6 +103,8 @@
         display: flex;
         width: max-content;
         animation: marquee 20s linear infinite;
+        /* OPTIMASI: Hardware Acceleration untuk Animasi Mulus */
+        will-change: transform;
     }
 </style>
 
@@ -108,18 +113,17 @@
      ========================================= -->
 <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[var(--dark)]">
     
-    <!-- Latar Belakang & Glowing Orbs -->
+    <!-- Latar Belakang Video -->
     <div class="absolute inset-0 z-0">
-        <!-- Opacity dinaikkan ke 50 agar lebih terang -->
-        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50">
+        <!-- OPTIMASI: Tambah playsinline & disablePictureInPicture untuk mobile -->
+        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback class="w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
-        <!-- Gradien ditipiskan di atas dan tengah agar video jelas -->
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
 
-    <!-- Cahaya Pendar Halus -->
-    <div class="absolute top-[10%] left-[10%] w-[30%] h-[40%] bg-volt rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none z-0"></div>
+    <!-- Cahaya Pendar Halus (OPTIMASI: Hapus mix-blend-screen, kurangi radius blur) -->
+    <div class="absolute top-[10%] left-[10%] w-[30%] h-[40%] bg-volt rounded-full filter blur-[100px] opacity-10 pointer-events-none z-0"></div>
 
     <!-- Konten Hero -->
     <div class="relative z-10 w-[95%] max-w-[1200px] mx-auto px-4 flex flex-col items-center text-center pt-24">
@@ -200,7 +204,7 @@
     @else
         <!-- FALLBACK KETIKA ADMIN BELUM UPLOAD BANNER (TETAP FULL WIDTH) -->
         <div class="w-full h-full relative flex items-center justify-center bg-[#0c0c0c]">
-            <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000')] bg-cover bg-center grayscale mix-blend-overlay"></div>
+            <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000')] bg-cover bg-center grayscale"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
             
             <div class="text-center relative z-10 px-4">
@@ -221,18 +225,17 @@
     
     <!-- Sisi Kiri: Slider CodePen -->
     <div class="w-full md:w-1/2 h-[50vh] md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
-        <!-- Ambient subtle glow di belakang slider -->
-        <div class="absolute w-[300px] h-[300px] bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-5"></div>
+        <!-- OPTIMASI: Hapus mix-blend-screen dan kurangi blur dari ambient glow ini -->
+        <div class="absolute w-[200px] h-[200px] bg-white rounded-full filter blur-[100px] opacity-5"></div>
         
         <!-- UL Cards CodePen -->
         <ul class="cards z-20">
-            <!-- 5 Aset Baru Lokal -->
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'"></li>
-            <!-- Duplikasi agar efek Infinity Seamless jalan mulus tanpa putus -->
+            <!-- Duplikasi -->
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
@@ -288,7 +291,6 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5 auto-rows-[250px] md:auto-rows-[300px]">
-            
             <!-- Card Padel -->
             <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 row-span-1 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
@@ -346,8 +348,9 @@
      ========================================= -->
 <section class="py-32 w-full text-center relative overflow-hidden flex flex-col items-center justify-center border-t border-white/5">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" class="w-full h-full object-cover object-top opacity-10 filter grayscale">
-        <div class="absolute inset-0 bg-black/60"></div>
+        <!-- OPTIMASI: Hapus filter grayscale dari css, pakai opacity standar -->
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" class="w-full h-full object-cover object-top opacity-[0.05]">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black"></div>
     </div>
     
     <div class="relative z-10 w-full px-4 gsap-fade-up">
@@ -360,7 +363,7 @@
 </section>
 
 <!-- =========================================
-     SCRIPT GSAP & CAROUSEL (ROBUST & BUG-FREE)
+     SCRIPT GSAP & CAROUSEL (OPTIMIZED)
      ========================================= -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -412,17 +415,15 @@
             }
         }
 
-        // Mulai auto-slide jika banner > 1
         if (bannerCount > 1) {
             resetInterval();
         }
 
         // ===========================================
-        // GSAP & SCROLL TRIGGER
+        // GSAP & SCROLL TRIGGER (OPTIMIZED)
         // ===========================================
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. Animasi Masuk (Hero)
         gsap.from(".gsap-hero", {
             y: 40,
             opacity: 0,
@@ -432,7 +433,6 @@
             delay: 0.1
         });
 
-        // 2. Animasi Fade Up Standard
         gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
             gsap.from(elem, {
                 scrollTrigger: {
@@ -446,47 +446,41 @@
             });
         });
 
-        // 3. LOGIC SHOWCASE (CODEPEN INFINITY + TEXT SCROLL)
+        // LOGIC SHOWCASE INFINITY SCROLL (OPTIMIZED)
         const showcase = document.getElementById('showcase-pin');
         const textContainer = document.getElementById('text-container');
         const textWrap = document.getElementById('scroll-text-wrap');
         const cards = gsap.utils.toArray('.cards li');
         
-        // Buat Timeline Seamless Loop CodePen Murni
+        // Buat Timeline Seamless Loop
         const seamlessLoop = buildSeamlessLoop(cards, 0.1);
 
-        // Hitung jarak scroll berdasarkan tinggi Teks Wrap dikurangi tinggi layar containernya
-        // Ini memastikan teks berhenti tepat saat blok teks terakhir berada di tengah layar
         let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
 
-        // Buat Timeline Induk yang Menahan Layar (Pin)
         const tlPin = gsap.timeline({
             scrollTrigger: {
                 trigger: showcase,
                 start: "top top",
-                end: "+=" + scrollDist, // Jarak scroll sama dengan tinggi teks
+                end: "+=" + scrollDist,
                 pin: true,
-                scrub: 1.5, // Bikin scroll empuk (smooth)
+                scrub: 1, // OPTIMASI: Kurangi dari 1.5 jadi 1 agar hitungan lebih ringan
                 anticipatePin: 1
             }
         });
 
-        // A. Animasi Teks Bergerak ke Atas
         tlPin.to(textWrap, {
             y: -scrollDist,
             ease: "none"
         }, 0);
 
-        // B. Sinkronisasi Loop CodePen dengan Scroll
-        // Kita mulai dari tengah loop (duration) biar nggak ada gambar kosong di awal
         tlPin.fromTo(seamlessLoop, 
             { totalTime: seamlessLoop.duration() }, 
-            { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, // Muter 2.5 kali selama scroll
+            { totalTime: seamlessLoop.duration() * 2.5, ease: "none" },
             0
         );
     });
 
-    // FUNGSI INTI UNTUK SEAMLESS LOOP (MURNI DARI SCRIPT.JS CODEPEN LU)
+    // FUNGSI INTI UNTUK SEAMLESS LOOP (OPTIMIZED DENGAN force3D)
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,
@@ -503,7 +497,8 @@
             time = 0,
             i, index, item;
 
-        gsap.set(items, {xPercent: 400, opacity: 0, scale: 0});
+        // OPTIMASI: Tambah force3D: true agar animasi diproses oleh GPU (Hardware Acceleration)
+        gsap.set(items, {xPercent: 400, opacity: 0, scale: 0, force3D: true});
 
         for (i = 0; i < l; i++) {
             index = i % items.length;
