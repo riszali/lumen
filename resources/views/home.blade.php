@@ -51,60 +51,32 @@
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     /* =========================================
-       CSS KHUSUS CAROUSEL (RESPONSIVE)
+       CSS KHUSUS CAROUSEL (GSAP 3D LOOP)
        ========================================= */
-    /* DESKTOP (Infinity 3D Loop) */
-    @media (min-width: 768px) {
-        .cards {
-            position: relative;
-            width: 18rem;
-            height: 24rem;
-            margin: 0 auto;
-            padding: 0;
-            perspective: 1200px;
-        }
-        .cards li {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 18rem;
-            height: 24rem;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #000;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            will-change: transform, opacity;
-            transform: translateZ(0); 
-        }
+    .cards {
+        position: relative;
+        width: 18rem;
+        height: 24rem;
+        margin: 0 auto;
+        padding: 0;
+        perspective: 1200px;
     }
-
-    /* MOBILE (Native Swipe Scroll - Anti Lemot) */
-    @media (max-width: 767px) {
-        .cards {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            width: 100vw;
-            padding: 1rem 1.5rem;
-            gap: 1rem;
-        }
-        .cards li {
-            position: relative;
-            flex: 0 0 75vw;
-            height: 60vh;
-            max-height: 400px;
-            scroll-snap-align: center;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #000;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
-        /* Sembunyikan gambar duplikat di HP untuk hemat RAM */
-        .cards li:nth-child(n+6) {
-            display: none !important;
-        }
+    
+    .cards li {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 18rem;
+        height: 24rem;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: #000;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        /* OPTIMASI EXTREME: Hardware acceleration agar sangat mulus di HP */
+        will-change: transform, opacity;
+        transform: translateZ(0); 
+        backface-visibility: hidden;
     }
 
     .cards li img {
@@ -112,6 +84,13 @@
         height: 100%;
         object-fit: cover;
         opacity: 1 !important; 
+        /* OPTIMASI: Filter dihapus karena ini penyebab utama frame drop/HP panas saat animasi */
+    }
+
+    /* Skala Responsif untuk HP */
+    @media (max-width: 768px) {
+        .cards { width: 14rem; height: 18rem; }
+        .cards li { width: 14rem; height: 18rem; }
     }
 
     /* CSS Marquee */
@@ -124,6 +103,7 @@
         width: max-content;
         animation: marquee 20s linear infinite;
         will-change: transform;
+        transform: translateZ(0);
     }
 </style>
 
@@ -134,7 +114,7 @@
     
     <!-- Latar Belakang: Video untuk Desktop, Gambar Statis untuk HP -->
     <div class="absolute inset-0 z-0">
-        <!-- Video hanya dirender dan jalan di Desktop/Tablet (md:block) -->
+        <!-- Video dirender dan jalan di Desktop/Tablet saja untuk menghemat baterai HP -->
         <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback class="hidden md:block w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
@@ -229,7 +209,7 @@
             <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
             
             <div class="text-center relative z-10 px-4">
-                <div class="w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 md:backdrop-blur-sm">
                     <svg class="w-8 h-8 md:w-10 md:h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <h3 class="font-bebas text-4xl md:text-7xl text-gray-500 tracking-wide uppercase drop-shadow-md">BELUM ADA BANNER</h3>
@@ -240,24 +220,24 @@
 </section>
 
 <!-- =========================================
-     4. THE SHOWCASE (ADAPTIVE HP & DESKTOP)
+     4. THE SHOWCASE (SCROLL TRIGGER AKTIF)
      ========================================= -->
-<section id="showcase-pin" class="w-full flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
+<section id="showcase-pin" class="w-full h-screen flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
     
-    <!-- Sisi Kiri: Slider Gambar -->
-    <div class="w-full md:w-1/2 py-10 md:py-0 md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
-        <!-- Ambient subtle glow (Sembunyi di HP) -->
-        <div class="hidden md:block absolute w-[200px] h-[200px] bg-white rounded-full filter blur-[100px] opacity-5"></div>
+    <!-- Sisi Kiri: Slider Gambar CodePen -->
+    <div class="w-full md:w-1/2 h-[50vh] md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
+        <!-- OPTIMASI: Sembunyikan ambient glow di HP karena mix-blend sangat memberatkan render -->
+        <div class="hidden md:block absolute w-[300px] h-[300px] bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-5"></div>
         
-        <!-- UL Cards -->
-        <ul class="cards z-20 hide-scrollbar">
+        <!-- UL Cards GSAP -->
+        <ul class="cards z-20">
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'"></li>
             
-            <!-- Duplikasi KHUSUS DESKTOP (Di CSS HP disembunyikan) -->
+            <!-- Duplikasi agar efek Infinity Seamless jalan -->
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
@@ -266,13 +246,13 @@
         </ul>
     </div>
 
-    <!-- Sisi Kanan: Teks Info -->
-    <div id="text-container" class="w-full md:w-1/2 md:h-screen relative overflow-hidden z-10 bg-[#080808]">
-        <div id="scroll-text-wrap" class="relative md:absolute top-0 left-0 w-full flex flex-col md:block gap-6 px-4 pb-12 md:px-0 md:pb-0">
+    <!-- Sisi Kanan: Teks Info yang Di-Scroll -->
+    <div id="text-container" class="w-full md:w-1/2 h-[50vh] md:h-screen relative overflow-hidden z-10 bg-[#080808]">
+        <div id="scroll-text-wrap" class="absolute top-0 left-0 w-full">
             
             <!-- Blok Teks 1 -->
-            <div class="md:h-screen flex flex-col justify-center px-0 md:px-12 py-4 md:py-10">
-                <div class="premium-card p-6 md:p-14 gs-mobile-fade">
+            <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
+                <div class="premium-card p-6 md:p-14">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">01 // KENDALI MUTLAK</span>
                     <h2 class="text-4xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">PRESISI & KEKUATAN</h2>
                     <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Raket padel premium yang direkayasa dengan serat karbon tingkat aerospace. Memberikan transfer energi maksimal tanpa mengorbankan akurasi pukulan Anda pada saat-saat krusial.</p>
@@ -280,8 +260,8 @@
             </div>
 
             <!-- Blok Teks 2 -->
-            <div class="md:h-screen flex flex-col justify-center px-0 md:px-12 py-4 md:py-10">
-                <div class="premium-card p-6 md:p-14 gs-mobile-fade">
+            <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
+                <div class="premium-card p-6 md:p-14">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">02 // AGILITAS TINGGI</span>
                     <h2 class="text-4xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">BERGERAK TANPA RAGU</h2>
                     <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Sepatu performa tinggi dengan grip sol inovatif dan bantalan super responsif. Memastikan setiap pijakan, lompatan, dan manuver di lapangan terasa ringan, solid, dan stabil.</p>
@@ -289,8 +269,8 @@
             </div>
 
             <!-- Blok Teks 3 -->
-            <div class="md:h-screen flex flex-col justify-center px-0 md:px-12 py-4 md:py-10">
-                <div class="premium-card p-6 md:p-14 gs-mobile-fade">
+            <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
+                <div class="premium-card p-6 md:p-14">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">03 // DAYA TAHAN</span>
                     <h2 class="text-4xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">ENERGI TANPA HENTI</h2>
                     <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Bertahan lebih lama dari lawanmu. Formulasi nutrisi canggih yang dirancang khusus untuk hidrasi instan, menjaga fokus tetap tajam, dan mempercepat proses pemulihan otot pasca tanding.</p>
@@ -384,7 +364,7 @@
 </section>
 
 <!-- =========================================
-     SCRIPT GSAP & CAROUSEL (MENDUKUNG MOBILE)
+     SCRIPT GSAP & CAROUSEL (OPTIMIZED)
      ========================================= -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -439,11 +419,11 @@
         if (bannerCount > 1) { resetInterval(); }
 
         // ===========================================
-        // GSAP & SCROLL TRIGGER (OPTIMASI MOBILE)
+        // GSAP & SCROLL TRIGGER (OPTIMASI SUPER HP)
         // ===========================================
         gsap.registerPlugin(ScrollTrigger);
 
-        // Hero Animasi (Jalan di semua device)
+        // Hero Animasi
         gsap.from(".gsap-hero", {
             y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1
         });
@@ -457,50 +437,38 @@
         });
 
         // ==============================================================
-        // GSAP MATCHMEDIA: Pisahkan animasi berat hanya untuk Desktop
+        // LOGIC SHOWCASE INFINITY SCROLL (ScrollTrigger Aktif di Semua)
         // ==============================================================
-        let mm = gsap.matchMedia();
+        const showcase = document.getElementById('showcase-pin');
+        const textContainer = document.getElementById('text-container');
+        const textWrap = document.getElementById('scroll-text-wrap');
+        const cards = gsap.utils.toArray('.cards li');
+        
+        // Buat Timeline Seamless Loop
+        const seamlessLoop = buildSeamlessLoop(cards, 0.1);
 
-        // DESKTOP: Jalankan Infinity Loop & Pinned Scroll
-        mm.add("(min-width: 768px)", () => {
-            const showcase = document.getElementById('showcase-pin');
-            const textContainer = document.getElementById('text-container');
-            const textWrap = document.getElementById('scroll-text-wrap');
-            const cards = gsap.utils.toArray('.cards li');
-            
-            const seamlessLoop = buildSeamlessLoop(cards, 0.1);
-            let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
+        let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
 
-            const tlPin = gsap.timeline({
-                scrollTrigger: {
-                    trigger: showcase,
-                    start: "top top",
-                    end: "+=" + scrollDist,
-                    pin: true,
-                    scrub: 1, // Kurangi dari 1.5 biar scroll gak ketahan berat
-                    anticipatePin: 1
-                }
-            });
-
-            tlPin.to(textWrap, { y: -scrollDist, ease: "none" }, 0);
-            tlPin.fromTo(seamlessLoop, 
-                { totalTime: seamlessLoop.duration() }, 
-                { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0
-            );
+        const tlPin = gsap.timeline({
+            scrollTrigger: {
+                trigger: showcase,
+                start: "top top",
+                end: "+=" + scrollDist,
+                pin: true,
+                // OPTIMASI: Scrub dikecilkan jadi 0.5 supaya animasinya tidak berat ngikutin scroll di HP
+                scrub: 0.5, 
+                anticipatePin: 1
+            }
         });
 
-        // MOBILE: Hanya Fade-Up sederhana untuk teks (0% Beban CPU)
-        mm.add("(max-width: 767px)", () => {
-            gsap.utils.toArray('.gs-mobile-fade').forEach(elem => {
-                gsap.from(elem, {
-                    scrollTrigger: { trigger: elem, start: "top 80%" },
-                    y: 30, opacity: 0, duration: 0.8, ease: "power2.out"
-                });
-            });
-        });
+        tlPin.to(textWrap, { y: -scrollDist, ease: "none" }, 0);
+        tlPin.fromTo(seamlessLoop, 
+            { totalTime: seamlessLoop.duration() }, 
+            { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0
+        );
     });
 
-    // FUNGSI INTI UNTUK SEAMLESS LOOP (Hanya dipanggil di Desktop)
+    // FUNGSI INTI UNTUK SEAMLESS LOOP
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,
@@ -517,8 +485,8 @@
             time = 0,
             i, index, item;
 
-        // Force3D untuk Hardware Acceleration
-        gsap.set(items, {xPercent: 400, opacity: 0, scale: 0, force3D: true});
+        // OPTIMASI EXTREME: Tambahkan rotationZ: 0.01 dan force3D untuk maksa HP lu ngerender ini pakai GPU
+        gsap.set(items, {xPercent: 400, opacity: 0, scale: 0, force3D: true, rotationZ: 0.01});
 
         for (i = 0; i < l; i++) {
             index = i % items.length;
