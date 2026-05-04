@@ -78,8 +78,8 @@
     <div class="fixed bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-teal-400 dark:bg-[#00E5FF] rounded-full filter blur-[100px] opacity-20 dark:opacity-10 pointer-events-none z-0 transition-colors duration-500 transform translate-z-0 will-change-transform"></div>
 
     <!-- Sidebar (Glassmorphism) -->
-    <!-- OPTIMASI: Ubah backdrop-blur-2xl menjadi backdrop-blur-xl -->
-    <aside id="sidebar" class="w-72 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border-r border-gray-200 dark:border-white/10 flex flex-col z-20 h-full relative shadow-[8px_0_32px_0_rgba(0,0,0,0.05)] dark:shadow-[8px_0_32px_0_rgba(0,0,0,0.3)] transition-all duration-300">
+    <!-- OPTIMASI: Ganti transition-all jadi transition-[width] biar performanya ngebut waktu di-toggle -->
+    <aside id="sidebar" class="w-72 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border-r border-gray-200 dark:border-white/10 flex flex-col z-20 h-full relative shadow-[8px_0_32px_0_rgba(0,0,0,0.05)] dark:shadow-[8px_0_32px_0_rgba(0,0,0,0.3)] transition-[width] duration-300 ease-in-out">
         <!-- Logo -->
         <div class="h-24 flex items-center justify-center border-b border-gray-200 dark:border-white/10 transition-colors duration-500 px-4 relative">
             <a href="{{ route('admin.dashboard') }}" class="block transform hover:scale-105 transition duration-500 w-full flex justify-center">
@@ -110,7 +110,6 @@
                 <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Customers</span>
             </a>
 
-            <!-- TAMBAHAN MENU: HOME BANNERS -->
             <a href="{{ route('admin.banners.index') }}" class="flex items-center px-4 py-3.5 rounded-full transition-all duration-300 group {{ request()->routeIs('admin.banners.*') ? 'bg-emerald-50 dark:bg-volt/20 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/30 shadow-sm dark:shadow-[0_0_15px_rgba(204,255,0,0.15)]' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-emerald-600 dark:hover:text-white border border-transparent hover:shadow-inner' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Home Banners</span>
@@ -140,7 +139,8 @@
     </aside>
 
     <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10 transition-all duration-300">
+    <!-- OPTIMASI: Hapus class 'transition-all duration-300' dari wrapper utama ini -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         
         <!-- Header -->
         <header class="h-24 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 sm:px-10 z-20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] transition-colors duration-500">
@@ -188,6 +188,7 @@
         </main>
     </div>
 
+    <!-- OPTIMASI JAVASCRIPT: Hindari layout thrashing biar menu mulus -->
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -195,17 +196,27 @@
             const logoFull = document.getElementById('logo-full');
             const logoMini = document.getElementById('logo-mini');
 
-            sidebar.classList.toggle('w-72');
-            sidebar.classList.toggle('w-20');
+            const isCollapsing = sidebar.classList.contains('w-72');
 
-            texts.forEach(text => { text.classList.toggle('hidden'); });
-
-            if(sidebar.classList.contains('w-20')) {
+            if (isCollapsing) {
+                // Sembunyikan teks duluan sebelum sidebar menyusut, biar elemen gak kegencet/maksa baris baru
+                texts.forEach(text => text.classList.add('hidden'));
                 logoFull.classList.add('hidden');
                 logoMini.classList.remove('hidden');
+                
+                sidebar.classList.remove('w-72');
+                sidebar.classList.add('w-20');
             } else {
-                logoFull.classList.remove('hidden');
-                logoMini.classList.add('hidden');
+                // Besarkan ukuran sidebar dulu
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-72');
+                
+                // Tunggu 300ms (sesuai durasi transisi CSS) sebelum munculin teksnya
+                setTimeout(() => {
+                    texts.forEach(text => text.classList.remove('hidden'));
+                    logoFull.classList.remove('hidden');
+                    logoMini.classList.add('hidden');
+                }, 300);
             }
         }
 
