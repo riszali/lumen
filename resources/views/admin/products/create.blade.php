@@ -4,19 +4,11 @@
 @section('header_title', 'Create Product')
 
 @section('content')
-
-<style>
-    /* OPTIMASI: Ganti Filter Blur dengan Radial Gradient Biasa */
-    .bg-glow-emerald { background: radial-gradient(circle, rgba(52, 211, 153, 0.12) 0%, transparent 60%); }
-    .dark .bg-glow-emerald { background: radial-gradient(circle, rgba(204, 255, 0, 0.08) 0%, transparent 60%); }
-</style>
-
 <!-- Ambient Background Wrapper for Glassmorphism -->
-<!-- OPTIMASI: backdrop-blur diturunkan jadi md untuk HP -->
-<div class="relative w-full min-h-[85vh] rounded-[2.5rem] overflow-hidden bg-white/40 dark:bg-white/[0.02] p-4 sm:p-6 lg:p-8 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-gray-200 dark:border-white/10 backdrop-blur-md md:backdrop-blur-xl transition-colors duration-500 transform translate-z-0">
+<div class="relative w-full min-h-[85vh] rounded-[2.5rem] overflow-hidden bg-white/40 dark:bg-white/[0.02] p-4 sm:p-6 lg:p-8 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-gray-200 dark:border-white/10 backdrop-blur-2xl transition-colors duration-500">
     
-    <!-- Animated Glow/Blobs behind the glass (Optimized) -->
-    <div class="absolute top-[-10%] left-[-10%] w-[80vw] h-[80vw] md:w-[40vw] md:h-[40vw] bg-glow-emerald pointer-events-none transition-colors duration-500 z-0"></div>
+    <!-- Animated Glow/Blobs behind the glass -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-400 dark:bg-volt rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] opacity-20 dark:opacity-10 pointer-events-none transition-colors duration-500"></div>
 
     <!-- Main Content Layer -->
     <div class="relative z-10 max-w-4xl mx-auto space-y-8">
@@ -27,7 +19,7 @@
         </div>
 
         <!-- Glass Form Container -->
-        <div class="bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] p-6 sm:p-8 transition-colors duration-500">
+        <div class="bg-white/70 dark:bg-white/[0.03] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] p-8 transition-colors duration-500">
             <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 font-montserrat">
                 @csrf
 
@@ -137,7 +129,7 @@
                     <!-- Price -->
                     <div>
                         <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Price (Rp) *</label>
-                        <!-- Hidden input untuk disubmit ke form -->
+                        <!-- Hidden input untuk disubmit ke form (berisi angka integer asli tanpa titik) -->
                         <input type="hidden" name="price" id="price_raw" value="{{ old('price') }}">
                         <!-- Visible input untuk display user (menggunakan titik ribuan) -->
                         <input type="text" id="price_formatted" value="{{ old('price') ? number_format(old('price'), 0, ',', '.') : '' }}" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none" oninput="formatRupiah(this)">
@@ -152,7 +144,7 @@
                     </div>
                 </div>
 
-                <!-- DI SINI POSISI KOLOM DESCRIPTION DAN SPECIFICATION (SPLIT KIRI KANAN) -->
+                <!-- Description & Specification (Split 2 Column for Desktop) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Description -->
                     <div>
@@ -209,7 +201,7 @@
     </div>
 </div>
 
-<!-- Script untuk Multi-Image Preview, Custom Dropdowns, dan Format Rupiah -->
+<!-- Script untuk Multi-Image Preview dan Custom Dropdowns -->
 <script>
     // --- Logika Format Rupiah ---
     function formatRupiah(input) {
