@@ -141,20 +141,33 @@
                     </div>
                 </div>
 
-                <!-- Description -->
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Description *</label>
-                    <textarea name="description" rows="5" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('description') }}</textarea>
-                    @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                <!-- DI SINI POSISI KOLOM DESCRIPTION DAN SPECIFICATION (SPLIT KIRI KANAN) -->
+                <!-- Description & Specification (Split 2 Column for Desktop) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Description *</label>
+                        <textarea name="description" rows="6" required placeholder="Jelaskan deskripsi umum produk ini..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('description') }}</textarea>
+                        @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Specification -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Specification (Optional)</label>
+                        <textarea name="specification" rows="6" placeholder="Contoh:&#10;Berat: 365g&#10;Material: 12K Carbon&#10;Tebal: 38mm" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('specification') }}</textarea>
+                        @error('specification') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                    </div>
                 </div>
+                <!-- END SPLIT COLUMN -->
 
                 <!-- Multiple Images Upload with Preview -->
-                <div>
+                <div class="bg-gray-50/50 dark:bg-black/10 rounded-2xl border border-gray-200 dark:border-white/5 p-6 transition-colors duration-500">
                     <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Product Images (Can upload multiple) *</label>
-                    <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Tahan tombol CTRL/SHIFT saat memilih foto untuk upload banyak file. Foto pertama akan otomatis menjadi thumbnail produk.</p>
+                    <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Tahan tombol CTRL/SHIFT saat memilih foto untuk upload banyak file. <strong class="text-emerald-600 dark:text-volt">Klik pada gambar di bawah untuk menjadikannya foto utama (Primary).</strong></p>
                     
                     <div class="relative">
-                        <!-- 'images[]' and 'multiple' attribute added here -->
+                        <!-- Input Index Primary Hidden -->
+                        <input type="hidden" name="primary_image_index" id="primary_image_index" value="0">
                         <input type="file" name="images[]" id="images_input" multiple accept="image/*" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
                     </div>
                     @error('images') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
@@ -189,33 +202,33 @@
 
 <!-- Script untuk Multi-Image Preview dan Custom Dropdowns -->
 <script>
-    // --- Logika Live Preview Multiple Images ---
+    // --- Logika Live Preview & Pilih Primary Image ---
     document.getElementById('images_input').addEventListener('change', function() {
         const previewContainer = document.getElementById('image_preview_container');
-        previewContainer.innerHTML = ''; // Kosongkan preview lama
+        previewContainer.innerHTML = ''; 
+        document.getElementById('primary_image_index').value = 0; // Reset ke index 0 setiap kali upload
         
         if (this.files) {
             Array.from(this.files).forEach((file, index) => {
-                if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; // Validasi ekstensi
+                if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; 
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const div = document.createElement('div');
-                    div.className = 'relative aspect-square bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm dark:shadow-inner';
+                    const isPrimary = index === 0;
+                    
+                    div.className = `img-item relative aspect-square bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden shadow-sm dark:shadow-inner cursor-pointer transition-all duration-300 ${isPrimary ? 'border-2 border-emerald-500 dark:border-volt scale-105 shadow-lg' : 'border border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30'}`;
+                    div.onclick = function() { setNewPrimary(this, index); };
                     
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.className = 'w-full h-full object-cover';
-                    
                     div.appendChild(img);
 
-                    // Beri label/badge untuk gambar pertama sebagai Thumbnail (Primary)
-                    if (index === 0) {
-                        const badge = document.createElement('div');
-                        badge.className = 'absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md';
-                        badge.innerText = 'Primary';
-                        div.appendChild(badge);
-                    }
+                    const badge = document.createElement('div');
+                    badge.className = `primary-badge absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md ${isPrimary ? '' : 'hidden'}`;
+                    badge.innerText = 'Primary';
+                    div.appendChild(badge);
                     
                     previewContainer.appendChild(div);
                 };
@@ -223,6 +236,24 @@
             });
         }
     });
+
+    function setNewPrimary(element, index) {
+        document.getElementById('primary_image_index').value = index;
+        
+        // Reset styles for all items
+        document.querySelectorAll('#image_preview_container .img-item').forEach(item => {
+            item.classList.remove('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+            item.classList.add('border', 'border-gray-200', 'dark:border-white/10');
+            const badge = item.querySelector('.primary-badge');
+            if (badge) badge.classList.add('hidden');
+        });
+        
+        // Apply active styles to clicked item
+        element.classList.remove('border', 'border-gray-200', 'dark:border-white/10');
+        element.classList.add('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+        const badge = element.querySelector('.primary-badge');
+        if (badge) badge.classList.remove('hidden');
+    }
 
     // --- Logika Input Kategori Baru ---
     let isNewCategoryMode = false;

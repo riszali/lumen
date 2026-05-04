@@ -142,27 +142,45 @@
                     </div>
                 </div>
 
-                <!-- Description -->
-                <div>
-                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Description *</label>
-                    <textarea name="description" rows="5" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white transition-all duration-300 outline-none">{{ old('description', $product->description) }}</textarea>
-                    @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                <!-- Description & Specification (Split 2 Column for Desktop) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Description *</label>
+                        <textarea name="description" rows="6" required placeholder="Jelaskan deskripsi umum produk ini..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('description', $product->description) }}</textarea>
+                        @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Specification -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Specification (Optional)</label>
+                        <textarea name="specification" rows="6" placeholder="Contoh:&#10;Berat: 365g&#10;Material: 12K Carbon&#10;Tebal: 38mm" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('specification', $product->specification) }}</textarea>
+                        @error('specification') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                    </div>
                 </div>
 
                 <!-- Multi-Image Upload & Preview -->
                 <div class="bg-gray-50/50 dark:bg-black/10 rounded-2xl border border-gray-200 dark:border-white/5 p-6 transition-colors duration-500">
                     <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4 font-bold transition-colors duration-500">Product Images Gallery</label>
                     
+                    <!-- Form Kirim Data Primary -->
+                    <input type="hidden" name="primary_image_id" id="primary_image_id" value="{{ $product->primaryImage->id ?? '' }}">
+                    <input type="hidden" name="primary_image_index" id="primary_image_index" value="">
+
                     <!-- Menampilkan Gambar yang Sudah Ada -->
                     @if($product->images->count() > 0)
-                        <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Current Images ({{ $product->images->count() }}):</p>
-                        <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
+                        <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Current Images ({{ $product->images->count() }}): <strong class="text-emerald-600 dark:text-volt">Klik pada gambar di bawah untuk menjadikannya foto utama (Primary).</strong></p>
+                        <div id="existing_images_container" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
                             @foreach($product->images as $image)
-                                <div class="relative aspect-square bg-gray-100 dark:bg-black/40 border border-gray-300 dark:border-white/10 rounded-xl overflow-hidden shadow-sm dark:shadow-inner">
-                                    <img src="{{ Storage::url($image->image_path) }}" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition duration-300">
-                                    @if($image->is_primary)
-                                        <div class="absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md">Primary</div>
-                                    @endif
+                                <div class="img-item relative aspect-square bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 {{ $image->is_primary ? 'border-2 border-emerald-500 dark:border-volt scale-105 shadow-lg' : 'border border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30' }}"
+                                     onclick="setExistingPrimary(this, {{ $image->id }})">
+                                    
+                                    <img src="{{ Storage::url($image->image_path) }}" class="w-full h-full object-cover">
+                                    
+                                    <!-- Badge -->
+                                    <div class="primary-badge absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md {{ $image->is_primary ? '' : 'hidden' }}">
+                                        Primary
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
@@ -174,7 +192,6 @@
                             <span class="font-bold">Note:</span> Mengunggah gambar baru akan menimpa (replace) semua gambar lama yang ada di atas. Biarkan kosong jika tidak ingin mengubah gambar.
                         </p>
                         <div class="relative">
-                            <!-- Input array 'images[]' -->
                             <input type="file" name="images[]" id="images_input" multiple accept="image/*" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
                         </div>
                         @error('images') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
@@ -208,33 +225,65 @@
 
 <!-- Script untuk Multi-Image Preview dan Custom Dropdowns -->
 <script>
-    // --- Logika Live Preview Multiple Images ---
+
+    // Klik Foto Existing untuk Jadikan Primary
+    function setExistingPrimary(element, id) {
+        document.getElementById('primary_image_id').value = id;
+        document.getElementById('primary_image_index').value = ''; // Clear new
+        
+        // Reset old badges
+        document.querySelectorAll('#existing_images_container .img-item').forEach(item => {
+            item.classList.remove('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+            item.classList.add('border', 'border-gray-200', 'dark:border-white/10');
+            const badge = item.querySelector('.primary-badge');
+            if (badge) badge.classList.add('hidden');
+        });
+        
+        // Apply active
+        element.classList.remove('border', 'border-gray-200', 'dark:border-white/10');
+        element.classList.add('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+        const badge = element.querySelector('.primary-badge');
+        if (badge) badge.classList.remove('hidden');
+    }
+
+    // --- Logika Live Preview Multiple Images Baru ---
     document.getElementById('images_input').addEventListener('change', function() {
         const previewContainer = document.getElementById('image_preview_container');
-        previewContainer.innerHTML = ''; // Kosongkan preview lama
+        previewContainer.innerHTML = ''; 
         
+        // Jika pilih gambar baru, prioritas primary pindah ke gambar baru (index 0)
+        document.getElementById('primary_image_index').value = 0; 
+        document.getElementById('primary_image_id').value = ''; 
+        
+        // Lepas highlight dari existing image jika ada
+        document.querySelectorAll('#existing_images_container .img-item').forEach(item => {
+            item.classList.remove('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+            item.classList.add('border', 'border-gray-200', 'dark:border-white/10', 'opacity-50'); // Kasih efek redup karena akan dihapus
+            const badge = item.querySelector('.primary-badge');
+            if (badge) badge.classList.add('hidden');
+        });
+
         if (this.files) {
             Array.from(this.files).forEach((file, index) => {
-                if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; // Validasi ekstensi
+                if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; 
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const div = document.createElement('div');
-                    div.className = 'relative aspect-square bg-gray-100 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-sm dark:shadow-inner';
+                    const isPrimary = index === 0;
+                    
+                    div.className = `img-item relative aspect-square bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden shadow-sm dark:shadow-inner cursor-pointer transition-all duration-300 ${isPrimary ? 'border-2 border-emerald-500 dark:border-volt scale-105 shadow-lg' : 'border border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30'}`;
+                    div.onclick = function() { setNewPrimary(this, index); };
                     
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.className = 'w-full h-full object-cover';
-                    
                     div.appendChild(img);
 
-                    // Label/badge untuk gambar pertama
-                    if (index === 0) {
-                        const badge = document.createElement('div');
-                        badge.className = 'absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md';
-                        badge.innerText = 'Primary';
-                        div.appendChild(badge);
-                    }
+                    const badge = document.createElement('div');
+                    badge.className = `primary-badge absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md ${isPrimary ? '' : 'hidden'}`;
+                    badge.innerText = 'Primary';
+                    div.appendChild(badge);
                     
                     previewContainer.appendChild(div);
                 };
@@ -242,6 +291,23 @@
             });
         }
     });
+
+    function setNewPrimary(element, index) {
+        document.getElementById('primary_image_index').value = index;
+        document.getElementById('primary_image_id').value = ''; 
+        
+        document.querySelectorAll('#image_preview_container .img-item').forEach(item => {
+            item.classList.remove('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+            item.classList.add('border', 'border-gray-200', 'dark:border-white/10');
+            const badge = item.querySelector('.primary-badge');
+            if (badge) badge.classList.add('hidden');
+        });
+        
+        element.classList.remove('border', 'border-gray-200', 'dark:border-white/10');
+        element.classList.add('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
+        const badge = element.querySelector('.primary-badge');
+        if (badge) badge.classList.remove('hidden');
+    }
 
     // --- Logika Input Kategori Baru ---
     let isNewCategoryMode = false;
