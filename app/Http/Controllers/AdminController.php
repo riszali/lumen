@@ -26,7 +26,7 @@ class AdminController extends Controller
 
     public function productsIndex()
     {
-        $products = Product::with('category')->latest()->paginate(10);
+        $products = Product::with('category', 'primaryImage')->latest()->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
@@ -38,12 +38,12 @@ class AdminController extends Controller
 
     public function productsStore(Request $request)
     {
-        // 1. Cek Kategori Baru
+        // 1. Cek Kategori Baru (FIX ERROR 500 DUPLICATE)
         if ($request->filled('new_category_name')) {
-            $newCategory = Category::create([
-                'name' => $request->new_category_name,
-                'slug' => Str::slug($request->new_category_name)
-            ]);
+            $newCategory = Category::firstOrCreate(
+                ['slug' => Str::slug($request->new_category_name)],
+                ['name' => $request->new_category_name]
+            );
             $request->merge(['category_id' => $newCategory->id]);
         } else {
             $request->validate(['category_id' => 'required|exists:categories,id']);
@@ -56,14 +56,16 @@ class AdminController extends Controller
             $request->validate(['brand' => 'required|string|max:255']);
         }
 
-        // 3. Validasi Data Lain (Diubah untuk multi-image)
+        // 3. Validasi Data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required',
+            'specification' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'images' => 'required|array|min:1',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240'
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240',
+            'primary_image_index' => 'nullable|integer'
         ]);
 
         $product = Product::create([
@@ -72,42 +74,44 @@ class AdminController extends Controller
             'category_id' => $request->category_id,
             'brand' => $request->brand,
             'description' => $request->description,
+            'specification' => $request->specification,
             'price' => $request->price,
             'stock' => $request->stock,
             'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        // 4. Proses Upload Multiple Image
+        // 4. Proses Upload Multiple Image dengan Primary Index Check
         if ($request->hasFile('images')) {
+            $primaryIndex = $request->input('primary_image_index', 0);
+            
             foreach ($request->file('images') as $index => $image) {
                 $path = $image->store('products', 'public');
                 $product->images()->create([
                     'image_path' => $path,
-                    // Gambar pertama di array otomatis jadi Primary
-                    'is_primary' => $index === 0 ? true : false 
+                    'is_primary' => ((int)$index === (int)$primaryIndex) 
                 ]);
             }
         }
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan beserta semua gambarnya.');
+        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function productsEdit(Product $product)
     {
         $categories = Category::all();
-        $product->load('images'); // Load gambar-gambar lama
+        $product->load('images');
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
     public function productsUpdate(Request $request, Product $product)
     {
-        // 1. Cek Kategori Baru
+        // 1. Cek Kategori Baru (FIX ERROR 500 DUPLICATE)
         if ($request->filled('new_category_name')) {
-            $newCategory = Category::create([
-                'name' => $request->new_category_name,
-                'slug' => Str::slug($request->new_category_name)
-            ]);
+            $newCategory = Category::firstOrCreate(
+                ['slug' => Str::slug($request->new_category_name)],
+                ['name' => $request->new_category_name]
+            );
             $request->merge(['category_id' => $newCategory->id]);
         } else {
             $request->validate(['category_id' => 'required|exists:categories,id']);
@@ -120,14 +124,17 @@ class AdminController extends Controller
             $request->validate(['brand' => 'required|string|max:255']);
         }
 
-        // 3. Validasi Data Lain
+        // 3. Validasi Data
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required',
+            'specification' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240'
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240',
+            'primary_image_id' => 'nullable|exists:product_images,id',
+            'primary_image_index' => 'nullable|integer'
         ]);
 
         $product->update([
@@ -136,27 +143,36 @@ class AdminController extends Controller
             'category_id' => $request->category_id,
             'brand' => $request->brand,
             'description' => $request->description,
+            'specification' => $request->specification,
             'price' => $request->price,
             'stock' => $request->stock,
             'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        // 4. Proses Multi-Image jika ada gambar baru yang diunggah
+        // 4. Proses Gambar (Update / Upload Baru)
         if ($request->hasFile('images')) {
-            // Karena ini sistem simple update: Jika upload baru, hapus semua gambar lama
+            // Jika ada gambar baru diupload, hapus semua yang lama
             foreach ($product->images as $oldImage) {
                 Storage::disk('public')->delete($oldImage->image_path);
                 $oldImage->delete();
             }
 
-            // Simpan gambar baru
+            $primaryIndex = $request->input('primary_image_index', 0);
             foreach ($request->file('images') as $index => $image) {
                 $path = $image->store('products', 'public');
                 $product->images()->create([
                     'image_path' => $path,
-                    'is_primary' => $index === 0 ? true : false
+                    'is_primary' => ((int)$index === (int)$primaryIndex)
                 ]);
+            }
+        } else {
+            // Jika tidak ada upload baru, tapi user klik gambar lama untuk jadi primary
+            if ($request->filled('primary_image_id')) {
+                // Reset semua is_primary ke false
+                $product->images()->update(['is_primary' => false]);
+                // Set yang diklik jadi true
+                $product->images()->where('id', $request->primary_image_id)->update(['is_primary' => true]);
             }
         }
 
@@ -224,7 +240,6 @@ class AdminController extends Controller
         return back()->with('success', 'Profil dan keamanan akun berhasil diperbarui.');
     }
 
-    // --- MANAJEMEN BANNER SHOWCASE --- //
     public function bannersIndex()
     {
         $banners = Banner::latest()->get();
