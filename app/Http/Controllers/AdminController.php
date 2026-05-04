@@ -37,9 +37,27 @@ class AdminController extends Controller
 
     public function productsStore(Request $request)
     {
+        // 1. Cek Kategori Baru
+        if ($request->filled('new_category_name')) {
+            $newCategory = Category::create([
+                'name' => $request->new_category_name,
+                'slug' => Str::slug($request->new_category_name)
+            ]);
+            $request->merge(['category_id' => $newCategory->id]);
+        } else {
+            $request->validate(['category_id' => 'required|exists:categories,id']);
+        }
+
+        // 2. Cek Brand Baru
+        if ($request->filled('new_brand_name')) {
+            $request->merge(['brand' => $request->new_brand_name]);
+        } else {
+            $request->validate(['brand' => 'required|string|max:255']);
+        }
+
+        // 3. Validasi Data Lain
         $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -50,6 +68,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name) . '-' . time(),
             'category_id' => $request->category_id,
+            'brand' => $request->brand,
             'description' => $request->description,
             'price' => $request->price,
             'stock' => $request->stock,
@@ -76,9 +95,27 @@ class AdminController extends Controller
 
     public function productsUpdate(Request $request, Product $product)
     {
+        // 1. Cek Kategori Baru
+        if ($request->filled('new_category_name')) {
+            $newCategory = Category::create([
+                'name' => $request->new_category_name,
+                'slug' => Str::slug($request->new_category_name)
+            ]);
+            $request->merge(['category_id' => $newCategory->id]);
+        } else {
+            $request->validate(['category_id' => 'required|exists:categories,id']);
+        }
+
+        // 2. Cek Brand Baru
+        if ($request->filled('new_brand_name')) {
+            $request->merge(['brand' => $request->new_brand_name]);
+        } else {
+            $request->validate(['brand' => 'required|string|max:255']);
+        }
+
+        // 3. Validasi Data Lain
         $request->validate([
             'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -89,6 +126,7 @@ class AdminController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'category_id' => $request->category_id,
+            'brand' => $request->brand,
             'description' => $request->description,
             'price' => $request->price,
             'stock' => $request->stock,
@@ -172,4 +210,4 @@ class AdminController extends Controller
 
         return back()->with('success', 'Profil dan keamanan akun berhasil diperbarui.');
     }
-}   
+}
