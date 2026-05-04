@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -209,5 +210,38 @@ class AdminController extends Controller
         $user->save();
 
         return back()->with('success', 'Profil dan keamanan akun berhasil diperbarui.');
+    }
+
+    // --- MANAJEMEN BANNER SHOWCASE --- //
+    public function bannersIndex()
+    {
+        $banners = Banner::latest()->get();
+        return view('admin.banners.index', compact('banners'));
+    }
+
+    public function bannersStore(Request $request)
+    {
+        $request->validate([
+            'title' => 'nullable|string|max:255',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240'
+        ]);
+
+        $path = $request->file('image')->store('banners', 'public');
+
+        Banner::create([
+            'title' => $request->title,
+            'image_path' => $path,
+            'is_active' => true,
+        ]);
+
+        return back()->with('success', 'Gambar banner berhasil diunggah dan akan tampil di Home.');
+    }
+
+    public function bannersDestroy(Banner $banner)
+    {
+        Storage::disk('public')->delete($banner->image_path);
+        $banner->delete();
+
+        return back()->with('success', 'Gambar banner berhasil dihapus.');
     }
 }

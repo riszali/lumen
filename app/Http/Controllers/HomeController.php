@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -21,6 +22,9 @@ class HomeController extends Controller
                         ->take(4)
                         ->get();
 
-        return view('home', compact('featuredProducts', 'newArrivals'));
+        // Ambil gambar banner dinamis dari database
+        $banners = Banner::where('is_active', true)->latest()->get();
+
+        return view('home', compact('featuredProducts', 'newArrivals', 'banners'));
     }
 }

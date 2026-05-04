@@ -66,4 +66,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Admin Settings & Profile
     Route::get('/profile', [AdminController::class, 'profileEdit'])->name('profile.edit');
     Route::put('/profile', [AdminController::class, 'profileUpdate'])->name('profile.update');
+
+    // Banners Management
+    Route::get('/banners', [AdminController::class, 'bannersIndex'])->name('banners.index');
+    Route::post('/banners', [AdminController::class, 'bannersStore'])->name('banners.store');
+    Route::delete('/banners/{banner}', [AdminController::class, 'bannersDestroy'])->name('banners.destroy');
 });

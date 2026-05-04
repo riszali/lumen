@@ -46,6 +46,10 @@
         box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     }
 
+    /* Custom Scrollbar buat Slider Banners Tambahan Admin */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
     /* =========================================
        CSS KHUSUS CODEPEN CAROUSEL INFINITY
        ========================================= */
@@ -117,15 +121,6 @@
 
     <!-- Konten Hero -->
     <div class="relative z-10 w-[95%] max-w-[1200px] mx-auto px-4 flex flex-col items-center text-center pt-24">
-        
-        <!-- KICKER CLEAN TANPA KAPSUL / TITIK AI -->
-        <div class="gsap-hero mb-6">
-            <div class="border-b-2 border-volt pb-2 px-2 inline-block">
-                <span class="text-white font-montserrat font-bold tracking-[0.3em] uppercase text-xs sm:text-sm">
-                    WILLSPORTS <span class="text-volt mx-2">//</span> ELITE GEAR
-                </span>
-            </div>
-        </div>
 
         <div class="gsap-hero mb-8 w-full">
             <h1 class="font-bebas text-[80px] sm:text-[110px] md:text-[150px] text-white tracking-wide drop-shadow-2xl">
@@ -160,7 +155,55 @@
 </div>
 
 <!-- =========================================
-     3. THE SHOWCASE (CODEPEN INFINITY + TEXT SCROLL)
+     3. DYNAMIC BANNERS (TAMBAHAN BARU DARI ADMIN)
+     ========================================= -->
+<section class="relative w-full py-16 bg-[#0a0a0a] border-b border-white/5 overflow-hidden z-20">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex justify-between items-end">
+        <div>
+            <h2 class="font-bebas text-4xl text-white tracking-wide uppercase">LATEST <span class="text-volt">HIGHLIGHTS</span></h2>
+            <p class="text-gray-500 font-montserrat text-xs mt-1 uppercase tracking-widest font-bold">Exclusive Drops & Promos</p>
+        </div>
+        <!-- Tombol Geser Slider -->
+        <div class="hidden sm:flex gap-2">
+            <button onclick="document.getElementById('banner-slider-admin').scrollBy({left: -400, behavior: 'smooth'})" class="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white hover:border-volt hover:text-volt transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button onclick="document.getElementById('banner-slider-admin').scrollBy({left: 400, behavior: 'smooth'})" class="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white hover:border-volt hover:text-volt transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Slider Horizontal -->
+    <div id="banner-slider-admin" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-4 sm:px-6 lg:px-8 pb-8 hide-scrollbar scroll-smooth">
+        @if(isset($banners) && $banners->count() > 0)
+            @foreach($banners as $banner)
+            <div class="snap-center shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] aspect-[16/9] md:aspect-[21/9] bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] overflow-hidden relative group shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent"></div>
+                
+                @if($banner->title)
+                <div class="absolute bottom-6 left-6 right-6">
+                    <h3 class="font-bebas text-3xl sm:text-4xl text-white tracking-wide drop-shadow-md">{{ $banner->title }}</h3>
+                </div>
+                @endif
+            </div>
+            @endforeach
+        @else
+            <!-- FALLBACK KETIKA ADMIN BELUM UPLOAD BANNER BIAR SECTIONNYA TETAP MUNCUL -->
+            <div class="snap-center shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] aspect-[16/9] md:aspect-[21/9] bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] overflow-hidden relative group shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center text-center p-6">
+                <svg class="w-12 h-12 text-white/20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <h3 class="font-bebas text-3xl text-gray-500 tracking-wide">BELUM ADA BANNER</h3>
+                <p class="text-[10px] uppercase tracking-widest text-gray-600 mt-2 font-bold">Silakan upload gambar dari menu Admin Panel</p>
+            </div>
+            
+            <div class="snap-center shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] aspect-[16/9] md:aspect-[21/9] bg-white/[0.01] backdrop-blur-2xl border border-white/5 rounded-[2rem] overflow-hidden relative group shadow-[0_10px_30px_rgba(0,0,0,0.2)]"></div>
+        @endif
+    </div>
+</section>
+
+<!-- =========================================
+     4. THE SHOWCASE (CODEPEN INFINITY + TEXT SCROLL)
      ========================================= -->
 <section id="showcase-pin" class="w-full h-screen flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
     
@@ -222,7 +265,7 @@
 </section>
 
 <!-- =========================================
-     4. BENTO GRID (KATEGORI PRODUK)
+     5. BENTO GRID (KATEGORI PRODUK)
      ========================================= -->
 <section class="py-24 bg-[var(--dark)] px-4 sm:px-8 lg:px-12 relative overflow-hidden">
     
@@ -287,7 +330,7 @@
 </section>
 
 <!-- =========================================
-     5. FINAL CTA BANNER
+     6. FINAL CTA BANNER
      ========================================= -->
 <section class="py-32 w-full text-center relative overflow-hidden flex flex-col items-center justify-center border-t border-white/5">
     <div class="absolute inset-0 z-0">
@@ -305,12 +348,66 @@
 </section>
 
 <!-- =========================================
-     SCRIPT GSAP (ROBUST & BUG-FREE)
+     SCRIPT GSAP & CAROUSEL (ROBUST & BUG-FREE)
      ========================================= -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        
+        // ===========================================
+        // LOGIC CAROUSEL FULL WIDTH (SECTION 3)
+        // ===========================================
+        const track = document.getElementById('full-banner-track');
+        const indicators = document.querySelectorAll('.banner-indicator');
+        let currentBanner = 0;
+        const bannerCount = indicators.length;
+        let slideInterval;
+
+        window.goToBanner = function(index) {
+            if (!track) return;
+            currentBanner = index;
+            track.style.transform = `translateX(-${currentBanner * 100}%)`;
+            
+            indicators.forEach((ind, i) => {
+                if (i === currentBanner) {
+                    ind.classList.remove('bg-white/30', 'hover:bg-white/60');
+                    ind.classList.add('bg-volt');
+                } else {
+                    ind.classList.remove('bg-volt');
+                    ind.classList.add('bg-white/30', 'hover:bg-white/60');
+                }
+            });
+            resetInterval();
+        };
+
+        window.nextBanner = function() {
+            if (bannerCount > 1) {
+                goToBanner((currentBanner + 1) % bannerCount);
+            }
+        };
+
+        window.prevBanner = function() {
+            if (bannerCount > 1) {
+                goToBanner((currentBanner - 1 + bannerCount) % bannerCount);
+            }
+        };
+
+        function resetInterval() {
+            clearInterval(slideInterval);
+            if (bannerCount > 1) {
+                slideInterval = setInterval(nextBanner, 6000); // Geser otomatis tiap 6 detik
+            }
+        }
+
+        // Mulai auto-slide jika banner > 1
+        if (bannerCount > 1) {
+            resetInterval();
+        }
+
+        // ===========================================
+        // GSAP & SCROLL TRIGGER
+        // ===========================================
         gsap.registerPlugin(ScrollTrigger);
 
         // 1. Animasi Masuk (Hero)
