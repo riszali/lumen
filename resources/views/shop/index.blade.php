@@ -37,26 +37,23 @@
     .bg-volt { background-color: var(--volt); }
     .border-volt { border-color: var(--volt); }
 
-    /* Desain Card Baru: Glassmorphism & Rounded */
+    /* Desain Card Baru: Glassmorphism & Rounded (Dioptimasi) */
     .premium-card {
         background-color: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        /* OPTIMASI: Blur dikurangi agar ringan di GPU HP */
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border: 1px solid var(--border);
         border-radius: 2rem; 
         box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         transition: all 0.4s ease;
+        will-change: transform, box-shadow; /* Hardware Acceleration */
     }
     .premium-card:hover {
         border-color: rgba(204, 255, 0, 0.3);
         background-color: rgba(255, 255, 255, 0.06);
         box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 25px rgba(204, 255, 0, 0.1);
         transform: translateY(-5px);
-    }
-
-    /* Efek Noise Kasar di Background */
-    .bg-noise {
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
     }
 
     /* Custom Scrollbar untuk Dropdown Custom */
@@ -72,12 +69,14 @@
 <section class="relative w-full pt-32 pb-20 flex items-center justify-center overflow-hidden bg-[var(--dark)] border-b border-white/5">
     <!-- Latar Belakang & Glowing Orbs -->
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" class="w-full h-full object-cover opacity-20 filter grayscale">
+        <!-- OPTIMASI: Tambahkan loading lazy/preload jika memungkinkan -->
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" class="w-full h-full object-cover opacity-20 filter grayscale" loading="eager" decoding="async">
         <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/60 to-[#050505]/80"></div>
     </div>
 
     <!-- Cahaya Pendar Halus -->
-    <div class="absolute top-[20%] right-[10%] w-[30%] h-[40%] bg-volt rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none z-0"></div>
+    <!-- OPTIMASI: Sembunyikan blur besar ini di mobile (hidden md:block) dan kurangi blurnya -->
+    <div class="hidden md:block absolute top-[20%] right-[10%] w-[30%] h-[40%] bg-volt rounded-full filter blur-[100px] opacity-10 pointer-events-none z-0 transform translate-z-0"></div>
 
     <div class="relative z-20 w-full max-w-[1400px] mx-auto px-4 flex flex-col items-center text-center">
         
@@ -100,12 +99,12 @@
 <!-- =========================================
      2. SHOP CONTENT (GRID & FILTERS)
      ========================================= -->
-<section class="relative w-full bg-[var(--dark)] py-12 lg:py-20 z-20 min-h-screen bg-noise">
+<!-- OPTIMASI: Hapus kelas .bg-noise yang sangat memberatkan performa -->
+<section class="relative w-full bg-[var(--dark)] py-12 lg:py-20 z-20 min-h-screen">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         <!-- Toolbar (Filter & Sort) - CUSTOM DROPDOWN -->
-        <!-- OPTIMASI: Ditambahkan 'relative z-50' agar dropdown tidak ketabrak gambar produk -->
-        <div class="mb-12 relative z-50 bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] p-4 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+        <div class="mb-12 relative z-50 bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-4 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
             <form id="filter_form" action="{{ route('shop.index') }}" method="GET" class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
                 
                 <!-- CUSTOM Category Filter -->
@@ -200,10 +199,10 @@
                     <div class="premium-card group cursor-pointer flex flex-col overflow-hidden relative">
                         
                         <!-- Header Image Card -->
-                        <!-- OPTIMASI: aspect-[4/5] diubah menjadi aspect-square untuk foto produk 1:1 -->
                         <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden aspect-square bg-black/50 m-2 rounded-[1.5rem]">
                             @if($product->primaryImage)
-                                <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-110 group-hover:opacity-80 transition-all duration-700">
+                                <!-- OPTIMASI: Tambahkan loading="lazy" decoding="async" -->
+                                <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-110 group-hover:opacity-80 transition-all duration-700">
                             @else
                                 <div class="w-full h-full bg-[#111] flex items-center justify-center text-white/20 font-montserrat text-[10px] uppercase tracking-widest font-bold">No Image</div>
                             @endif
@@ -241,10 +240,10 @@
             @if($supplementProducts->count() > 0)
                 
                 <!-- Banner Pemisah Suplemen -->
-                <div class="{{ $gearProducts->count() > 0 ? 'mt-24' : '' }} mb-10 relative overflow-hidden bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] group z-10">
+                <div class="{{ $gearProducts->count() > 0 ? 'mt-24' : '' }} mb-10 relative overflow-hidden bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2.5rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] group z-10">
                     <div class="absolute inset-0 z-0">
-                        <!-- Background khusus banner suplemen -->
-                        <img src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=2000" class="w-full h-full object-cover opacity-20 filter grayscale transition duration-700 group-hover:opacity-30 group-hover:scale-105">
+                        <!-- OPTIMASI: Lazy load banner suplemen -->
+                        <img src="https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=2000" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-20 filter grayscale transition duration-700 group-hover:opacity-30 group-hover:scale-105">
                         <div class="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent"></div>
                     </div>
                     
@@ -273,10 +272,10 @@
                     @foreach($supplementProducts as $product)
                     <div class="premium-card group cursor-pointer flex flex-col overflow-hidden relative">
                         
-                        <!-- OPTIMASI: aspect-[4/5] diubah menjadi aspect-square untuk foto produk 1:1 -->
                         <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden aspect-square bg-black/50 m-2 rounded-[1.5rem]">
                             @if($product->primaryImage)
-                                <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center group-hover:scale-110 group-hover:opacity-80 transition-all duration-700">
+                                <!-- OPTIMASI: Tambahkan loading="lazy" decoding="async" -->
+                                <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-110 group-hover:opacity-80 transition-all duration-700">
                             @else
                                 <div class="w-full h-full bg-[#111] flex items-center justify-center text-white/20 font-montserrat text-[10px] uppercase tracking-widest font-bold">No Image</div>
                             @endif
