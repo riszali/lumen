@@ -112,8 +112,8 @@
     
     <!-- Latar Belakang: Video untuk Desktop, Gambar Statis untuk HP -->
     <div class="absolute inset-0 z-0">
-        <!-- Video dirender dan jalan di Desktop/Tablet saja untuk menghemat baterai HP -->
-        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback class="hidden md:block w-full h-full object-cover opacity-50">
+        <!-- OPTIMASI: Tambah preload="metadata" agar tidak memblokir render HTML -->
+        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="hidden md:block w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
         <!-- Gambar Statis yang Ringan untuk HP -->
@@ -169,7 +169,8 @@
         <div id="full-banner-track" class="w-full h-full flex transition-transform duration-700 ease-in-out">
             @foreach($banners as $banner)
             <div class="w-full h-full flex-shrink-0 relative">
-                <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover object-center">
+                <!-- OPTIMASI: loading="lazy" decoding="async" -->
+                <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" loading="lazy" decoding="async" class="w-full h-full object-cover object-center">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 
                 @if($banner->title)
@@ -229,18 +230,19 @@
         
         <!-- UL Cards GSAP -->
         <ul class="cards z-20">
-            <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'"></li>
+            <!-- OPTIMASI: loading="lazy" decoding="async" pada semua gambar -->
+            <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" loading="lazy" decoding="async"></li>
             
             <!-- Duplikasi agar efek Infinity Seamless jalan -->
-            <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'"></li>
-            <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'"></li>
+            <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" loading="lazy" decoding="async"></li>
+            <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" loading="lazy" decoding="async"></li>
         </ul>
     </div>
 
@@ -280,12 +282,72 @@
 </section>
 
 <!-- =========================================
-     5. BRAND PARTNERS & BENTO GRID
+     5. BENTO GRID & BRAND PARTNERS (WHITE BACKGROUND)
      ========================================= -->
-<section class="pt-16 pb-24 bg-[var(--dark)] relative overflow-hidden">
+<section class="pt-16 bg-white relative overflow-hidden">
     
-    <!-- BRAND LOGOS (MARQUEE) -->
-    <div class="w-full mb-12 sm:mb-20 overflow-hidden border-y border-white/5 py-5 sm:py-8 bg-[#080808] relative gsap-fade-up">
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 pb-16 sm:pb-24">
+        <div class="mb-8 sm:mb-14 gsap-fade-up">
+            <h2 class="font-bebas text-4xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
+            <p class="text-gray-600 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
+        </div>
+        
+        <!-- OPTIMASI HP: Grid 2 Kolom per baris di HP, Bento Grid di Desktop -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 auto-rows-[180px] sm:auto-rows-[220px] md:auto-rows-[300px]">
+            
+            <!-- Card Padel -->
+            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+                <div class="relative w-full h-full">
+                    <img src="{{ asset('assets/images/padel-rack-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=800'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 md:bottom-8 md:left-8 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 md:mb-2 block">Koleksi Raket</span>
+                        <h3 class="font-bebas text-xl sm:text-3xl md:text-5xl text-white drop-shadow-md">RAKET PADEL</h3>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card Shoes -->
+            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+                <div class="relative w-full h-full">
+                    <img src="{{ asset('assets/images/shoes-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Alas Kaki Profesional</span>
+                        <h3 class="font-bebas text-xl sm:text-3xl md:text-4xl text-white drop-shadow-md">SEPATU OLAHRAGA</h3>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card Supplements -->
+            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+                <div class="relative w-full h-full">
+                    <img src="{{ asset('assets/images/supp-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Nutrisi Olahraga</span>
+                        <h3 class="font-bebas text-xl sm:text-2xl md:text-3xl text-white drop-shadow-md">SUPLEMEN</h3>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Card Activewear -->
+            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+                <div class="relative w-full h-full">
+                    <img src="{{ asset('assets/images/wear-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Pakaian Performa</span>
+                        <h3 class="font-bebas text-xl sm:text-2xl md:text-3xl text-white drop-shadow-md">ACTIVEWEAR</h3>
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- BRAND LOGOS (MARQUEE) Diletakkan di bawah Bento Grid -->
+    <div class="w-full overflow-hidden py-5 sm:py-8 bg-[#080808] relative gsap-fade-up">
         <!-- Fade Edges -->
         <div class="absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none"></div>
         <div class="absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none"></div>
@@ -310,66 +372,6 @@
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NIKE</span>
         </div>
     </div>
-
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
-        <div class="mb-8 sm:mb-14 gsap-fade-up">
-            <h2 class="font-bebas text-4xl md:text-6xl text-white uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
-            <p class="text-gray-500 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
-        </div>
-        
-        <!-- OPTIMASI HP: Card dikecilkan dan dibikin Horizontal Scroll (Sebaris) di HP. Desktop tetap Grid Bento -->
-        <div class="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar md:grid md:grid-cols-4 gap-3 sm:gap-5 md:auto-rows-[300px] pb-6 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
-            
-            <!-- Card Padel -->
-            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto md:col-span-2 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
-                <div class="relative w-full h-full">
-                    <img src="{{ asset('assets/images/padel-rack-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=800'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 md:bottom-8 md:left-8 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 md:mb-2 block">Koleksi Raket</span>
-                        <h3 class="font-bebas text-2xl sm:text-4xl md:text-5xl text-white drop-shadow-md">RAKET PADEL</h3>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Card Shoes -->
-            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
-                <div class="relative w-full h-full">
-                    <img src="{{ asset('assets/images/shoes-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Alas Kaki Profesional</span>
-                        <h3 class="font-bebas text-xl sm:text-3xl md:text-4xl text-white drop-shadow-md">SEPATU OLAHRAGA</h3>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Card Supplements -->
-            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
-                <div class="relative w-full h-full">
-                    <img src="{{ asset('assets/images/supp-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Nutrisi Olahraga</span>
-                        <h3 class="font-bebas text-lg sm:text-2xl md:text-3xl text-white drop-shadow-md">SUPLEMEN</h3>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Card Activewear -->
-            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="shrink-0 snap-center w-[45vw] h-[180px] sm:w-[35vw] sm:h-[220px] md:w-auto md:h-auto col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
-                <div class="relative w-full h-full">
-                    <img src="{{ asset('assets/images/wear-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[8px] md:text-[10px] uppercase tracking-widest mb-1 block">Pakaian Performa</span>
-                        <h3 class="font-bebas text-lg sm:text-2xl md:text-3xl text-white drop-shadow-md">ACTIVEWEAR</h3>
-                    </div>
-                </div>
-            </a>
-            
-        </div>
-    </div>
 </section>
 
 <!-- =========================================
@@ -382,7 +384,8 @@
         <!-- Pola Grid Tipis -->
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]"></div>
         
-        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" class="w-full h-full object-cover object-top opacity-10 filter grayscale mix-blend-overlay">
+        <!-- OPTIMASI: loading="lazy" decoding="async" -->
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" loading="lazy" decoding="async" class="w-full h-full object-cover object-top opacity-10 filter grayscale mix-blend-overlay">
         <div class="absolute inset-0 bg-gradient-to-t from-[var(--dark)] via-[var(--dark)]/80 to-[var(--dark)]"></div>
     </div>
 
@@ -433,11 +436,14 @@
 </section>
 
 <!-- =========================================
-     SCRIPT GSAP & CAROUSEL (OPTIMIZED)
+     SCRIPT GSAP & CAROUSEL (OPTIMIZED & DEFERRED)
      ========================================= -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- OPTIMASI: Tambah "defer" agar HTML diload duluan tanpa terhalang script besar ini -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
 <script>
+    // Karena script di-defer, inisialisasi harus nunggu DOMContentLoaded
     document.addEventListener("DOMContentLoaded", () => {
         
         // ===========================================
@@ -490,51 +496,56 @@
         // ===========================================
         // GSAP & SCROLL TRIGGER (OPTIMASI SUPER HP)
         // ===========================================
-        gsap.registerPlugin(ScrollTrigger);
+        // Pastikan GSAP terload karena kita pakai defer di headernya
+        if (typeof gsap !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
 
-        // Hero Animasi
-        gsap.from(".gsap-hero", {
-            y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1
-        });
-
-        // Fade Up Biasa
-        gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
-            gsap.from(elem, {
-                scrollTrigger: { trigger: elem, start: "top 85%" },
-                y: 40, opacity: 0, duration: 1, ease: "power3.out"
+            // Hero Animasi
+            gsap.from(".gsap-hero", {
+                y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1
             });
-        });
 
-        // ==============================================================
-        // LOGIC SHOWCASE INFINITY SCROLL (ScrollTrigger Aktif di Semua)
-        // ==============================================================
-        const showcase = document.getElementById('showcase-pin');
-        const textContainer = document.getElementById('text-container');
-        const textWrap = document.getElementById('scroll-text-wrap');
-        const cards = gsap.utils.toArray('.cards li');
-        
-        // Buat Timeline Seamless Loop
-        const seamlessLoop = buildSeamlessLoop(cards, 0.1);
+            // Fade Up Biasa
+            gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
+                gsap.from(elem, {
+                    scrollTrigger: { trigger: elem, start: "top 85%" },
+                    y: 40, opacity: 0, duration: 1, ease: "power3.out"
+                });
+            });
 
-        let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
+            // ==============================================================
+            // LOGIC SHOWCASE INFINITY SCROLL (ScrollTrigger Aktif di Semua)
+            // ==============================================================
+            const showcase = document.getElementById('showcase-pin');
+            const textContainer = document.getElementById('text-container');
+            const textWrap = document.getElementById('scroll-text-wrap');
+            const cards = gsap.utils.toArray('.cards li');
+            
+            if(showcase && textWrap && cards.length > 0) {
+                // Buat Timeline Seamless Loop
+                const seamlessLoop = buildSeamlessLoop(cards, 0.1);
 
-        const tlPin = gsap.timeline({
-            scrollTrigger: {
-                trigger: showcase,
-                start: "top top",
-                end: "+=" + scrollDist,
-                pin: true,
-                // OPTIMASI: Scrub dikecilkan jadi 0.5 supaya animasinya tidak berat ngikutin scroll di HP
-                scrub: 0.5, 
-                anticipatePin: 1
+                let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
+
+                const tlPin = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: showcase,
+                        start: "top top",
+                        end: "+=" + scrollDist,
+                        pin: true,
+                        // OPTIMASI: Scrub dikecilkan jadi 0.5 supaya animasinya tidak berat ngikutin scroll di HP
+                        scrub: 0.5, 
+                        anticipatePin: 1
+                    }
+                });
+
+                tlPin.to(textWrap, { y: -scrollDist, ease: "none" }, 0);
+                tlPin.fromTo(seamlessLoop, 
+                    { totalTime: seamlessLoop.duration() }, 
+                    { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0
+                );
             }
-        });
-
-        tlPin.to(textWrap, { y: -scrollDist, ease: "none" }, 0);
-        tlPin.fromTo(seamlessLoop, 
-            { totalTime: seamlessLoop.duration() }, 
-            { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0
-        );
+        }
     });
 
     // FUNGSI INTI UNTUK SEAMLESS LOOP
