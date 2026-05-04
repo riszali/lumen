@@ -43,7 +43,7 @@
         background-color: var(--card-bg);
         border: 1px solid var(--border);
         border-radius: 24px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     }
 
     /* Custom Scrollbar */
@@ -73,7 +73,6 @@
         border: 1px solid rgba(255,255,255,0.1);
         background: #000;
         box-shadow: 0 15px 30px rgba(0,0,0,0.6);
-        /* OPTIMASI EXTREME: Hardware acceleration agar sangat mulus di HP */
         will-change: transform, opacity;
         transform: translateZ(0); 
         backface-visibility: hidden;
@@ -84,7 +83,6 @@
         height: 100%;
         object-fit: cover;
         opacity: 1 !important; 
-        /* OPTIMASI: Filter dihapus karena ini penyebab utama frame drop/HP panas saat animasi */
     }
 
     /* Skala Responsif untuk HP */
@@ -292,51 +290,53 @@
             <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-5 auto-rows-[250px] md:auto-rows-[300px]">
+        <!-- OPTIMASI HP: auto-rows dikecilkan agar grid card proporsional di layar HP -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-5 auto-rows-[160px] sm:auto-rows-[200px] md:auto-rows-[300px]">
+            
             <!-- Card Padel -->
-            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 row-span-1 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 row-span-1 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/padel-rack-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=800'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-8 left-8 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[10px] uppercase tracking-widest mb-2 block">Koleksi Raket</span>
-                        <h3 class="font-bebas text-4xl md:text-5xl text-white">RAKET PADEL</h3>
+                    <div class="absolute bottom-5 left-5 md:bottom-8 md:left-8 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 md:mb-2 block">Koleksi Raket</span>
+                        <h3 class="font-bebas text-3xl sm:text-4xl md:text-5xl text-white drop-shadow-md">RAKET PADEL</h3>
                     </div>
                 </div>
             </a>
 
             <!-- Card Shoes -->
-            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/shoes-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[10px] uppercase tracking-widest mb-1 block">Alas Kaki Profesional</span>
-                        <h3 class="font-bebas text-3xl md:text-4xl text-white">SEPATU OLAHRAGA</h3>
+                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 block">Alas Kaki Profesional</span>
+                        <h3 class="font-bebas text-2xl sm:text-3xl md:text-4xl text-white drop-shadow-md">SEPATU OLAHRAGA</h3>
                     </div>
                 </div>
             </a>
 
             <!-- Card Supplements -->
-            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/supp-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[10px] uppercase tracking-widest mb-1 block">Nutrisi Olahraga</span>
-                        <h3 class="font-bebas text-2xl md:text-3xl text-white">SUPLEMEN</h3>
+                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 block">Nutrisi Olahraga</span>
+                        <h3 class="font-bebas text-xl sm:text-2xl md:text-3xl text-white drop-shadow-md">SUPLEMEN</h3>
                     </div>
                 </div>
             </a>
 
             <!-- Card Activewear -->
-            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-3xl transition-all duration-500 hover:border-white/20">
+            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] border border-white/5 rounded-2xl md:rounded-3xl transition-all duration-500 hover:border-white/20">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/wear-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
-                    <div class="absolute bottom-6 left-6 z-10">
-                        <span class="text-volt font-montserrat font-bold text-[10px] uppercase tracking-widest mb-1 block">Pakaian Performa</span>
-                        <h3 class="font-bebas text-2xl md:text-3xl text-white">ACTIVEWEAR</h3>
+                    <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 z-10">
+                        <span class="text-volt font-montserrat font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-1 block">Pakaian Performa</span>
+                        <h3 class="font-bebas text-xl sm:text-2xl md:text-3xl text-white drop-shadow-md">ACTIVEWEAR</h3>
                     </div>
                 </div>
             </a>
@@ -346,20 +346,62 @@
 </section>
 
 <!-- =========================================
-     6. FINAL CTA BANNER
+     6. FINAL CTA BANNER (PREMIUM REDESIGN)
      ========================================= -->
-<section class="py-24 md:py-32 w-full text-center relative overflow-hidden flex flex-col items-center justify-center border-t border-white/5">
-    <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000" alt="Athletes" class="w-full h-full object-cover object-top opacity-[0.05]">
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black"></div>
-    </div>
+<section class="py-24 md:py-32 w-full relative overflow-hidden flex flex-col items-center justify-center bg-[var(--dark)] border-t border-white/5">
     
-    <div class="relative z-10 w-full px-4 gsap-fade-up">
-        <h2 class="font-bebas text-5xl sm:text-7xl md:text-[90px] text-white leading-none mb-6 tracking-wide drop-shadow-lg">MULAI DENGAN <span class="text-volt">YANG TERBAIK</span></h2>
-        <p class="text-gray-400 max-w-lg mx-auto font-montserrat text-xs sm:text-base font-light mb-10 leading-relaxed">Berhenti berkompromi. Lengkapi dirimu dengan gear pilihan atlet profesional dan rasakan perbedaan kualitas di setiap permainanmu.</p>
-        <a href="{{ route('shop.index') }}" class="bg-white text-black px-12 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-volt transition-all duration-300 shadow-lg">
-            Masuk ke Toko
-        </a>
+    <!-- Abstract / Tech Background -->
+    <div class="absolute inset-0 z-0">
+        <!-- Pola Grid Tipis -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]"></div>
+        
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" class="w-full h-full object-cover object-top opacity-10 filter grayscale mix-blend-overlay">
+        <div class="absolute inset-0 bg-gradient-to-t from-[var(--dark)] via-[var(--dark)]/80 to-[var(--dark)]"></div>
+    </div>
+
+    <!-- Glowing Background Accents -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] md:w-[50%] h-[50%] bg-volt rounded-full mix-blend-screen filter blur-[200px] opacity-10 pointer-events-none z-0"></div>
+
+    <div class="relative z-10 w-[95%] max-w-[1000px] mx-auto px-4 sm:px-0">
+        <!-- Glassmorphism Floating Card -->
+        <div class="bg-[#0c0c0c]/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] md:rounded-[3rem] p-8 sm:p-12 md:p-16 text-center shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative overflow-hidden group">
+            
+            <!-- Hover Inner Glow Effect -->
+            <div class="absolute inset-0 bg-gradient-to-br from-volt/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+            
+            <!-- Sudut Aksen Kiri Atas & Kanan Bawah -->
+            <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-volt/50 rounded-tl-[2rem] md:rounded-tl-[3rem] opacity-50"></div>
+            <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-volt/50 rounded-br-[2rem] md:rounded-br-[3rem] opacity-50"></div>
+
+            <div class="gsap-fade-up relative z-10 flex flex-col items-center">
+                
+                <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-6 flex items-center justify-center gap-3">
+                    <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
+                    Tingkatkan Levelmu
+                    <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
+                </span>
+                
+                <h2 class="font-bebas text-5xl sm:text-7xl md:text-[90px] text-white leading-[0.9] mb-6 tracking-wide drop-shadow-lg">
+                    MULAI DENGAN <br/> 
+                    <span class="text-volt text-6xl sm:text-8xl md:text-[110px] drop-shadow-[0_0_25px_rgba(204,255,0,0.3)]">YANG TERBAIK</span>
+                </h2>
+                
+                <p class="text-gray-400 max-w-lg mx-auto font-montserrat text-xs sm:text-sm md:text-base font-light mb-10 leading-relaxed">
+                    Berhenti berkompromi. Lengkapi dirimu dengan gear pilihan atlet profesional dan rasakan perbedaan kualitas di setiap permainanmu.
+                </p>
+                
+                <!-- Double Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full sm:w-auto">
+                    <a href="{{ route('shop.index') }}" class="w-full sm:w-auto bg-volt text-black px-10 py-4 rounded-full font-montserrat font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white hover:-translate-y-1 transition-all duration-300 shadow-[0_0_20px_rgba(204,255,0,0.2)] hover:shadow-[0_0_30px_rgba(204,255,0,0.4)]">
+                        Masuk ke Toko
+                    </a>
+                    <a href="#showcase-pin" class="w-full sm:w-auto bg-transparent text-white border border-white/30 px-10 py-4 rounded-full font-montserrat font-bold uppercase tracking-widest text-xs sm:text-sm hover:border-volt hover:text-volt hover:-translate-y-1 transition-all duration-300">
+                        Eksplor Produk
+                    </a>
+                </div>
+
+            </div>
+        </div>
     </div>
 </section>
 
