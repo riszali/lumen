@@ -46,39 +46,65 @@
         box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     }
 
-    /* Custom Scrollbar buat Slider Banners Tambahan Admin */
+    /* Custom Scrollbar */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     /* =========================================
-       CSS KHUSUS CODEPEN CAROUSEL INFINITY
+       CSS KHUSUS CAROUSEL (RESPONSIVE)
        ========================================= */
-    .cards {
-        position: relative;
-        width: 18rem;
-        height: 24rem;
-        margin: 0 auto;
-        padding: 0;
-        perspective: 1200px;
+    /* DESKTOP (Infinity 3D Loop) */
+    @media (min-width: 768px) {
+        .cards {
+            position: relative;
+            width: 18rem;
+            height: 24rem;
+            margin: 0 auto;
+            padding: 0;
+            perspective: 1200px;
+        }
+        .cards li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 18rem;
+            height: 24rem;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            will-change: transform, opacity;
+            transform: translateZ(0); 
+        }
     }
 
-    .cards li {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        width: 18rem;
-        height: 24rem;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: #000;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-        /* OPTIMASI: Paksa browser pakai GPU (Hardware Acceleration) */
-        will-change: transform, opacity;
-        transform: translateZ(0); 
+    /* MOBILE (Native Swipe Scroll - Anti Lemot) */
+    @media (max-width: 767px) {
+        .cards {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            width: 100vw;
+            padding: 1rem 1.5rem;
+            gap: 1rem;
+        }
+        .cards li {
+            position: relative;
+            flex: 0 0 75vw;
+            height: 60vh;
+            max-height: 400px;
+            scroll-snap-align: center;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #000;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        /* Sembunyikan gambar duplikat di HP untuk hemat RAM */
+        .cards li:nth-child(n+6) {
+            display: none !important;
+        }
     }
 
     .cards li img {
@@ -86,12 +112,6 @@
         height: 100%;
         object-fit: cover;
         opacity: 1 !important; 
-        /* OPTIMASI: Hapus filter bawaan yang memberatkan CPU */
-    }
-
-    @media (max-width: 768px) {
-        .cards { width: 15rem; height: 20rem; }
-        .cards li { width: 15rem; height: 20rem; }
     }
 
     /* CSS Marquee */
@@ -103,7 +123,6 @@
         display: flex;
         width: max-content;
         animation: marquee 20s linear infinite;
-        /* OPTIMASI: Hardware Acceleration untuk Animasi Mulus */
         will-change: transform;
     }
 </style>
@@ -113,17 +132,20 @@
      ========================================= -->
 <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[var(--dark)]">
     
-    <!-- Latar Belakang Video -->
+    <!-- Latar Belakang: Video untuk Desktop, Gambar Statis untuk HP -->
     <div class="absolute inset-0 z-0">
-        <!-- OPTIMASI: Tambah playsinline & disablePictureInPicture untuk mobile -->
-        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback class="w-full h-full object-cover opacity-50">
+        <!-- Video hanya dirender dan jalan di Desktop/Tablet (md:block) -->
+        <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback class="hidden md:block w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
+        <!-- Gambar Statis yang Ringan untuk HP -->
+        <div class="block md:hidden w-full h-full bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000')] bg-cover bg-center opacity-30 grayscale"></div>
+        
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
 
-    <!-- Cahaya Pendar Halus (OPTIMASI: Hapus mix-blend-screen, kurangi radius blur) -->
-    <div class="absolute top-[10%] left-[10%] w-[30%] h-[40%] bg-volt rounded-full filter blur-[100px] opacity-10 pointer-events-none z-0"></div>
+    <!-- Cahaya Pendar (Disembunyikan di HP untuk hemat GPU) -->
+    <div class="hidden md:block absolute top-[10%] left-[10%] w-[30%] h-[40%] bg-volt rounded-full filter blur-[100px] opacity-10 pointer-events-none z-0"></div>
 
     <!-- Konten Hero -->
     <div class="relative z-10 w-[95%] max-w-[1200px] mx-auto px-4 flex flex-col items-center text-center pt-24">
@@ -163,14 +185,13 @@
 <!-- =========================================
      3. FULL-WIDTH BANNER CAROUSEL (DARI ADMIN)
      ========================================= -->
-<section class="relative w-full h-[60vh] md:h-[85vh] bg-[#050505] overflow-hidden z-20 group border-b border-white/5">
+<section class="relative w-full h-[50vh] md:h-[85vh] bg-[#050505] overflow-hidden z-20 group border-b border-white/5">
     @if(isset($banners) && $banners->count() > 0)
         <!-- Track Slider -->
         <div id="full-banner-track" class="w-full h-full flex transition-transform duration-700 ease-in-out">
             @foreach($banners as $banner)
             <div class="w-full h-full flex-shrink-0 relative">
                 <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover object-center">
-                <!-- Overlay Gradien Biar Teks Tetep Terbaca -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 
                 @if($banner->title)
@@ -186,56 +207,57 @@
 
         @if($banners->count() > 1)
             <!-- Navigasi Kiri / Kanan -->
-            <button onclick="prevBanner()" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 z-30">
-                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"></path></svg>
+            <button onclick="prevBanner()" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 z-30">
+                <svg class="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            <button onclick="nextBanner()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 z-30">
-                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"></path></svg>
+            <button onclick="nextBanner()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-10 h-10 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-100 md:opacity-0 md:group-hover:opacity-100 z-30">
+                <svg class="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"></path></svg>
             </button>
 
-            <!-- Indikator Garis (Dots) -->
+            <!-- Indikator Garis -->
             <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-30">
                 @foreach($banners as $index => $banner)
-                <button onclick="goToBanner({{ $index }})" class="banner-indicator w-8 sm:w-16 h-1 sm:h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-volt' : 'bg-white/30 hover:bg-white/60' }}"></button>
+                <button onclick="goToBanner({{ $index }})" class="banner-indicator w-8 sm:w-16 h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-volt' : 'bg-white/30' }}"></button>
                 @endforeach
             </div>
         @endif
 
     @else
-        <!-- FALLBACK KETIKA ADMIN BELUM UPLOAD BANNER (TETAP FULL WIDTH) -->
+        <!-- FALLBACK -->
         <div class="w-full h-full relative flex items-center justify-center bg-[#0c0c0c]">
             <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000')] bg-cover bg-center grayscale"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
             
             <div class="text-center relative z-10 px-4">
-                <div class="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-                    <svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
-                <h3 class="font-bebas text-5xl md:text-7xl text-gray-500 tracking-wide uppercase drop-shadow-md">BELUM ADA BANNER</h3>
-                <p class="text-[10px] md:text-xs uppercase tracking-widest text-gray-600 mt-3 font-bold font-montserrat">Silakan upload gambar penuh (Full Width) dari menu Admin Panel</p>
+                <h3 class="font-bebas text-4xl md:text-7xl text-gray-500 tracking-wide uppercase drop-shadow-md">BELUM ADA BANNER</h3>
+                <p class="text-[10px] md:text-xs uppercase tracking-widest text-gray-600 mt-3 font-bold font-montserrat">Silakan upload gambar dari menu Admin Panel</p>
             </div>
         </div>
     @endif
 </section>
 
 <!-- =========================================
-     4. THE SHOWCASE (CODEPEN INFINITY + TEXT SCROLL)
+     4. THE SHOWCASE (ADAPTIVE HP & DESKTOP)
      ========================================= -->
-<section id="showcase-pin" class="w-full h-screen flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
+<section id="showcase-pin" class="w-full flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
     
-    <!-- Sisi Kiri: Slider CodePen -->
-    <div class="w-full md:w-1/2 h-[50vh] md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
-        <!-- OPTIMASI: Hapus mix-blend-screen dan kurangi blur dari ambient glow ini -->
-        <div class="absolute w-[200px] h-[200px] bg-white rounded-full filter blur-[100px] opacity-5"></div>
+    <!-- Sisi Kiri: Slider Gambar -->
+    <div class="w-full md:w-1/2 py-10 md:py-0 md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
+        <!-- Ambient subtle glow (Sembunyi di HP) -->
+        <div class="hidden md:block absolute w-[200px] h-[200px] bg-white rounded-full filter blur-[100px] opacity-5"></div>
         
-        <!-- UL Cards CodePen -->
-        <ul class="cards z-20">
+        <!-- UL Cards -->
+        <ul class="cards z-20 hide-scrollbar">
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/nox.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/siux.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'"></li>
-            <!-- Duplikasi -->
+            
+            <!-- Duplikasi KHUSUS DESKTOP (Di CSS HP disembunyikan) -->
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/gabriel-martin-iLBogzzUhrU-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1621252179027-94459d278660?q=80&w=600'"></li>
             <li><img src="{{ asset('assets/images/Martita-Ortega.webp') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600'"></li>
@@ -244,34 +266,34 @@
         </ul>
     </div>
 
-    <!-- Sisi Kanan: Teks yang di Scroll -->
-    <div id="text-container" class="w-full md:w-1/2 h-[50vh] md:h-screen relative overflow-hidden z-10 bg-[#080808]">
-        <div id="scroll-text-wrap" class="absolute top-0 left-0 w-full">
+    <!-- Sisi Kanan: Teks Info -->
+    <div id="text-container" class="w-full md:w-1/2 md:h-screen relative overflow-hidden z-10 bg-[#080808]">
+        <div id="scroll-text-wrap" class="relative md:absolute top-0 left-0 w-full flex flex-col md:block gap-6 px-4 pb-12 md:px-0 md:pb-0">
             
-            <!-- Blok Teks 1: Raket Padel -->
-            <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
-                <div class="premium-card p-8 md:p-14">
+            <!-- Blok Teks 1 -->
+            <div class="md:h-screen flex flex-col justify-center px-0 md:px-12 py-4 md:py-10">
+                <div class="premium-card p-6 md:p-14 gs-mobile-fade">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">01 // KENDALI MUTLAK</span>
-                    <h2 class="text-5xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">PRESISI & KEKUATAN</h2>
-                    <p class="text-gray-400 font-montserrat text-sm md:text-base leading-relaxed font-light">Raket padel premium yang direkayasa dengan serat karbon tingkat aerospace. Memberikan transfer energi maksimal tanpa mengorbankan akurasi pukulan Anda pada saat-saat krusial.</p>
+                    <h2 class="text-4xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">PRESISI & KEKUATAN</h2>
+                    <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Raket padel premium yang direkayasa dengan serat karbon tingkat aerospace. Memberikan transfer energi maksimal tanpa mengorbankan akurasi pukulan Anda pada saat-saat krusial.</p>
                 </div>
             </div>
 
-            <!-- Blok Teks 2: Sepatu -->
-            <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
-                <div class="premium-card p-8 md:p-14">
+            <!-- Blok Teks 2 -->
+            <div class="md:h-screen flex flex-col justify-center px-0 md:px-12 py-4 md:py-10">
+                <div class="premium-card p-6 md:p-14 gs-mobile-fade">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">02 // AGILITAS TINGGI</span>
-                    <h2 class="text-5xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">BERGERAK TANPA RAGU</h2>
-                    <p class="text-gray-400 font-montserrat text-sm md:text-base leading-relaxed font-light">Sepatu performa tinggi dengan grip sol inovatif dan bantalan super responsif. Memastikan setiap pijakan, lompatan, dan manuver di lapangan terasa ringan, solid, dan stabil.</p>
+                    <h2 class="text-4xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">BERGERAK TANPA RAGU</h2>
+                    <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Sepatu performa tinggi dengan grip sol inovatif dan bantalan super responsif. Memastikan setiap pijakan, lompatan, dan manuver di lapangan terasa ringan, solid, dan stabil.</p>
                 </div>
             </div>
 
-            <!-- Blok Teks 3: Nutrisi -->
-            <div class="h-[50vh] md:h-screen flex flex-col justify-center px-4 md:px-12 py-10">
-                <div class="premium-card p-8 md:p-14">
+            <!-- Blok Teks 3 -->
+            <div class="md:h-screen flex flex-col justify-center px-0 md:px-12 py-4 md:py-10">
+                <div class="premium-card p-6 md:p-14 gs-mobile-fade">
                     <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.2em] uppercase mb-4 block">03 // DAYA TAHAN</span>
-                    <h2 class="text-5xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">ENERGI TANPA HENTI</h2>
-                    <p class="text-gray-400 font-montserrat text-sm md:text-base leading-relaxed font-light">Bertahan lebih lama dari lawanmu. Formulasi nutrisi canggih yang dirancang khusus untuk hidrasi instan, menjaga fokus tetap tajam, dan mempercepat proses pemulihan otot pasca tanding.</p>
+                    <h2 class="text-4xl md:text-7xl font-bebas text-white uppercase tracking-wide mb-4">ENERGI TANPA HENTI</h2>
+                    <p class="text-gray-400 font-montserrat text-xs md:text-base leading-relaxed font-light">Bertahan lebih lama dari lawanmu. Formulasi nutrisi canggih yang dirancang khusus untuk hidrasi instan, menjaga fokus tetap tajam, dan mempercepat proses pemulihan otot pasca tanding.</p>
                 </div>
             </div>
 
@@ -286,7 +308,7 @@
     
     <div class="max-w-[1400px] mx-auto relative z-10">
         <div class="mb-14 gsap-fade-up">
-            <h2 class="font-bebas text-5xl md:text-6xl text-white uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
+            <h2 class="font-bebas text-4xl md:text-6xl text-white uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
             <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
         </div>
         
@@ -346,16 +368,15 @@
 <!-- =========================================
      6. FINAL CTA BANNER
      ========================================= -->
-<section class="py-32 w-full text-center relative overflow-hidden flex flex-col items-center justify-center border-t border-white/5">
+<section class="py-24 md:py-32 w-full text-center relative overflow-hidden flex flex-col items-center justify-center border-t border-white/5">
     <div class="absolute inset-0 z-0">
-        <!-- OPTIMASI: Hapus filter grayscale dari css, pakai opacity standar -->
-        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" alt="Athletes" class="w-full h-full object-cover object-top opacity-[0.05]">
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000" alt="Athletes" class="w-full h-full object-cover object-top opacity-[0.05]">
         <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black"></div>
     </div>
     
     <div class="relative z-10 w-full px-4 gsap-fade-up">
-        <h2 class="font-bebas text-6xl sm:text-7xl md:text-[90px] text-white leading-none mb-6 tracking-wide drop-shadow-lg">MULAI DENGAN <span class="text-volt">YANG TERBAIK</span></h2>
-        <p class="text-gray-400 max-w-lg mx-auto font-montserrat text-sm sm:text-base font-light mb-10 leading-relaxed">Berhenti berkompromi. Lengkapi dirimu dengan gear pilihan atlet profesional dan rasakan perbedaan kualitas di setiap permainanmu.</p>
+        <h2 class="font-bebas text-5xl sm:text-7xl md:text-[90px] text-white leading-none mb-6 tracking-wide drop-shadow-lg">MULAI DENGAN <span class="text-volt">YANG TERBAIK</span></h2>
+        <p class="text-gray-400 max-w-lg mx-auto font-montserrat text-xs sm:text-base font-light mb-10 leading-relaxed">Berhenti berkompromi. Lengkapi dirimu dengan gear pilihan atlet profesional dan rasakan perbedaan kualitas di setiap permainanmu.</p>
         <a href="{{ route('shop.index') }}" class="bg-white text-black px-12 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-volt transition-all duration-300 shadow-lg">
             Masuk ke Toko
         </a>
@@ -363,7 +384,7 @@
 </section>
 
 <!-- =========================================
-     SCRIPT GSAP & CAROUSEL (OPTIMIZED)
+     SCRIPT GSAP & CAROUSEL (MENDUKUNG MOBILE)
      ========================================= -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -386,11 +407,11 @@
             
             indicators.forEach((ind, i) => {
                 if (i === currentBanner) {
-                    ind.classList.remove('bg-white/30', 'hover:bg-white/60');
+                    ind.classList.remove('bg-white/30');
                     ind.classList.add('bg-volt');
                 } else {
                     ind.classList.remove('bg-volt');
-                    ind.classList.add('bg-white/30', 'hover:bg-white/60');
+                    ind.classList.add('bg-white/30');
                 }
             });
             resetInterval();
@@ -411,76 +432,75 @@
         function resetInterval() {
             clearInterval(slideInterval);
             if (bannerCount > 1) {
-                slideInterval = setInterval(nextBanner, 6000); // Geser otomatis tiap 6 detik
+                slideInterval = setInterval(nextBanner, 6000); 
             }
         }
 
-        if (bannerCount > 1) {
-            resetInterval();
-        }
+        if (bannerCount > 1) { resetInterval(); }
 
         // ===========================================
-        // GSAP & SCROLL TRIGGER (OPTIMIZED)
+        // GSAP & SCROLL TRIGGER (OPTIMASI MOBILE)
         // ===========================================
         gsap.registerPlugin(ScrollTrigger);
 
+        // Hero Animasi (Jalan di semua device)
         gsap.from(".gsap-hero", {
-            y: 40,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.15,
-            ease: "power3.out",
-            delay: 0.1
+            y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1
         });
 
+        // Fade Up Biasa
         gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
             gsap.from(elem, {
-                scrollTrigger: {
-                    trigger: elem,
-                    start: "top 85%",
-                },
-                y: 40,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out"
+                scrollTrigger: { trigger: elem, start: "top 85%" },
+                y: 40, opacity: 0, duration: 1, ease: "power3.out"
             });
         });
 
-        // LOGIC SHOWCASE INFINITY SCROLL (OPTIMIZED)
-        const showcase = document.getElementById('showcase-pin');
-        const textContainer = document.getElementById('text-container');
-        const textWrap = document.getElementById('scroll-text-wrap');
-        const cards = gsap.utils.toArray('.cards li');
-        
-        // Buat Timeline Seamless Loop
-        const seamlessLoop = buildSeamlessLoop(cards, 0.1);
+        // ==============================================================
+        // GSAP MATCHMEDIA: Pisahkan animasi berat hanya untuk Desktop
+        // ==============================================================
+        let mm = gsap.matchMedia();
 
-        let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
+        // DESKTOP: Jalankan Infinity Loop & Pinned Scroll
+        mm.add("(min-width: 768px)", () => {
+            const showcase = document.getElementById('showcase-pin');
+            const textContainer = document.getElementById('text-container');
+            const textWrap = document.getElementById('scroll-text-wrap');
+            const cards = gsap.utils.toArray('.cards li');
+            
+            const seamlessLoop = buildSeamlessLoop(cards, 0.1);
+            let scrollDist = textWrap.scrollHeight - textContainer.clientHeight;
 
-        const tlPin = gsap.timeline({
-            scrollTrigger: {
-                trigger: showcase,
-                start: "top top",
-                end: "+=" + scrollDist,
-                pin: true,
-                scrub: 1, // OPTIMASI: Kurangi dari 1.5 jadi 1 agar hitungan lebih ringan
-                anticipatePin: 1
-            }
+            const tlPin = gsap.timeline({
+                scrollTrigger: {
+                    trigger: showcase,
+                    start: "top top",
+                    end: "+=" + scrollDist,
+                    pin: true,
+                    scrub: 1, // Kurangi dari 1.5 biar scroll gak ketahan berat
+                    anticipatePin: 1
+                }
+            });
+
+            tlPin.to(textWrap, { y: -scrollDist, ease: "none" }, 0);
+            tlPin.fromTo(seamlessLoop, 
+                { totalTime: seamlessLoop.duration() }, 
+                { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0
+            );
         });
 
-        tlPin.to(textWrap, {
-            y: -scrollDist,
-            ease: "none"
-        }, 0);
-
-        tlPin.fromTo(seamlessLoop, 
-            { totalTime: seamlessLoop.duration() }, 
-            { totalTime: seamlessLoop.duration() * 2.5, ease: "none" },
-            0
-        );
+        // MOBILE: Hanya Fade-Up sederhana untuk teks (0% Beban CPU)
+        mm.add("(max-width: 767px)", () => {
+            gsap.utils.toArray('.gs-mobile-fade').forEach(elem => {
+                gsap.from(elem, {
+                    scrollTrigger: { trigger: elem, start: "top 80%" },
+                    y: 30, opacity: 0, duration: 0.8, ease: "power2.out"
+                });
+            });
+        });
     });
 
-    // FUNGSI INTI UNTUK SEAMLESS LOOP (OPTIMIZED DENGAN force3D)
+    // FUNGSI INTI UNTUK SEAMLESS LOOP (Hanya dipanggil di Desktop)
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,
@@ -497,7 +517,7 @@
             time = 0,
             i, index, item;
 
-        // OPTIMASI: Tambah force3D: true agar animasi diproses oleh GPU (Hardware Acceleration)
+        // Force3D untuk Hardware Acceleration
         gsap.set(items, {xPercent: 400, opacity: 0, scale: 0, force3D: true});
 
         for (i = 0; i < l; i++) {
