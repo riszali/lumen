@@ -73,12 +73,13 @@
 </head>
 <body class="bg-gray-50 dark:bg-dark font-montserrat antialiased text-gray-900 dark:text-white overflow-hidden flex h-screen relative transition-colors duration-500">
 
-    <!-- Ambient Glow Glassmorphism -->
-    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[50%] bg-emerald-400 dark:bg-volt rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[150px] opacity-20 dark:opacity-[0.08] pointer-events-none z-0 transition-colors duration-500"></div>
-    <div class="fixed bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-teal-400 dark:bg-[#00E5FF] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[150px] opacity-20 dark:opacity-[0.05] pointer-events-none z-0 transition-colors duration-500"></div>
+    <!-- OPTIMASI: Hapus mix-blend, kurangi blur ke 100px, tambah hardware acceleration biar ringan -->
+    <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[50%] bg-emerald-400 dark:bg-volt rounded-full filter blur-[100px] opacity-20 dark:opacity-10 pointer-events-none z-0 transition-colors duration-500 transform translate-z-0 will-change-transform"></div>
+    <div class="fixed bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-teal-400 dark:bg-[#00E5FF] rounded-full filter blur-[100px] opacity-20 dark:opacity-10 pointer-events-none z-0 transition-colors duration-500 transform translate-z-0 will-change-transform"></div>
 
     <!-- Sidebar (Glassmorphism) -->
-    <aside id="sidebar" class="w-72 bg-white/70 dark:bg-white/[0.02] backdrop-blur-2xl border-r border-gray-200 dark:border-white/10 flex flex-col z-20 h-full relative shadow-[8px_0_32px_0_rgba(0,0,0,0.05)] dark:shadow-[8px_0_32px_0_rgba(0,0,0,0.3)] transition-all duration-300">
+    <!-- OPTIMASI: Ubah backdrop-blur-2xl menjadi backdrop-blur-xl -->
+    <aside id="sidebar" class="w-72 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border-r border-gray-200 dark:border-white/10 flex flex-col z-20 h-full relative shadow-[8px_0_32px_0_rgba(0,0,0,0.05)] dark:shadow-[8px_0_32px_0_rgba(0,0,0,0.3)] transition-all duration-300">
         <!-- Logo -->
         <div class="h-24 flex items-center justify-center border-b border-gray-200 dark:border-white/10 transition-colors duration-500 px-4 relative">
             <a href="{{ route('admin.dashboard') }}" class="block transform hover:scale-105 transition duration-500 w-full flex justify-center">
@@ -142,7 +143,7 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden relative z-10 transition-all duration-300">
         
         <!-- Header -->
-        <header class="h-24 bg-white/70 dark:bg-white/[0.02] backdrop-blur-xl border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 sm:px-10 z-20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] transition-colors duration-500">
+        <header class="h-24 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 sm:px-10 z-20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] transition-colors duration-500">
             <div class="flex items-center">
                 <!-- Tombol Minimize Menu -->
                 <button onclick="toggleSidebar()" class="mr-4 sm:mr-6 p-2 rounded-full text-gray-500 hover:bg-gray-100 hover:text-emerald-600 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-volt transition-all duration-300 focus:outline-none">
@@ -173,7 +174,7 @@
         <!-- Flash Messages -->
         <div class="fixed top-28 right-10 z-[110] flex flex-col items-end pointer-events-none">
             @if(session('success'))
-                <div class="toast-message bg-white/90 dark:bg-white/[0.05] backdrop-blur-2xl border border-gray-200 dark:border-white/10 border-l-4 border-l-emerald-500 dark:border-l-volt text-gray-900 dark:text-white px-6 py-4 rounded-r-2xl shadow-lg dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mb-3 animate-fade-in-down flex items-center gap-4 transition-colors duration-500">
+                <div class="toast-message bg-white/90 dark:bg-white/[0.05] backdrop-blur-xl border border-gray-200 dark:border-white/10 border-l-4 border-l-emerald-500 dark:border-l-volt text-gray-900 dark:text-white px-6 py-4 rounded-r-2xl shadow-lg dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)] pointer-events-auto mb-3 animate-fade-in-down flex items-center gap-4 transition-colors duration-500">
                     <div class="bg-emerald-100 dark:bg-volt/20 p-1.5 rounded-full">
                         <svg class="w-5 h-5 text-emerald-600 dark:text-volt" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                     </div>

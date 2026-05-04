@@ -4,13 +4,14 @@
 @section('header_title', 'OVERVIEW')
 
 @section('content')
-<!-- Ambient Light Background (Khusus Dashboard) -->
-<div class="absolute top-[10%] right-[10%] w-[30%] h-[40%] bg-emerald-400 dark:bg-volt rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[150px] opacity-20 dark:opacity-[0.08] pointer-events-none z-0 transition-colors duration-500"></div>
+<!-- OPTIMASI: Hapus mix-blend, kurangi blur ke 100px, tambah hardware acceleration biar enteng -->
+<div class="absolute top-[10%] right-[10%] w-[30%] h-[40%] bg-emerald-400 dark:bg-volt rounded-full filter blur-[100px] opacity-20 dark:opacity-10 pointer-events-none z-0 transition-colors duration-500 transform translate-z-0 will-change-transform"></div>
 
 <div class="relative w-full space-y-8 z-10">
 
-    <!-- Header Banner (Glassmorphism & Rounded) -->
-    <div class="flex flex-col sm:flex-row items-center sm:items-start justify-between p-8 bg-white/70 dark:bg-white/[0.03] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-[2.5rem] shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transition-colors duration-500">
+    <!-- Header Banner -->
+    <!-- OPTIMASI: Ubah backdrop-blur-2xl menjadi backdrop-blur-xl -->
+    <div class="flex flex-col sm:flex-row items-center sm:items-start justify-between p-8 bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2.5rem] shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] transition-colors duration-500">
         <div>
             <h1 class="font-bebas text-4xl sm:text-6xl text-gray-900 dark:text-white tracking-wide drop-shadow-sm dark:drop-shadow-md transition-colors duration-500">SELAMAT DATANG, {{ auth()->user()->name ?? 'ADMIN' }}</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400 font-montserrat font-light mt-2 tracking-wide transition-colors duration-500">Pantau performa penjualan dan manajemen produk WILLSPORTS.</p>
@@ -23,7 +24,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Revenue Card -->
-        <div class="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
+        <div class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
             <div class="flex justify-between items-start mb-6">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-montserrat font-bold uppercase tracking-widest group-hover:text-emerald-700 dark:group-hover:text-white transition">Total Pendapatan</h3>
                 <div class="p-2.5 bg-gray-100 dark:bg-black/40 rounded-xl border border-gray-200 dark:border-white/10 text-emerald-600 dark:text-volt group-hover:bg-emerald-100 dark:group-hover:bg-volt group-hover:text-emerald-700 dark:group-hover:text-black transition shadow-inner">
@@ -34,7 +35,7 @@
         </div>
         
         <!-- Orders Card -->
-        <div class="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
+        <div class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
             <div class="flex justify-between items-start mb-6">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-montserrat font-bold uppercase tracking-widest group-hover:text-emerald-700 dark:group-hover:text-white transition">Total Pesanan</h3>
                 <div class="p-2.5 bg-gray-100 dark:bg-black/40 rounded-xl border border-gray-200 dark:border-white/10 text-emerald-600 dark:text-volt group-hover:bg-emerald-100 dark:group-hover:bg-volt group-hover:text-emerald-700 dark:group-hover:text-black transition shadow-inner">
@@ -45,7 +46,7 @@
         </div>
         
         <!-- Products Card -->
-        <div class="bg-white/80 dark:bg-white/[0.02] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
+        <div class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
             <div class="flex justify-between items-start mb-6">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-montserrat font-bold uppercase tracking-widest group-hover:text-emerald-700 dark:group-hover:text-white transition">Total Produk</h3>
                 <div class="p-2.5 bg-gray-100 dark:bg-black/40 rounded-xl border border-gray-200 dark:border-white/10 text-emerald-600 dark:text-volt group-hover:bg-emerald-100 dark:group-hover:bg-volt group-hover:text-emerald-700 dark:group-hover:text-black transition shadow-inner">
@@ -56,8 +57,9 @@
         </div>
     </div>
 
-    <!-- Recent Orders Table (Glassmorphism & Rounded) -->
-    <div class="bg-white/70 dark:bg-white/[0.03] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] transition-colors duration-500">
+    <!-- Recent Orders Table -->
+    <!-- OPTIMASI: Ubah backdrop-blur-2xl menjadi backdrop-blur-xl -->
+    <div class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[2.5rem] overflow-hidden shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] transition-colors duration-500">
         <div class="px-8 py-6 border-b border-gray-200 dark:border-white/10 flex justify-between items-center bg-gray-50/50 dark:bg-white/5 transition-colors duration-500">
             <h3 class="font-bebas text-3xl text-gray-900 dark:text-white tracking-wide drop-shadow-sm dark:drop-shadow-md">PESANAN TERBARU</h3>
             <a href="{{ route('admin.orders.index') }}" class="text-[10px] font-montserrat font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 hover:text-white dark:hover:text-black hover:bg-emerald-500 dark:hover:bg-volt transition border border-gray-200 dark:border-white/20 px-4 py-2 rounded-xl bg-white dark:bg-black/40 shadow-inner">Lihat Semua</a>
