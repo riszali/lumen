@@ -37,10 +37,24 @@
     /* OPTIMASI EKSTRIM: Ganti Filter Blur Berat dengan Radial Gradient Murni */
     .bg-glow-cyan { background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 65%); }
     .bg-glow-volt { background: radial-gradient(circle, rgba(204, 255, 0, 0.08) 0%, transparent 65%); }
+
+    /* BYPASS TAILWIND COMPILER: Fix Tombol Hitam */
+    .text-volt-custom { color: var(--volt) !important; }
+    .group:hover .group-hover\:text-volt-custom { color: var(--volt) !important; }
+    .btn-volt-custom {
+        background-color: var(--volt) !important;
+        color: #000000 !important;
+        border: 1px solid var(--volt) !important;
+    }
+    .btn-volt-custom:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border-color: #ffffff !important;
+        box-shadow: 0 0 25px rgba(255,255,255,0.4) !important;
+    }
 </style>
 
 <!-- Main Wrapper with Dark Background -->
-<!-- Ditambahkan transform translate-z-0 untuk Hardware Acceleration (GPU) -->
 <div class="relative w-full min-h-screen bg-[#050505] overflow-hidden pt-navbar pb-24 transform translate-z-0">
     
     <!-- Ambient Light Effects (Teroptimasi - Sangat Ringan di HP) -->
@@ -57,13 +71,12 @@
             <span class="mx-3 opacity-50">/</span>
             <a href="{{ route('shop.index', ['category' => $product->category->slug]) }}" class="hover:text-white transition duration-300">{{ $product->category->name }}</a> 
             <span class="mx-3 opacity-50">/</span>
-            <span class="text-[#ccff00] drop-shadow-md">{{ $product->name }}</span>
+            <span class="text-volt-custom drop-shadow-md">{{ $product->name }}</span>
         </nav>
 
         <div class="flex flex-col md:flex-row gap-12 lg:gap-16">
             <!-- Product Images (Left) - Menggunakan Swiper Slider -->
             <div class="w-full md:w-1/2">
-                <!-- OPTIMASI: backdrop-blur-2xl di HP jadi md -->
                 <div class="bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-4 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] mb-6">
                     
                     <!-- Swiper Image Container -->
@@ -72,7 +85,6 @@
                             @forelse($product->images as $image)
                                 <!-- Gambar diklik memanggil Lightbox -->
                                 <div class="swiper-slide cursor-zoom-in" onclick="openLightbox('{{ Storage::url($image->image_path) }}')">
-                                    <!-- OPTIMASI: loading lazy dan decoding async -->
                                     <img src="{{ Storage::url($image->image_path) }}" loading="lazy" decoding="async" class="w-full h-full object-cover object-center">
                                 </div>
                             @empty
@@ -90,7 +102,7 @@
                 @if($product->images->count() > 1)
                 <div class="grid grid-cols-4 sm:grid-cols-5 gap-3 px-2">
                     @foreach($product->images as $index => $image)
-                    <button onclick="mainSwiper.slideTo({{ $index }})" class="aspect-square bg-black/20 border border-white/10 rounded-2xl overflow-hidden hover:border-[#ccff00] focus:outline-none focus:border-[#ccff00] transition duration-300 shadow-inner opacity-60 hover:opacity-100">
+                    <button onclick="mainSwiper.slideTo({{ $index }})" style="outline: none;" class="aspect-square bg-black/20 border border-white/10 rounded-2xl overflow-hidden transition duration-300 shadow-inner opacity-60 hover:opacity-100 hover:border-[#ccff00]">
                         <img src="{{ Storage::url($image->image_path) }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
                     </button>
                     @endforeach
@@ -103,7 +115,7 @@
                 
                 <h1 class="font-bebas text-5xl lg:text-7xl text-white mb-2 tracking-wide drop-shadow-md leading-none">{{ $product->name }}</h1>
                 <p class="text-sm text-gray-400 font-montserrat font-bold tracking-widest uppercase mb-6">{{ $product->brand ?? $product->category->name }}</p>
-                <p class="text-3xl text-[#ccff00] font-bebas tracking-wide mb-8">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                <p class="text-3xl text-volt-custom font-bebas tracking-wide mb-8">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                 
                 <!-- TABS: Description & Specification -->
                 <div class="font-montserrat">
@@ -130,7 +142,6 @@
                 </div>
 
                 <!-- Add to Cart Form -->
-                <!-- OPTIMASI: backdrop-blur diturunkan -->
                 <div class="bg-white/5 backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-lg mt-auto">
                     <form action="{{ route('cart.add') }}" method="POST" class="font-montserrat">
                         @csrf
@@ -139,7 +150,7 @@
                         @if($product->variants->count() > 0)
                         <div class="mb-6 relative">
                             <label for="variant_id" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">Pilih Varian *</label>
-                            <select name="variant_id" id="variant_id" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-5 focus:ring-[#ccff00] focus:border-[#ccff00] text-sm text-white appearance-none shadow-inner transition outline-none cursor-pointer [&>option]:bg-[#050505]" required>
+                            <select name="variant_id" id="variant_id" style="outline: none;" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-5 text-sm text-white appearance-none shadow-inner transition cursor-pointer [&>option]:bg-[#050505]" required>
                                 <option value="">-- Tentukan Pilihan --</option>
                                 @foreach($product->variants as $variant)
                                     <option value="{{ $variant->id }}">
@@ -156,9 +167,11 @@
                         <div class="flex items-end gap-4 mb-2">
                             <div class="w-28 flex-shrink-0">
                                 <label for="quantity" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">Kuantitas</label>
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-4 focus:ring-[#ccff00] focus:border-[#ccff00] text-center text-sm text-white shadow-inner transition outline-none" required>
+                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" style="outline: none;" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-4 text-center text-sm text-white shadow-inner transition" required>
                             </div>
-                            <button type="submit" class="flex-grow bg-[#ccff00] text-black border border-[#ccff00] rounded-xl py-4 uppercase tracking-widest text-xs font-bold hover:bg-white hover:text-black hover:border-white transition-all duration-300 shadow-[0_0_15px_rgba(204,255,0,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] flex justify-center items-center gap-3">
+                            
+                            <!-- TOMBOL ADD TO CART YANG SUDAH DI-FIX (DIJAMIN NYALA & BUKAN HITAM) -->
+                            <button type="submit" class="flex-grow btn-volt-custom rounded-xl py-4 uppercase tracking-widest text-xs font-bold transition-all duration-300 shadow-[0_0_15px_rgba(204,255,0,0.2)] flex justify-center items-center gap-3">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                                 Add to Cart
                             </button>
@@ -181,8 +194,7 @@
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 @foreach($relatedProducts as $related)
-                <!-- OPTIMASI: backdrop-blur diturunkan -->
-                <div class="group cursor-pointer bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.08] hover:border-[#ccff00]/30 transition-all duration-500 flex flex-col">
+                <div class="group cursor-pointer bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.08] transition-all duration-500 flex flex-col">
                     
                     <a href="{{ route('shop.show', $related->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
                         @if($related->primaryImage)
@@ -194,11 +206,11 @@
                     </a>
                     
                     <div class="text-center px-2 pb-3 flex-grow flex flex-col justify-end font-montserrat">
-                        <h4 class="text-white font-bebas text-2xl tracking-wide mb-1 transition group-hover:text-[#ccff00] line-clamp-1">
+                        <h4 class="text-white font-bebas text-2xl tracking-wide mb-1 transition group-hover:text-volt-custom line-clamp-1">
                             <a href="{{ route('shop.show', $related->slug) }}">{{ $related->name }}</a>
                         </h4>
                         <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $related->brand ?? $related->category->name }}</p>
-                        <p class="text-[#ccff00] text-sm font-bold tracking-wider">Rp {{ number_format($related->price, 0, ',', '.') }}</p>
+                        <p class="text-volt-custom text-sm font-bold tracking-wider">Rp {{ number_format($related->price, 0, ',', '.') }}</p>
                     </div>
                 </div>
                 @endforeach
