@@ -110,10 +110,12 @@
     
     <!-- Latar Belakang & Glowing Orbs -->
     <div class="absolute inset-0 z-0">
-        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-20">
+        <!-- Opacity dinaikkan ke 50 agar lebih terang -->
+        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
-        <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/30 via-[#050505]/70 to-[#050505]"></div>
+        <!-- Gradien ditipiskan di atas dan tengah agar video jelas -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
 
     <!-- Cahaya Pendar Halus -->
@@ -126,16 +128,16 @@
             <h1 class="font-bebas text-[80px] sm:text-[110px] md:text-[150px] text-white tracking-wide drop-shadow-2xl">
                 ELEVATE YOUR <span class="text-volt">GAME</span>
             </h1>
-            <p class="text-gray-400 font-montserrat text-sm sm:text-base font-light max-w-2xl mx-auto leading-relaxed mt-2">
+            <p class="text-gray-400 font-montserrat text-sm sm:text-base font-light max-w-2xl mx-auto leading-relaxed mt-2 drop-shadow-md">
                 Perlengkapan padel spesifikasi turnamen untuk atlet yang menuntut kesempurnaan. Rasakan kendali mutlak dan dominasi setiap jengkal lapangan.
             </p>
         </div>
 
         <div class="gsap-hero flex flex-col sm:flex-row justify-center gap-4 mt-6 w-full">
-            <a href="{{ route('shop.index') }}" class="bg-volt text-black px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white hover:-translate-y-1 transition-all duration-300">
+            <a href="{{ route('shop.index') }}" class="bg-volt text-black px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white hover:-translate-y-1 transition-all duration-300 shadow-[0_0_15px_rgba(204,255,0,0.3)]">
                 Lihat Koleksi
             </a>
-            <a href="#showcase-pin" class="bg-transparent border border-white/30 text-white px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white/10 hover:-translate-y-1 transition-all duration-300">
+            <a href="#showcase-pin" class="bg-black/50 backdrop-blur-md border border-white/30 text-white px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white/10 hover:-translate-y-1 transition-all duration-300">
                 Jelajahi Produk
             </a>
         </div>
@@ -155,51 +157,61 @@
 </div>
 
 <!-- =========================================
-     3. DYNAMIC BANNERS (TAMBAHAN BARU DARI ADMIN)
+     3. FULL-WIDTH BANNER CAROUSEL (DARI ADMIN)
      ========================================= -->
-<section class="relative w-full py-16 bg-[#0a0a0a] border-b border-white/5 overflow-hidden z-20">
-    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex justify-between items-end">
-        <div>
-            <h2 class="font-bebas text-4xl text-white tracking-wide uppercase">LATEST <span class="text-volt">HIGHLIGHTS</span></h2>
-            <p class="text-gray-500 font-montserrat text-xs mt-1 uppercase tracking-widest font-bold">Exclusive Drops & Promos</p>
-        </div>
-        <!-- Tombol Geser Slider -->
-        <div class="hidden sm:flex gap-2">
-            <button onclick="document.getElementById('banner-slider-admin').scrollBy({left: -400, behavior: 'smooth'})" class="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white hover:border-volt hover:text-volt transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            <button onclick="document.getElementById('banner-slider-admin').scrollBy({left: 400, behavior: 'smooth'})" class="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center text-white hover:border-volt hover:text-volt transition">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- Slider Horizontal -->
-    <div id="banner-slider-admin" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-4 sm:px-6 lg:px-8 pb-8 hide-scrollbar scroll-smooth">
-        @if(isset($banners) && $banners->count() > 0)
+<section class="relative w-full h-[60vh] md:h-[85vh] bg-[#050505] overflow-hidden z-20 group border-b border-white/5">
+    @if(isset($banners) && $banners->count() > 0)
+        <!-- Track Slider -->
+        <div id="full-banner-track" class="w-full h-full flex transition-transform duration-700 ease-in-out">
             @foreach($banners as $banner)
-            <div class="snap-center shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] aspect-[16/9] md:aspect-[21/9] bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] overflow-hidden relative group shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent"></div>
+            <div class="w-full h-full flex-shrink-0 relative">
+                <img src="{{ Storage::url($banner->image_path) }}" alt="{{ $banner->title }}" class="w-full h-full object-cover object-center">
+                <!-- Overlay Gradien Biar Teks Tetep Terbaca -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 
                 @if($banner->title)
-                <div class="absolute bottom-6 left-6 right-6">
-                    <h3 class="font-bebas text-3xl sm:text-4xl text-white tracking-wide drop-shadow-md">{{ $banner->title }}</h3>
+                <div class="absolute bottom-10 left-6 md:bottom-20 md:left-20 max-w-4xl px-4 md:px-0">
+                    <div class="border-l-4 border-volt pl-4 md:pl-6">
+                        <h2 class="font-bebas text-5xl md:text-8xl text-white tracking-wide drop-shadow-2xl leading-none uppercase">{{ $banner->title }}</h2>
+                    </div>
                 </div>
                 @endif
             </div>
             @endforeach
-        @else
-            <!-- FALLBACK KETIKA ADMIN BELUM UPLOAD BANNER BIAR SECTIONNYA TETAP MUNCUL -->
-            <div class="snap-center shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] aspect-[16/9] md:aspect-[21/9] bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2rem] overflow-hidden relative group shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col items-center justify-center text-center p-6">
-                <svg class="w-12 h-12 text-white/20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                <h3 class="font-bebas text-3xl text-gray-500 tracking-wide">BELUM ADA BANNER</h3>
-                <p class="text-[10px] uppercase tracking-widest text-gray-600 mt-2 font-bold">Silakan upload gambar dari menu Admin Panel</p>
+        </div>
+
+        @if($banners->count() > 1)
+            <!-- Navigasi Kiri / Kanan -->
+            <button onclick="prevBanner()" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 z-30">
+                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button onclick="nextBanner()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 bg-black/30 backdrop-blur-md border border-white/10 hover:border-volt hover:bg-volt hover:text-black text-white rounded-full flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100 z-30">
+                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+
+            <!-- Indikator Garis (Dots) -->
+            <div class="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-30">
+                @foreach($banners as $index => $banner)
+                <button onclick="goToBanner({{ $index }})" class="banner-indicator w-8 sm:w-16 h-1 sm:h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-volt' : 'bg-white/30 hover:bg-white/60' }}"></button>
+                @endforeach
             </div>
-            
-            <div class="snap-center shrink-0 w-[85vw] sm:w-[60vw] md:w-[45vw] lg:w-[35vw] aspect-[16/9] md:aspect-[21/9] bg-white/[0.01] backdrop-blur-2xl border border-white/5 rounded-[2rem] overflow-hidden relative group shadow-[0_10px_30px_rgba(0,0,0,0.2)]"></div>
         @endif
-    </div>
+
+    @else
+        <!-- FALLBACK KETIKA ADMIN BELUM UPLOAD BANNER (TETAP FULL WIDTH) -->
+        <div class="w-full h-full relative flex items-center justify-center bg-[#0c0c0c]">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000')] bg-cover bg-center grayscale mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]"></div>
+            
+            <div class="text-center relative z-10 px-4">
+                <div class="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
+                    <svg class="w-10 h-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="font-bebas text-5xl md:text-7xl text-gray-500 tracking-wide uppercase drop-shadow-md">BELUM ADA BANNER</h3>
+                <p class="text-[10px] md:text-xs uppercase tracking-widest text-gray-600 mt-3 font-bold font-montserrat">Silakan upload gambar penuh (Full Width) dari menu Admin Panel</p>
+            </div>
+        </div>
+    @endif
 </section>
 
 <!-- =========================================
