@@ -130,7 +130,10 @@
                     <!-- Price -->
                     <div>
                         <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Price (Rp) *</label>
-                        <input type="number" name="price" value="{{ old('price', (int)$product->price) }}" required min="0" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white transition-all duration-300 outline-none">
+                        <!-- Hidden input untuk disubmit ke form (berisi angka integer asli tanpa titik) -->
+                        <input type="hidden" name="price" id="price_raw" value="{{ old('price', (int)$product->price) }}">
+                        <!-- Visible input untuk display user (menggunakan titik ribuan) -->
+                        <input type="text" id="price_formatted" value="{{ old('price') ? number_format(old('price'), 0, ',', '.') : number_format((int)$product->price, 0, ',', '.') }}" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white transition-all duration-300 outline-none" oninput="formatRupiah(this)">
                         @error('price') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                     </div>
 
@@ -223,8 +226,24 @@
     </div>
 </div>
 
-<!-- Script untuk Multi-Image Preview dan Custom Dropdowns -->
+<!-- Script untuk Multi-Image Preview, Custom Dropdowns, dan Format Rupiah -->
 <script>
+
+    // --- Logika Format Rupiah ---
+    function formatRupiah(input) {
+        // Hapus karakter selain angka
+        let numericValue = input.value.replace(/[^0-9]/g, '');
+        
+        // Simpan nilai murni ke hidden input untuk database
+        document.getElementById('price_raw').value = numericValue;
+        
+        // Update input display dengan format titik ribuan
+        if (numericValue) {
+            input.value = new Intl.NumberFormat('id-ID').format(numericValue);
+        } else {
+            input.value = '';
+        }
+    }
 
     // Klik Foto Existing untuk Jadikan Primary
     function setExistingPrimary(element, id) {
