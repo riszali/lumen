@@ -31,12 +31,6 @@
     <!-- Tailwind CSS Vite (Utama) -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- 
-      CATATAN PERFORMA PENTING: 
-      Script CDN Tailwind ini bikin browser meng-compile CSS setiap kali pindah halaman.
-      Sebaiknya konfigurasi warna 'volt' dan 'dark' ini dipindahkan ke file tailwind.config.js 
-      bawaan Laravel, lalu hapus script CDN ini agar web jadi secepat kilat (0 delay).
-    -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -65,8 +59,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
         .dark ::-webkit-scrollbar-thumb:hover { background: #ccff00; }
 
-        /* OPTIMASI EXTREME: Pengganti efek Blur-[100px] dengan Radial Gradient Biasa. 
-           Ini 1000x lebih ringan untuk dirender CPU/GPU HP pada saat memuat halaman */
+        /* OPTIMASI EXTREME: Pengganti efek Blur-[100px] dengan Radial Gradient Biasa. */
         .bg-glow-1 {
             background: radial-gradient(circle, rgba(52, 211, 153, 0.12) 0%, transparent 60%);
         }
@@ -93,15 +86,13 @@
         .animate-fade-out-up { animation: fadeOutUp 0.3s ease-in forwards; }
     </style>
 </head>
-<!-- OPTIMASI: Transisi body dihapus karena memicu reflow saat reload halaman -->
-<body class="bg-gray-50 dark:bg-dark font-montserrat antialiased text-gray-900 dark:text-white overflow-hidden flex h-screen relative">
+<body class="bg-gray-50 dark:bg-dark font-montserrat antialiased text-gray-900 dark:text-white overflow-hidden flex h-screen relative transform translate-z-0">
 
-    <!-- OPTIMASI: Efek cahaya background (Glow) diubah dari blur filter ke CSS radial-gradient murni -->
+    <!-- Ambient Lights -->
     <div class="fixed top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-glow-1 pointer-events-none z-0"></div>
     <div class="fixed bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-glow-2 pointer-events-none z-0"></div>
 
     <!-- Sidebar -->
-    <!-- OPTIMASI: backdrop-blur diturunkan ke 'md' agar tidak menyiksa RAM/GPU HP -->
     <aside id="sidebar" class="w-72 bg-white/90 dark:bg-[#0a0a0a]/80 backdrop-blur-md border-r border-gray-200 dark:border-white/10 flex flex-col z-20 h-full relative shadow-md transition-[width] duration-200 ease-out">
         <!-- Logo -->
         <div class="h-24 flex items-center justify-center border-b border-gray-200 dark:border-white/10 px-4 relative">
@@ -136,6 +127,12 @@
             <a href="{{ route('admin.banners.index') }}" class="flex items-center px-4 py-3.5 rounded-2xl transition-colors duration-150 group {{ request()->routeIs('admin.banners.*') ? 'bg-emerald-50 dark:bg-volt/10 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Home Banners</span>
+            </a>
+
+            <!-- TAMBAHAN MENU SUBSCRIBER -->
+            <a href="{{ route('admin.subscribers.index') }}" class="flex items-center px-4 py-3.5 rounded-2xl transition-colors duration-150 group {{ request()->routeIs('admin.subscribers.*') ? 'bg-emerald-50 dark:bg-volt/10 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent' }}">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Subscribers</span>
             </a>
         </nav>
 

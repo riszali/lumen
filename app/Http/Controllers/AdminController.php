@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Banner;
+use App\Models\Subscriber; // <-- Pastikan ini ada
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -38,7 +39,7 @@ class AdminController extends Controller
 
     public function productsStore(Request $request)
     {
-        // 1. Cek Kategori Baru (FIX ERROR 500 DUPLICATE)
+        // 1. Cek Kategori Baru (Mencegah Error 500 Duplicate Entry)
         if ($request->filled('new_category_name')) {
             $newCategory = Category::firstOrCreate(
                 ['slug' => Str::slug($request->new_category_name)],
@@ -106,7 +107,7 @@ class AdminController extends Controller
 
     public function productsUpdate(Request $request, Product $product)
     {
-        // 1. Cek Kategori Baru (FIX ERROR 500 DUPLICATE)
+        // 1. Cek Kategori Baru (Mencegah Error 500 Duplicate Entry)
         if ($request->filled('new_category_name')) {
             $newCategory = Category::firstOrCreate(
                 ['slug' => Str::slug($request->new_category_name)],
@@ -270,5 +271,12 @@ class AdminController extends Controller
         $banner->delete();
 
         return back()->with('success', 'Gambar banner berhasil dihapus.');
+    }
+
+    // FUNGSI INI YANG KEMARIN KETINGGALAN
+    public function subscribersIndex()
+    {
+        $subscribers = Subscriber::latest()->paginate(15);
+        return view('admin.subscribers.index', compact('subscribers'));
     }
 }

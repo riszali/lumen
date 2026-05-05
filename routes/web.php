@@ -8,6 +8,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SubscriberController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -18,6 +19,9 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])->name('shop.sh
 Route::view('/care-guide', 'pages.care-guide')->name('pages.care-guide');
 Route::view('/customer-service', 'pages.customer-service')->name('pages.customer-service');
 Route::view('/shipping-returns', 'pages.shipping-returns')->name('pages.shipping-returns');
+
+// Subscribe Newsletter Route
+Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
 
 // Auth Routes (Simulated standard auth implementation)
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -71,4 +75,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/banners', [AdminController::class, 'bannersIndex'])->name('banners.index');
     Route::post('/banners', [AdminController::class, 'bannersStore'])->name('banners.store');
     Route::delete('/banners/{banner}', [AdminController::class, 'bannersDestroy'])->name('banners.destroy');
+
+    // Subscribers Management
+    Route::get('/subscribers', [AdminController::class, 'subscribersIndex'])->name('subscribers.index');
+    Route::delete('/subscribers/{subscriber}', [SubscriberController::class, 'destroy'])->name('subscribers.destroy');
 });

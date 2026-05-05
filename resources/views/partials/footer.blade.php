@@ -17,8 +17,9 @@
                 <p class="text-gray-400 text-sm font-light leading-relaxed">Berlangganan untuk mendapatkan akses eksklusif ke rilisan terbaru, promo spesial, dan berita seputar dunia padel.</p>
             </div>
             <div class="w-full lg:w-auto">
-                <form action="#" method="POST" class="flex w-full max-w-md mx-auto lg:mx-0 shadow-lg" onsubmit="event.preventDefault(); alert('Fitur newsletter akan segera hadir!');">
-                    <input type="email" placeholder="Masukkan email Anda" required
+                <form action="{{ route('subscribe') }}" method="POST" class="flex w-full max-w-md mx-auto lg:mx-0 shadow-lg">
+                    @csrf
+                    <input type="email" name="email" placeholder="Masukkan email Anda" required
                         class="flex-grow bg-white/5 border border-white/10 border-r-0 px-6 py-3.5 rounded-l-full text-sm text-white focus:border-[#ccff00] focus:ring-0 outline-none placeholder-gray-500 transition-colors backdrop-blur-sm">
                     <button type="submit" 
                         class="bg-[#ccff00] text-black px-6 sm:px-8 py-3.5 rounded-r-full font-bold uppercase tracking-widest text-[10px] sm:text-xs hover:bg-white transition-colors duration-300 border border-[#ccff00]">
