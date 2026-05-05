@@ -12,21 +12,34 @@ class ProductController extends Controller
     {
         $query = Product::with('primaryImage')->where('is_active', true);
 
-        if ($request->has('category')) {
+        // Filter Pencarian (Search by name or brand)
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('brand', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Filter Kategori
+        if ($request->filled('category')) {
             $query->whereHas('category', function($q) use ($request) {
                 $q->where('slug', $request->category);
             });
         }
 
-        if ($request->has('sort')) {
+        // Filter Urutkan (Sorting)
+        if ($request->filled('sort')) {
             if ($request->sort == 'price_asc') $query->orderBy('price', 'asc');
-            if ($request->sort == 'price_desc') $query->orderBy('price', 'desc');
-            if ($request->sort == 'newest') $query->latest();
+            else if ($request->sort == 'price_desc') $query->orderBy('price', 'desc');
+            else if ($request->sort == 'newest') $query->latest();
         } else {
             $query->latest();
         }
 
-        $products = $query->paginate(12);
+        // Simpan semua parameter filter saat ganti halaman (pagination)
+        $products = $query->paginate(12)->appends($request->query());
         $categories = Category::all();
 
         return view('shop.index', compact('products', 'categories'));

@@ -99,81 +99,101 @@
 <!-- =========================================
      2. SHOP CONTENT (GRID & FILTERS)
      ========================================= -->
-<!-- OPTIMASI: Hapus kelas .bg-noise yang sangat memberatkan performa -->
 <section class="relative w-full bg-[var(--dark)] py-12 lg:py-20 z-20 min-h-screen">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        <!-- Toolbar (Filter & Sort) - CUSTOM DROPDOWN -->
-        <div class="mb-12 relative z-50 bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-4 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
-            <form id="filter_form" action="{{ route('shop.index') }}" method="GET" class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+        <!-- Toolbar (Filter, Search & Sort) -->
+        <div class="mb-12 relative z-50 bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-4 sm:p-6 lg:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+            
+            <form id="filter_form" action="{{ route('shop.index') }}" method="GET" class="w-full flex flex-col lg:flex-row items-center gap-3 sm:gap-4">
                 
-                <!-- CUSTOM Category Filter -->
-                <div class="relative w-full" id="custom-category-dropdown">
-                    <!-- Hidden input to store actual value -->
-                    <input type="hidden" name="category" id="category_input" value="{{ request('category') }}">
-                    
-                    <button type="button" onclick="toggleCategoryFilter()" class="bg-black/20 backdrop-blur-md border border-white/10 text-white font-montserrat font-bold text-[10px] sm:text-xs rounded-full flex items-center justify-between w-full py-3.5 sm:py-4 px-4 sm:px-5 transition shadow-inner hover:border-volt focus:outline-none">
-                        <div class="flex items-center">
-                            <span class="text-gray-500 mr-3">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                            </span>
-                            <span id="category_text" class="uppercase">
-                                @php
-                                    $catName = 'SEMUA KATEGORI';
-                                    foreach($categories as $c) {
-                                        if(request('category') == $c->slug) $catName = strtoupper($c->name);
-                                    }
-                                    echo $catName;
-                                @endphp
-                            </span>
-                        </div>
-                        <span class="text-volt">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </button>
+                <!-- CUSTOM Search Filter (Desktop: 1 baris, HP: baris sendiri di atas) -->
+                <!-- OPTIMASI WARNA: bg-white/10 agar lebih terang dan kontras dari background -->
+                <div class="relative w-full lg:w-1/3 flex-shrink-0">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari gear andalanmu..." 
+                        class="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-montserrat font-bold text-[10px] sm:text-xs rounded-xl sm:rounded-2xl h-[48px] sm:h-[56px] pl-11 sm:pl-12 pr-4 transition-all duration-300 shadow-sm hover:border-volt hover:bg-white/15 focus:outline-none focus:border-volt focus:ring-1 focus:ring-volt placeholder-gray-300"
+                        onkeypress="if(event.keyCode == 13) { document.getElementById('filter_form').submit(); }">
+                    <div class="absolute inset-y-0 left-0 pl-4 sm:pl-5 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
 
-                    <!-- Dropdown Options Box -->
-                    <ul id="category_options" class="hidden absolute top-full left-0 w-full mt-2 bg-[#0c0c0c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] py-2 z-[60] custom-scroll max-h-60 overflow-y-auto">
-                        <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase" onclick="selectCategoryFilter('', 'SEMUA KATEGORI')">
-                            SEMUA KATEGORI
-                        </li>
-                        @foreach($categories as $category)
-                            <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase border-t border-white/5" onclick="selectCategoryFilter('{{ $category->slug }}', '{{ strtoupper($category->name) }}')">
-                                {{ strtoupper($category->name) }}
+                <!-- Wrapper Category & Sort (Selalu 1 Baris Sejajar Sesuai Request) -->
+                <div class="w-full lg:w-2/3 flex flex-row items-center gap-3 sm:gap-4">
+                    <!-- CUSTOM Category Filter (Lebar memanjang) -->
+                    <div class="relative flex-grow" id="custom-category-dropdown">
+                        <!-- Hidden input to store actual value -->
+                        <input type="hidden" name="category" id="category_input" value="{{ request('category') }}">
+                        
+                        <!-- OPTIMASI WARNA: bg-white/10 agar lebih terang dan kontras dari background -->
+                        <button type="button" onclick="toggleCategoryFilter()" class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-montserrat font-bold text-[10px] sm:text-xs rounded-xl sm:rounded-2xl flex items-center justify-between w-full h-[48px] sm:h-[56px] px-4 sm:px-5 transition-all duration-300 shadow-sm hover:border-volt hover:bg-white/15 focus:outline-none">
+                            <div class="flex items-center">
+                                <span class="text-gray-300 mr-3">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                                </span>
+                                <span id="category_text" class="uppercase">
+                                    @php
+                                        $catName = 'SEMUA KATEGORI';
+                                        foreach($categories as $c) {
+                                            if(request('category') == $c->slug) $catName = strtoupper($c->name);
+                                        }
+                                        echo $catName;
+                                    @endphp
+                                </span>
+                            </div>
+                            <span class="text-volt">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                        </button>
+
+                        <!-- Dropdown Options Box -->
+                        <ul id="category_options" class="hidden absolute top-full left-0 w-full mt-2 bg-[#0c0c0c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] py-2 z-[60] custom-scroll max-h-60 overflow-y-auto">
+                            <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase" onclick="selectCategoryFilter('', 'SEMUA KATEGORI')">
+                                SEMUA KATEGORI
                             </li>
-                        @endforeach
-                    </ul>
+                            @foreach($categories as $category)
+                                <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase border-t border-white/5" onclick="selectCategoryFilter('{{ $category->slug }}', '{{ strtoupper($category->name) }}')">
+                                    {{ strtoupper($category->name) }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <!-- CUSTOM Sort Icon Button (Fixed Width) -->
+                    <div class="relative flex-shrink-0" id="custom-sort-dropdown">
+                        <input type="hidden" name="sort" id="sort_input" value="{{ request('sort', 'newest') }}">
+                        
+                        <!-- Tombol Kotak Icon -->
+                        <!-- OPTIMASI WARNA: bg-white/10 agar lebih terang dan kontras dari background -->
+                        <button type="button" onclick="toggleSortFilter()" class="bg-white/10 backdrop-blur-md border border-white/20 text-white font-montserrat font-bold flex items-center justify-center w-[48px] h-[48px] sm:w-[56px] sm:h-[56px] rounded-xl sm:rounded-2xl transition-all duration-300 shadow-sm hover:border-volt hover:bg-white/15 focus:outline-none group relative">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6 group-hover:text-volt transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
+                            
+                            <!-- Titik Indikator jika sorting tidak default (Terbaru) -->
+                            @if(request('sort') && request('sort') != 'newest')
+                                <span class="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-volt rounded-full"></span>
+                            @endif
+                        </button>
+
+                        <!-- Dropdown Options Box (Rata Kanan) -->
+                        <ul id="sort_options" class="hidden absolute top-full right-0 w-48 sm:w-56 mt-2 bg-[#0c0c0c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] py-2 z-[60]">
+                            <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase flex items-center justify-between" onclick="selectSortFilter('newest')">
+                                TERBARU 
+                                @if(request('sort', 'newest') == 'newest') <span class="w-2 h-2 bg-volt rounded-full hidden group-hover:block text-black"></span> @endif
+                            </li>
+                            <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase border-t border-white/5 flex items-center justify-between" onclick="selectSortFilter('price_asc')">
+                                TERMURAH
+                                @if(request('sort') == 'price_asc') <span class="w-2 h-2 bg-volt rounded-full hidden group-hover:block text-black"></span> @endif
+                            </li>
+                            <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase border-t border-white/5 flex items-center justify-between" onclick="selectSortFilter('price_desc')">
+                                TERMAHAL
+                                @if(request('sort') == 'price_desc') <span class="w-2 h-2 bg-volt rounded-full hidden group-hover:block text-black"></span> @endif
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
-                <!-- CUSTOM Sort Combo -->
-                <div class="relative w-full" id="custom-sort-dropdown">
-                    <input type="hidden" name="sort" id="sort_input" value="{{ request('sort', 'newest') }}">
-                    
-                    <button type="button" onclick="toggleSortFilter()" class="bg-black/20 backdrop-blur-md border border-white/10 text-white font-montserrat font-bold text-[10px] sm:text-xs rounded-full flex items-center justify-between w-full py-3.5 sm:py-4 px-4 sm:px-5 transition shadow-inner hover:border-volt focus:outline-none">
-                        <div class="flex items-center">
-                            <span class="text-gray-500 mr-3">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"></path></svg>
-                            </span>
-                            <span id="sort_text" class="uppercase">
-                                @if(request('sort') == 'price_asc') TERMURAH
-                                @elseif(request('sort') == 'price_desc') TERMAHAL
-                                @else TERBARU
-                                @endif
-                            </span>
-                        </div>
-                        <span class="text-volt">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </span>
-                    </button>
-
-                    <!-- Dropdown Options Box -->
-                    <ul id="sort_options" class="hidden absolute top-full left-0 w-full mt-2 bg-[#0c0c0c]/95 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] py-2 z-[60]">
-                        <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase" onclick="selectSortFilter('newest', 'TERBARU')">TERBARU</li>
-                        <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase border-t border-white/5" onclick="selectSortFilter('price_asc', 'TERMURAH')">TERMURAH</li>
-                        <li class="px-5 py-3 text-[10px] sm:text-xs font-bold font-montserrat tracking-widest text-gray-400 hover:text-black hover:bg-volt cursor-pointer transition uppercase border-t border-white/5" onclick="selectSortFilter('price_desc', 'TERMAHAL')">TERMAHAL</li>
-                    </ul>
-                </div>
-
+                <!-- Tombol Submit Disembunyikan, biar pas user ketik di pencarian lalu ENTER formnya submit otomatis -->
+                <button type="submit" class="hidden"></button>
             </form>
         </div>
 
@@ -308,10 +328,10 @@
                 </div>
             @endif
 
-            <!-- Pagination Keseluruhan -->
+            <!-- Pagination Keseluruhan (Query String Dipertahankan) -->
             @if($products->hasPages())
             <div class="mt-20 flex justify-center glass-pagination relative z-10">
-                {{ $products->links() }}
+                {{ $products->appends(request()->query())->links() }}
             </div>
             @endif
 
@@ -320,7 +340,9 @@
             <div class="text-center py-24 bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] max-w-2xl mx-auto relative z-10">
                 <svg class="w-20 h-20 mx-auto mb-6 text-gray-600 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                 <h3 class="font-bebas text-4xl text-white tracking-wide mb-2 uppercase">Gear Tidak Ditemukan</h3>
-                <p class="text-gray-400 font-montserrat text-xs sm:text-sm font-light mb-8 max-w-sm mx-auto">Coba sesuaikan filter pencarianmu atau kembali lagi nanti untuk koleksi terbaru kami.</p>
+                <p class="text-gray-400 font-montserrat text-xs sm:text-sm font-light mb-8 max-w-sm mx-auto">
+                    {{ request('search') ? 'Pencarian "'.request('search').'" tidak membuahkan hasil. ' : '' }} Coba sesuaikan filter pencarianmu atau kembali lagi nanti.
+                </p>
                 <a href="{{ route('shop.index') }}" class="inline-block bg-white text-black px-10 py-4 rounded-full uppercase tracking-widest text-[11px] font-bold hover:bg-volt hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(204,255,0,0.4)] transition duration-300 border border-transparent hover:border-volt">
                     Reset Filter
                 </a>
@@ -348,9 +370,8 @@
         document.getElementById('category_options').classList.add('hidden');
     }
 
-    function selectSortFilter(value, text) {
+    function selectSortFilter(value) {
         document.getElementById('sort_input').value = value;
-        document.getElementById('sort_text').innerText = text;
         document.getElementById('sort_options').classList.add('hidden');
         document.getElementById('filter_form').submit(); // Otomatis submit setelah pilih
     }
