@@ -4,13 +4,11 @@
 
 @section('content')
 
-<!-- Font Khusus Sports Premium: Bebas Neue (Headline) & Montserrat (Body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    /* RESET & TEMA PREMIUM SPORTS MINIMALIST */
     :root {
         --volt: #ccff00;      
         --dark: #050505;      
@@ -37,7 +35,6 @@
         box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     }
 
-    /* CSS KHUSUS CAROUSEL (GSAP 3D LOOP) */
     .cards {
         position: relative;
         width: 18rem;
@@ -81,97 +78,90 @@
         transform: translateZ(0);
     }
 
-    /* =========================================================================
-       PERBAIKAN TOTAL CSS PAGINATION (ANTI-OVERLAP, MURNI BULAT & BERJARAK) 
-       ========================================================================= */
-    .glass-pagination nav {
-        display: flex;
-        justify-content: center;
-        width: 100%;
+    .glass-pagination nav > div:first-of-type,
+    .glass-pagination nav > div:last-of-type > div:first-of-type { 
+        display: none !important; 
     }
-    
-    /* Sembunyikan teks "Showing 1 to 10..." */
-    .glass-pagination nav > div:first-of-type { display: none !important; }
     .glass-pagination nav > div:last-of-type {
         display: flex !important;
         justify-content: center !important;
         width: 100% !important;
     }
-    .glass-pagination nav > div:last-of-type > div:first-of-type { display: none !important; }
-    
-    /* Target wrapper kotak-kotak bawaan Tailwind */
+
     .glass-pagination nav span.relative.z-0.inline-flex {
         box-shadow: none !important;
         background: transparent !important;
-        display: flex !important;
-        gap: 0.75rem !important; /* JARAK ANTAR TOMBOL */
         border: none !important;
-    }
-
-    /* Styling SETIAP ITEM (Anak langsung dari wrapper) agar BULAT MURNI */
-    .glass-pagination nav span.relative.z-0.inline-flex > * {
-        margin: 0 !important; /* Hapus margin minus bawaan tailwind */
         padding: 0 !important;
-        box-shadow: none !important;
-        border-radius: 50% !important; /* BULAT SEMPURNA */
-        width: 3rem !important;
-        height: 3rem !important;
+        margin: 0 !important;
         display: flex !important;
+        gap: 0.75rem !important; /* Jarak antar buletan */
         align-items: center !important;
-        justify-content: center !important;
-        background: rgba(255, 255, 255, 0.05) !important; /* GLASSMORPHISM */
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: #ffffff !important;
-        font-family: 'Montserrat', sans-serif !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        transition: all 0.3s ease !important;
-        text-decoration: none !important;
-        overflow: hidden !important; /* Cegah inner span kotak keluar */
     }
 
-    /* Hover effect khusus link (yang bisa di-klik) */
-    .glass-pagination nav span.relative.z-0.inline-flex > a:hover { 
-        background: rgba(204, 255, 0, 0.1) !important; 
-        border-color: var(--volt) !important;
-        color: var(--volt) !important;
-        transform: translateY(-3px) !important;
-        box-shadow: 0 5px 15px rgba(204, 255, 0, 0.2) !important;
-    }
-
-    /* KONDISI AKTIF (HALAMAN SAAT INI) */
-    .glass-pagination nav span.relative.z-0.inline-flex > span[aria-current="page"] {
-        background: var(--volt) !important; /* NEON VOLT */
-        border-color: var(--volt) !important;
-        color: #000000 !important;
-        box-shadow: 0 0 20px rgba(204, 255, 0, 0.5) !important; /* GLOWING EFEK */
-    }
-
-    /* HAPUS SEMUA STYLE BAWAAN DARI SPAN DALAM (Penyebab ada kotak di belakang) */
-    .glass-pagination nav span.relative.z-0.inline-flex > * > span,
-    .glass-pagination nav span.relative.z-0.inline-flex > * > svg {
+    .glass-pagination nav span.relative.z-0.inline-flex > span {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        border-radius: 0 !important;
-        padding: 0 !important;
         margin: 0 !important;
-        color: inherit !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .glass-pagination nav span.relative.z-0.inline-flex > a,
+    .glass-pagination nav span.relative.z-0.inline-flex > span > span {
+        width: 48px !important;
+        height: 48px !important;
+        min-width: 48px !important;
+        max-width: 48px !important;
+        min-height: 48px !important;
+        max-height: 48px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 100% !important;
-        height: 100% !important;
+        
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        text-decoration: none !important;
+        transition: all 0.3s ease !important;
+        
+        /* Tema Glassmorphism Default */
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #ffffff !important;
+        box-shadow: none !important;
     }
-    
-    /* Sesuaikan ukuran icon SVG panah */
-    .glass-pagination nav span.relative.z-0.inline-flex > * > svg {
-        width: 1.25rem !important;
-        height: 1.25rem !important;
+
+    .glass-pagination nav span.relative.z-0.inline-flex span[aria-current="page"] > span {
+        background-color: var(--volt) !important;
+        border-color: var(--volt) !important;
+        color: #000000 !important;
+        box-shadow: 0 0 20px rgba(204, 255, 0, 0.5) !important;
     }
-    /* ========================================================================= */
+
+    .glass-pagination nav span.relative.z-0.inline-flex > a:hover { 
+        background-color: rgba(204, 255, 0, 0.15) !important; 
+        border-color: var(--volt) !important;
+        color: var(--volt) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 5px 15px rgba(204, 255, 0, 0.2) !important;
+    }
+
+    /* 7. Icon SVG Center */
+    .glass-pagination nav svg {
+        width: 1.2rem !important;
+        height: 1.2rem !important;
+        display: block !important;
+        margin: auto !important;
+    }
+
 </style>
 
 <!-- 1. HERO SECTION -->
@@ -301,7 +291,7 @@
     </div>
 </section>
 
-<!-- 4.5 FEATURED GEAR DENGAN AJAX PAGINATION -->
+<!-- FEATURED GEAR DENGAN AJAX PAGINATION -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 relative z-10">
@@ -629,14 +619,12 @@
                         // Timpa konten lama dengan yang baru
                         gearSection.innerHTML = newContent;
                         
-                        // Kembalikan visibilitas (transisi selesai)
                         gearSection.style.opacity = '1';
                         gearSection.style.pointerEvents = 'auto';
                         
                         // Update link di bar URL tanpa merefresh halaman
                         window.history.pushState({path: url}, '', url);
                         
-                        // NOTE: Bagian auto-scroll (scrollIntoView) sudah dihapus sesuai permintaan agar tidak loncat.
                     })
                     .catch(error => {
                         console.error('AJAX Fetch Error:', error);
