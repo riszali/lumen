@@ -7,7 +7,8 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Banner;
-use App\Models\Subscriber; // <-- Pastikan ini ada
+use App\Models\Brand; // <-- TAMBAHAN INI
+use App\Models\Subscriber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -278,5 +279,49 @@ class AdminController extends Controller
     {
         $subscribers = Subscriber::latest()->paginate(15);
         return view('admin.subscribers.index', compact('subscribers'));
+    }
+
+    // --- TAMBAHAN FUNGSI MANAJEMEN BRAND DI PALING BAWAH ---
+    public function brandsIndex()
+    {
+        $brands = Brand::latest()->get();
+        return view('admin.brands.index', compact('brands'));
+    }
+
+    public function brandsStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:brands,name',
+            'description' => 'nullable|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:2048',
+            'banner' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240'
+        ]);
+
+        $bannerPath = $request->file('banner')->store('brands/banners', 'public');
+        $logoPath = $request->hasFile('logo') ? $request->file('logo')->store('brands/logos', 'public') : null;
+
+        Brand::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'logo_path' => $logoPath,
+            'banner_path' => $bannerPath,
+            'description' => $request->description,
+            'is_active' => true,
+        ]);
+
+        return back()->with('success', 'Brand beserta logo dan banner berhasil ditambahkan.');
+    }
+
+    public function brandsDestroy(Brand $brand)
+    {
+        if ($brand->banner_path) {
+            Storage::disk('public')->delete($brand->banner_path);
+        }
+        if ($brand->logo_path) {
+            Storage::disk('public')->delete($brand->logo_path);
+        }
+        $brand->delete();
+
+        return back()->with('success', 'Brand berhasil dihapus.');
     }
 }

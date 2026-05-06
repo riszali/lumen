@@ -15,6 +15,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [ProductController::class, 'index'])->name('shop.index');
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('shop.show');
 
+// TAMBAHAN INI: Route Khusus Halaman Brand
+Route::get('/brand/{slug}', [ProductController::class, 'brand'])->name('brand.show');
+
 // Static Pages
 Route::view('/care-guide', 'pages.care-guide')->name('pages.care-guide');
 Route::view('/customer-service', 'pages.customer-service')->name('pages.customer-service');
@@ -75,6 +78,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/banners', [AdminController::class, 'bannersIndex'])->name('banners.index');
     Route::post('/banners', [AdminController::class, 'bannersStore'])->name('banners.store');
     Route::delete('/banners/{banner}', [AdminController::class, 'bannersDestroy'])->name('banners.destroy');
+
+    // TAMBAHAN INI: Brands Management Admin
+    Route::get('/manage-brands', [AdminController::class, 'brandsIndex'])->name('brands.index');
+    Route::post('/manage-brands', [AdminController::class, 'brandsStore'])->name('brands.store');
+    Route::delete('/manage-brands/{brand}', [AdminController::class, 'brandsDestroy'])->name('brands.destroy');
 
     // Subscribers Management
     Route::get('/subscribers', [AdminController::class, 'subscribersIndex'])->name('subscribers.index');
