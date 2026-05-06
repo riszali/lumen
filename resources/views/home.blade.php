@@ -109,30 +109,28 @@
         padding: 10px 0 !important;
     }
 
-    /* 4. Reset span pembungkus (Laravel membungkus current page & disabled page pakai span ganda) */
-    .glass-pagination nav span.relative.z-0.inline-flex > span {
+    /* 4. HANCURKAN SEMUA FORMAT KOTAK BAWAAN LARAVEL/TAILWIND DI DALAM WRAPPER */
+    .glass-pagination nav span.relative.z-0.inline-flex * {
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
+        border-radius: 0 !important;
         margin: 0 !important;
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
     }
 
-    /* 5. Styling INTI: Ubah anchor (a) dan span dalam menjadi BULAT KACA */
-    .glass-pagination nav span.relative.z-0.inline-flex a,
-    .glass-pagination nav span.relative.z-0.inline-flex span[aria-current="page"] > span,
-    .glass-pagination nav span.relative.z-0.inline-flex span[aria-disabled="true"] > span {
-        margin: 0 !important; /* Paksa hilangkan margin negatif Tailwind (-ml-px) */
-        padding: 0 !important; /* Paksa hilangkan padding Tailwind (px-4 py-2) */
+    /* 5. Styling INTI: Terapkan BULAT KACA HANYA ke elemen paling dalam (Link dan inner Span) */
+    .glass-pagination nav span.relative.z-0.inline-flex > a,
+    .glass-pagination nav span.relative.z-0.inline-flex > span > span {
         width: 3rem !important;
         height: 3rem !important;
-        border-radius: 50% !important; /* BULAT SEMPURNA */
+        min-width: 3rem !important;
+        min-height: 3rem !important;
+        border-radius: 50% !important; /* BULAT MURNI TANPA SISA KOTAK */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        padding: 0 !important;
+        
         font-family: 'Montserrat', sans-serif !important;
         font-weight: 700 !important;
         font-size: 1rem !important;
@@ -145,13 +143,6 @@
         -webkit-backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         color: #ffffff !important;
-        box-shadow: none !important;
-        
-        /* Hindari styling kotak sisa dari tailwind */
-        border-top-left-radius: 50% !important;
-        border-bottom-left-radius: 50% !important;
-        border-top-right-radius: 50% !important;
-        border-bottom-right-radius: 50% !important;
     }
 
     /* 6. Halaman Aktif (NEON) */
@@ -163,7 +154,7 @@
     }
 
     /* 7. Hover Effect untuk Link Aktif */
-    .glass-pagination nav span.relative.z-0.inline-flex a:hover { 
+    .glass-pagination nav span.relative.z-0.inline-flex > a:hover { 
         background: rgba(204, 255, 0, 0.1) !important; 
         border-color: var(--volt) !important;
         color: var(--volt) !important;
@@ -175,7 +166,7 @@
     .glass-pagination nav svg {
         width: 1.25rem !important;
         height: 1.25rem !important;
-        margin: 0 !important;
+        display: block !important;
     }
     /* ========================================================================= */
 </style>
