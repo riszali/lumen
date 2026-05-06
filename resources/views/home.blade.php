@@ -81,30 +81,65 @@
         transform: translateZ(0);
     }
 
-    /* CSS Paginasi Home */
+    /* PERBAIKAN CSS PAGINATION: Menghilangkan overlap & merapikan jarak */
+    .glass-pagination nav {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
     .glass-pagination nav p { display: none; }
     .glass-pagination nav > div:first-child { display: none; }
-    .glass-pagination nav span, .glass-pagination nav a {
+    
+    .glass-pagination nav > div:last-child {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    .glass-pagination nav > div:last-child > div:first-child { display: none; } /* Hide Showing X to Y text */
+    
+    /* Target wrapper flex dari Laravel Tailwind untuk memberikan gap/jarak */
+    .glass-pagination nav span.relative.z-0.inline-flex {
+        box-shadow: none !important;
+        display: flex;
+        gap: 0.75rem; /* Memberikan jarak antar tombol agar tidak rapet */
+    }
+
+    /* Styling tombol individual */
+    .glass-pagination nav span.relative.inline-flex, 
+    .glass-pagination nav a.relative.inline-flex {
+        margin-left: 0 !important; /* Reset margin minus bawaan Tailwind */
+        margin-right: 0 !important;
         background-color: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
         color: #ffffff;
         font-family: 'Montserrat', sans-serif;
         font-weight: 700;
         font-size: 0.875rem;
         transition: all 0.3s ease;
-        border-radius: 9999px !important; 
+        border-radius: 9999px !important; /* Force bulat sempurna */
+        min-width: 2.75rem;
+        height: 2.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1rem;
+        text-decoration: none;
     }
-    .glass-pagination nav a:hover { 
-        background-color: rgba(204, 255, 0, 0.1); 
-        border-color: var(--volt);
-        color: var(--volt);
+    
+    .glass-pagination nav a.relative.inline-flex:hover { 
+        background-color: rgba(204, 255, 0, 0.1) !important; 
+        border-color: var(--volt) !important;
+        color: var(--volt) !important;
+        transform: translateY(-2px);
     }
-    .glass-pagination nav span[aria-current="page"] span {
+    
+    .glass-pagination nav span[aria-current="page"] > span {
         background-color: var(--volt) !important;
         border-color: var(--volt) !important;
         color: #000000 !important;
+        box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
     }
 </style>
 
@@ -235,10 +270,9 @@
     </div>
 </section>
 
-<!-- 4.5 FEATURED GEAR (RATA TENGAH / CENTERED) DENGAN DISKON -->
+<!-- 4.5 FEATURED GEAR DENGAN AJAX PAGINATION -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
-<section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5">
-    <!-- OPTIMASI: max-w diperlebar jadi 1600px dan padding dikecilkan biar muat 5 item per baris -->
+<section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 relative z-10">
         
         <!-- Header Rata Tengah -->
@@ -254,7 +288,6 @@
             <a href="{{ route('shop.index') }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-8 py-3 rounded-full transition-all mt-2">Lihat Semua</a>
         </div>
         
-        <!-- OPTIMASI: grid-cols diubah jadi 5 di layar besar (lg:grid-cols-5) -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
             @foreach($featuredProducts as $product)
             <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group flex flex-col relative">
@@ -285,7 +318,6 @@
                     </h4>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
                     
-                    <!-- LOGIKA HARGA DISKON -->
                     <div class="flex flex-col items-center">
                         @if($product->discount_price)
                             <span class="text-gray-500 line-through text-[9px] font-bold mb-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
@@ -463,7 +495,7 @@
     </div>
 </section>
 
-<!-- SCRIPT GSAP -->
+<!-- SCRIPT GSAP & AJAX PAGINATION -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script>
@@ -538,9 +570,53 @@
                 tlPin.fromTo(seamlessLoop, { totalTime: seamlessLoop.duration() }, { totalTime: seamlessLoop.duration() * 2.5, ease: "none" }, 0);
             }
         }
+
+        // --- 3. AJAX PAGINATION (Mencegah Blinking Kasar & Full Reload) ---
+        document.addEventListener('click', function(e) {
+            // Cek jika yang diklik adalah link pagination
+            let paginationLink = e.target.closest('.glass-pagination nav a');
+            
+            if (paginationLink) {
+                e.preventDefault(); // Stop browser reload
+                let url = paginationLink.getAttribute('href');
+                let gearSection = document.getElementById('featured-gear');
+                
+                // Tambahkan efek loading transisi (biar smooth)
+                gearSection.style.opacity = '0.4';
+                gearSection.style.pointerEvents = 'none';
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(html => {
+                        // Ambil HTML baru
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(html, 'text/html');
+                        
+                        // Cari bagian section '#featured-gear' yang baru
+                        let newContent = doc.getElementById('featured-gear').innerHTML;
+                        
+                        // Timpa konten lama dengan yang baru
+                        gearSection.innerHTML = newContent;
+                        
+                        // Kembalikan visibilitas (transisi selesai)
+                        gearSection.style.opacity = '1';
+                        gearSection.style.pointerEvents = 'auto';
+                        
+                        // Update link di bar URL tanpa merefresh halaman
+                        window.history.pushState({path: url}, '', url);
+                        
+                        // Auto-scroll dengan mulus tepat ke atas judul Featured Gear
+                        gearSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    })
+                    .catch(error => {
+                        console.error('AJAX Fetch Error:', error);
+                        window.location.href = url; // Fallback jika gagal
+                    });
+            }
+        });
     });
 
-    // --- 3. FUNGSI PEMBANTU GSAP 3D LOOP ---
+    // --- 4. FUNGSI PEMBANTU GSAP 3D LOOP ---
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,
