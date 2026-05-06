@@ -209,7 +209,7 @@
     </div>
 </section>
 
-<!-- 4.5 FEATURED GEAR (RATA TENGAH / CENTERED) -->
+<!-- 4.5 FEATURED GEAR (RATA TENGAH / CENTERED) DENGAN DISKON -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
@@ -229,7 +229,7 @@
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             @foreach($featuredProducts as $product)
-            <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group flex flex-col">
+            <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group flex flex-col relative">
                 <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
                     @if($product->primaryImage)
                         <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700">
@@ -237,6 +237,16 @@
                         <div class="w-full h-full flex items-center justify-center text-white/30 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-90 pointer-events-none"></div>
+                    
+                    <!-- BADGE DISKON -->
+                    @if($product->discount_price)
+                        <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 pointer-events-none">
+                            <span class="bg-red-600 text-white font-montserrat text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-lg border border-red-800">
+                                -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
+                            </span>
+                        </div>
+                    @endif
+
                     <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-volt text-black rounded-full p-1.5 shadow-md border border-[#000]">
                         <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </div>
@@ -246,7 +256,16 @@
                         <a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a>
                     </h4>
                     <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
-                    <p class="text-volt text-sm font-bold tracking-wider">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                    
+                    <!-- LOGIKA HARGA DISKON -->
+                    <div class="flex flex-col items-center">
+                        @if($product->discount_price)
+                            <span class="text-gray-500 line-through text-[9px] font-bold mb-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                            <span class="text-volt text-sm font-bold tracking-wider leading-none">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</span>
+                        @else
+                            <span class="text-volt text-sm font-bold tracking-wider leading-none mt-3">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                        @endif
+                    </div>
                 </div>
             </div>
             @endforeach
@@ -258,7 +277,7 @@
 <!-- 5. BENTO GRID KATEGORI -->
 <section class="pt-16 bg-white relative overflow-hidden z-20">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 pb-16 sm:pb-24">
-        <!-- Header Kategori juga ikut dirata tengahkan biar balance -->
+        <!-- Header Kategori -->
         <div class="mb-8 sm:mb-14 gsap-fade-up flex flex-col items-center text-center">
             <h2 class="font-bebas text-4xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
             <p class="text-gray-600 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
