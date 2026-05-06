@@ -81,34 +81,34 @@
         transform: translateZ(0);
     }
 
-    /* PERBAIKAN CSS PAGINATION: Menghilangkan overlap & merapikan jarak */
+    /* PERBAIKAN CSS PAGINATION: Menghilangkan overlap, merapikan jarak, dan membuat bulat sempurna */
     .glass-pagination nav {
         display: flex;
         justify-content: center;
         width: 100%;
     }
-    .glass-pagination nav p { display: none; }
-    .glass-pagination nav > div:first-child { display: none; }
+    .glass-pagination nav p { display: none !important; }
+    .glass-pagination nav > div:first-child { display: none !important; }
     
     .glass-pagination nav > div:last-child {
         display: flex;
         justify-content: center;
         width: 100%;
     }
-    .glass-pagination nav > div:last-child > div:first-child { display: none; } /* Hide Showing X to Y text */
+    .glass-pagination nav > div:last-child > div:first-child { display: none !important; } /* Hide Showing X to Y text */
     
     /* Target wrapper flex dari Laravel Tailwind untuk memberikan gap/jarak */
-    .glass-pagination nav span.relative.z-0.inline-flex {
+    .glass-pagination nav > div:last-child > span.relative.z-0.inline-flex {
         box-shadow: none !important;
         display: flex;
-        gap: 0.75rem; /* Memberikan jarak antar tombol agar tidak rapet */
+        gap: 0.5rem !important; /* Memberikan jarak antar tombol */
     }
 
-    /* Styling tombol individual */
-    .glass-pagination nav span.relative.inline-flex, 
+    /* Styling tombol individual agar bulat sempurna dan terpisah */
+    .glass-pagination nav span[aria-disabled], 
+    .glass-pagination nav span[aria-current],
     .glass-pagination nav a.relative.inline-flex {
-        margin-left: 0 !important; /* Reset margin minus bawaan Tailwind */
-        margin-right: 0 !important;
+        margin: 0 !important; /* Reset margin minus bawaan Tailwind */
         background-color: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
@@ -119,13 +119,14 @@
         font-size: 0.875rem;
         transition: all 0.3s ease;
         border-radius: 9999px !important; /* Force bulat sempurna */
-        min-width: 2.75rem;
-        height: 2.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 1rem;
+        width: 2.75rem !important; /* Fix width & height sama biar ga lonjong */
+        height: 2.75rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
         text-decoration: none;
+        box-shadow: none !important;
     }
     
     .glass-pagination nav a.relative.inline-flex:hover { 
@@ -135,11 +136,12 @@
         transform: translateY(-2px);
     }
     
-    .glass-pagination nav span[aria-current="page"] > span {
+    .glass-pagination nav span[aria-current="page"] > span,
+    .glass-pagination nav span[aria-current="page"] {
         background-color: var(--volt) !important;
         border-color: var(--volt) !important;
         color: #000000 !important;
-        box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+        box-shadow: 0 0 15px rgba(204, 255, 0, 0.4) !important;
     }
 </style>
 
@@ -605,8 +607,7 @@
                         // Update link di bar URL tanpa merefresh halaman
                         window.history.pushState({path: url}, '', url);
                         
-                        // Auto-scroll dengan mulus tepat ke atas judul Featured Gear
-                        gearSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        // NOTE: Bagian auto-scroll (scrollIntoView) sudah dihapus sesuai permintaan agar tidak loncat.
                     })
                     .catch(error => {
                         console.error('AJAX Fetch Error:', error);
