@@ -44,7 +44,7 @@
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                                 <span class="hidden sm:inline-block ml-2 text-[10px] uppercase tracking-widest font-bold">Cart</span>
                                 @if(auth()->user()->cart && auth()->user()->cart->items->count() > 0)
-                                    <span class="absolute -top-2 -right-2 sm:-right-3 bg-[#ccff00] text-black text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-md">
+                                    <span class="absolute -top-2 -right-2 sm:-right-3 bg-[#ccff00] text-black text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-md font-montserrat">
                                         {{ auth()->user()->cart->items->count() }}
                                     </span>
                                 @endif
@@ -59,7 +59,7 @@
                         </form>
                     </div>
                 @else
-                    <a href="{{ route('login') }}" class="bg-white/5 hover:bg-[#ccff00] border border-white/10 hover:border-[#ccff00] text-white hover:text-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[10px] uppercase tracking-widest font-bold transition duration-300">
+                    <a href="{{ route('login') }}" class="bg-white/5 hover:bg-[#ccff00] border border-white/10 hover:border-[#ccff00] text-white hover:text-black px-4 sm:px-6 py-2 sm:py-2.5 rounded-full text-[10px] uppercase tracking-widest font-bold transition duration-300 md:backdrop-blur-md">
                         Sign In
                     </a>
                 @endauth
@@ -92,6 +92,20 @@
                         <a href="{{ route('login') }}" class="text-[#ccff00] text-2xl font-bebas tracking-wide border-b border-white/5 pb-3">SIGN IN</a>
                     @endauth
                 </nav>
+
+                <!-- BAGIAN SOCIAL MEDIA DIUBAH MENJADI ICON SVG -->
+                <div class="pt-2 flex justify-between items-center text-[10px] text-gray-500 font-montserrat tracking-widest uppercase font-bold border-t border-white/5 mt-2">
+                    <span>WILLSPORTS Gear</span>
+                    <div class="flex space-x-5">
+                        <a href="https://www.instagram.com/willsports___/" target="_blank" aria-label="Instagram" class="text-gray-500 hover:text-[#ccff00] transition-colors">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="https://www.tiktok.com/@willsports___" target="_blank" aria-label="TikTok" class="text-gray-500 hover:text-[#ccff00] transition-colors">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.28-2.26.74-4.63 2.58-5.91 1.18-.87 2.63-1.31 4.1-1.27.33.01.67.03.99.08v4.16c-.57-.17-1.19-.21-1.76-.11-1.06.2-1.95.89-2.4 1.86-.45.97-.39 2.13.15 3.04.54.91 1.52 1.5 2.57 1.55 1.05.04 2.06-.41 2.71-1.23.51-.64.71-1.47.69-2.28-.02-2.92-.01-5.83-.02-8.75-.01-4.32-.01-8.64 0-12.97z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>
