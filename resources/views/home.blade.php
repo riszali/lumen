@@ -330,7 +330,38 @@
     </div>
 </section>
 
-<!-- 6. FINAL CTA BANNER -->
+<!-- 6. MARKETPLACE CTA -->
+<section class="py-20 bg-[#050505] relative overflow-hidden z-20 border-t border-white/5">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-[#0a0a0a] pointer-events-none z-0"></div>
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10">
+        <div class="text-center mb-12 gsap-fade-up">
+            <h2 class="font-bebas text-4xl md:text-5xl text-white uppercase tracking-wide mb-2">OFFICIAL <span class="text-volt">MARKETPLACE</span></h2>
+            <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-3">
+                <span class="w-6 sm:w-10 h-[1px] bg-volt hidden sm:block"></span>
+                Temukan kami di platform favorit Anda
+                <span class="w-6 sm:w-10 h-[1px] bg-volt hidden sm:block"></span>
+            </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-center items-stretch gap-6 gsap-fade-up">
+            <!-- Tokopedia -->
+            <a href="https://www.tokopedia.com/willsportsid" target="_blank" class="group relative w-full sm:w-[350px] bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 flex flex-col items-center justify-center hover:bg-white/[0.05] hover:border-[#42B549]/50 hover:-translate-y-2 transition-all duration-500 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#42B549]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <img src="{{ asset('assets/logo/images (1).png') }}" alt="Tokopedia" class="h-14 sm:h-16 w-auto object-contain mb-5 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-500 drop-shadow-md rounded-2xl relative z-10">
+                <span class="font-montserrat font-bold text-gray-400 tracking-widest text-sm uppercase group-hover:text-[#42B549] transition-colors duration-300 relative z-10">Belanja di Tokopedia</span>
+            </a>
+
+            <!-- Shopee -->
+            <a href="https://shopee.co.id/willsports.id" target="_blank" class="group relative w-full sm:w-[350px] bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 flex flex-col items-center justify-center hover:bg-white/[0.05] hover:border-[#EE4D2D]/50 hover:-translate-y-2 transition-all duration-500 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#EE4D2D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <img src="{{ asset('assets/logo/26c9324913c021677768.png') }}" alt="Shopee" class="h-14 sm:h-16 w-auto object-contain mb-5 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-500 drop-shadow-md rounded-2xl relative z-10">
+                <span class="font-montserrat font-bold text-gray-400 tracking-widest text-sm uppercase group-hover:text-[#EE4D2D] transition-colors duration-300 relative z-10">Belanja di Shopee</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 7. FINAL CTA BANNER -->
 <section class="py-24 md:py-32 w-full relative overflow-hidden flex flex-col items-center justify-center bg-[var(--dark)] border-t border-white/5 z-20">
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_10%,transparent_100%)]"></div>
@@ -369,7 +400,7 @@
     </div>
 </section>
 
-<!-- SCRIPT GSAP (INI YANG KEMARIN GAK SENGAJA KEHAPUS) -->
+<!-- SCRIPT GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script>
@@ -419,7 +450,7 @@
                 gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 40, opacity: 0, duration: 1, ease: "power3.out" });
             });
 
-            // Showcase Slider Scroll (Fungsi yang terhapus)
+            // Showcase Slider Scroll
             const showcase = document.getElementById('showcase-pin');
             const textContainer = document.getElementById('text-container');
             const textWrap = document.getElementById('scroll-text-wrap');
@@ -446,7 +477,7 @@
         }
     });
 
-    // --- 3. FUNGSI PEMBANTU GSAP 3D LOOP (Fungsi yang terhapus) ---
+    // --- 3. FUNGSI PEMBANTU GSAP 3D LOOP ---
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,
