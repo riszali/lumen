@@ -4,11 +4,13 @@
 
 @section('content')
 
+<!-- Font Khusus Sports Premium: Bebas Neue (Headline) & Montserrat (Body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+    /* RESET & TEMA PREMIUM SPORTS MINIMALIST */
     :root {
         --volt: #ccff00;      
         --dark: #050505;      
@@ -35,6 +37,7 @@
         box-shadow: 0 30px 60px rgba(0,0,0,0.8);
     }
 
+    /* CSS KHUSUS CAROUSEL (GSAP 3D LOOP) */
     .cards {
         position: relative;
         width: 18rem;
@@ -78,6 +81,11 @@
         transform: translateZ(0);
     }
 
+    /* =========================================================================
+       CSS PAGINATION FIX: LINGKARAN MURNI
+       ========================================================================= */
+    
+    /* 1. Sembunyikan teks "Showing X to Y" & Posisikan Container ke Tengah */
     .glass-pagination nav > div:first-of-type,
     .glass-pagination nav > div:last-of-type > div:first-of-type { 
         display: none !important; 
@@ -88,6 +96,7 @@
         width: 100% !important;
     }
 
+    /* 2. Wrapper Utama: Hapus style Tailwind, ubah jadi Flex dengan Gap */
     .glass-pagination nav span.relative.z-0.inline-flex {
         box-shadow: none !important;
         background: transparent !important;
@@ -95,30 +104,25 @@
         padding: 0 !important;
         margin: 0 !important;
         display: flex !important;
-        gap: 0.75rem !important; /* Jarak antar buletan */
+        flex-direction: row !important;
+        gap: 12px !important;
         align-items: center !important;
     }
 
+    /* 3. KUNCI PERBAIKAN: Hilangkan pembungkus luar dari format render (mengatasi kotak bertumpuk) */
     .glass-pagination nav span.relative.z-0.inline-flex > span {
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block !important;
+        display: contents !important; 
     }
 
+    /* 4. Format elemen yang diklik / halaman saat ini sebagai lingkaran */
     .glass-pagination nav span.relative.z-0.inline-flex > a,
     .glass-pagination nav span.relative.z-0.inline-flex > span > span {
-        width: 48px !important;
-        height: 48px !important;
-        min-width: 48px !important;
-        max-width: 48px !important;
-        min-height: 48px !important;
-        max-height: 48px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border-radius: 50% !important;
+        width: 45px !important;
+        height: 45px !important;
+        min-width: 45px !important;
+        margin: 0 !important; 
+        padding: 0 !important; 
+        border-radius: 50% !important; 
         
         display: flex !important;
         align-items: center !important;
@@ -130,7 +134,6 @@
         text-decoration: none !important;
         transition: all 0.3s ease !important;
         
-        /* Tema Glassmorphism Default */
         background-color: rgba(255, 255, 255, 0.05) !important;
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
@@ -139,29 +142,28 @@
         box-shadow: none !important;
     }
 
-    .glass-pagination nav span.relative.z-0.inline-flex span[aria-current="page"] > span {
+    /* 5. Halaman Aktif */
+    .glass-pagination nav span[aria-current="page"] > span {
         background-color: var(--volt) !important;
         border-color: var(--volt) !important;
         color: #000000 !important;
-        box-shadow: 0 0 20px rgba(204, 255, 0, 0.5) !important;
+        box-shadow: 0 0 15px rgba(204, 255, 0, 0.4) !important;
     }
 
-    .glass-pagination nav span.relative.z-0.inline-flex > a:hover { 
+    /* 6. Efek Hover */
+    .glass-pagination nav a:hover { 
         background-color: rgba(204, 255, 0, 0.15) !important; 
         border-color: var(--volt) !important;
         color: var(--volt) !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 5px 15px rgba(204, 255, 0, 0.2) !important;
     }
 
-    /* 7. Icon SVG Center */
+    /* 7. Icon SVG */
     .glass-pagination nav svg {
-        width: 1.2rem !important;
-        height: 1.2rem !important;
+        width: 20px !important;
+        height: 20px !important;
         display: block !important;
-        margin: auto !important;
     }
-
+    /* ========================================================================= */
 </style>
 
 <!-- 1. HERO SECTION -->
@@ -291,7 +293,7 @@
     </div>
 </section>
 
-<!-- FEATURED GEAR DENGAN AJAX PAGINATION -->
+<!-- 4.5 FEATURED GEAR DENGAN AJAX PAGINATION -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 relative z-10">
@@ -619,12 +621,14 @@
                         // Timpa konten lama dengan yang baru
                         gearSection.innerHTML = newContent;
                         
+                        // Kembalikan visibilitas (transisi selesai)
                         gearSection.style.opacity = '1';
                         gearSection.style.pointerEvents = 'auto';
                         
                         // Update link di bar URL tanpa merefresh halaman
                         window.history.pushState({path: url}, '', url);
                         
+                        // NOTE: Bagian auto-scroll (scrollIntoView) sudah dihapus sesuai permintaan agar tidak loncat.
                     })
                     .catch(error => {
                         console.error('AJAX Fetch Error:', error);
