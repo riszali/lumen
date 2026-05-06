@@ -150,7 +150,7 @@
             </button>
             
             <!-- INDIKATOR CAROUSEL DI TENGAH -->
-            <div class="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 flex justify-center gap-2 sm:gap-3 z-30 w-full max-w-[300px]">
+            <div class="absolute bottom-6 md:bottom-10 left-0 w-full flex justify-center gap-2 sm:gap-3 z-30">
                 @foreach($banners as $index => $banner)
                 <button onclick="goToBanner({{ $index }})" class="banner-indicator w-8 sm:w-16 h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-volt' : 'bg-white/30' }}"></button>
                 @endforeach
@@ -343,19 +343,27 @@
             </p>
         </div>
 
-        <div class="flex flex-col sm:flex-row justify-center items-stretch gap-6 gsap-fade-up">
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 gsap-fade-up">
             <!-- Tokopedia -->
-            <a href="https://www.tokopedia.com/willsportsid" target="_blank" class="group relative w-full sm:w-[350px] bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 flex flex-col items-center justify-center hover:bg-white/[0.05] hover:border-[#42B549]/50 hover:-translate-y-2 transition-all duration-500 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#42B549]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <img src="{{ asset('assets/logo/images (1).png') }}" alt="Tokopedia" class="h-14 sm:h-16 w-auto object-contain mb-5 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-500 drop-shadow-md rounded-2xl relative z-10">
-                <span class="font-montserrat font-bold text-gray-400 tracking-widest text-sm uppercase group-hover:text-[#42B549] transition-colors duration-300 relative z-10">Belanja di Tokopedia</span>
+            <a href="https://www.tokopedia.com/willsportsid" target="_blank" class="group flex flex-col items-center">
+                <!-- FRAME TIPIS (STROKE) -->
+                <div class="relative px-8 py-4 sm:px-10 sm:py-5 bg-white/[0.02] backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center hover:bg-white/[0.05] hover:border-[#42B549]/80 transition-all duration-300 overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.2)] group-hover:-translate-y-1 mb-3">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#42B549]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <!-- LOGO DENGAN BATASAN PANJANG/TINGGI YG IDENTIK -->
+                    <img src="{{ asset('assets/logo/images (1).png') }}" alt="Tokopedia" class="w-28 sm:w-36 h-8 sm:h-10 object-contain opacity-80 group-hover:opacity-100 transition duration-300 relative z-10">
+                </div>
+                <span class="font-montserrat font-bold text-gray-400 tracking-widest text-[10px] sm:text-xs uppercase group-hover:text-[#42B549] transition-colors duration-300">Belanja di Tokopedia</span>
             </a>
 
             <!-- Shopee -->
-            <a href="https://shopee.co.id/willsports.id" target="_blank" class="group relative w-full sm:w-[350px] bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 flex flex-col items-center justify-center hover:bg-white/[0.05] hover:border-[#EE4D2D]/50 hover:-translate-y-2 transition-all duration-500 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#EE4D2D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <img src="{{ asset('assets/logo/26c9324913c021677768.png') }}" alt="Shopee" class="h-14 sm:h-16 w-auto object-contain mb-5 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-500 drop-shadow-md rounded-2xl relative z-10">
-                <span class="font-montserrat font-bold text-gray-400 tracking-widest text-sm uppercase group-hover:text-[#EE4D2D] transition-colors duration-300 relative z-10">Belanja di Shopee</span>
+            <a href="https://shopee.co.id/willsports.id" target="_blank" class="group flex flex-col items-center">
+                <!-- FRAME TIPIS (STROKE) -->
+                <div class="relative px-8 py-4 sm:px-10 sm:py-5 bg-white/[0.02] backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center hover:bg-white/[0.05] hover:border-[#EE4D2D]/80 transition-all duration-300 overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.2)] group-hover:-translate-y-1 mb-3">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#EE4D2D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <!-- LOGO DENGAN BATASAN PANJANG/TINGGI YG IDENTIK -->
+                    <img src="{{ asset('assets/logo/26c9324913c021677768.png') }}" alt="Shopee" class="w-28 sm:w-36 h-8 sm:h-10 object-contain opacity-80 group-hover:opacity-100 transition duration-300 relative z-10">
+                </div>
+                <span class="font-montserrat font-bold text-gray-400 tracking-widest text-[10px] sm:text-xs uppercase group-hover:text-[#EE4D2D] transition-colors duration-300">Belanja di Shopee</span>
             </a>
         </div>
     </div>
