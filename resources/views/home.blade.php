@@ -84,76 +84,55 @@
     /* =========================================================================
        PERBAIKAN TOTAL CSS PAGINATION (ANTI-OVERLAP, MURNI BULAT & BERJARAK) 
        ========================================================================= */
-    
-    /* 1. Sembunyikan teks "Showing X to Y" */
-    .glass-pagination nav > div:first-of-type,
-    .glass-pagination nav > div:last-of-type > div:first-of-type { 
-        display: none !important; 
+    .glass-pagination nav {
+        display: flex;
+        justify-content: center;
+        width: 100%;
     }
     
-    /* 2. Pastikan paginasi ada di tengah */
+    /* Sembunyikan teks "Showing 1 to 10..." */
+    .glass-pagination nav > div:first-of-type { display: none !important; }
     .glass-pagination nav > div:last-of-type {
         display: flex !important;
         justify-content: center !important;
         width: 100% !important;
     }
-
-    /* 3. Wrapper Tombol: Reset shadow & kasih jarak (gap) */
+    .glass-pagination nav > div:last-of-type > div:first-of-type { display: none !important; }
+    
+    /* Target wrapper kotak-kotak bawaan Tailwind */
     .glass-pagination nav span.relative.z-0.inline-flex {
         box-shadow: none !important;
         background: transparent !important;
         display: flex !important;
-        gap: 0.75rem !important; /* Jarak murni antar tombol */
+        gap: 0.75rem !important; /* JARAK ANTAR TOMBOL */
         border: none !important;
-        align-items: center !important;
-        padding: 10px 0 !important;
     }
 
-    /* 4. HANCURKAN SEMUA FORMAT KOTAK BAWAAN LARAVEL/TAILWIND DI DALAM WRAPPER */
-    .glass-pagination nav span.relative.z-0.inline-flex * {
-        background: transparent !important;
-        border: none !important;
+    /* Styling SETIAP ITEM (Anak langsung dari wrapper) agar BULAT MURNI */
+    .glass-pagination nav span.relative.z-0.inline-flex > * {
+        margin: 0 !important; /* Hapus margin minus bawaan tailwind */
+        padding: 0 !important;
         box-shadow: none !important;
-        border-radius: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* 5. Styling INTI: Terapkan BULAT KACA HANYA ke elemen paling dalam (Link dan inner Span) */
-    .glass-pagination nav span.relative.z-0.inline-flex > a,
-    .glass-pagination nav span.relative.z-0.inline-flex > span > span {
+        border-radius: 50% !important; /* BULAT SEMPURNA */
         width: 3rem !important;
         height: 3rem !important;
-        min-width: 3rem !important;
-        min-height: 3rem !important;
-        border-radius: 50% !important; /* BULAT MURNI TANPA SISA KOTAK */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 !important;
-        
-        font-family: 'Montserrat', sans-serif !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        text-decoration: none !important;
-        transition: all 0.3s ease !important;
-        
-        /* Tema Glassmorphism Default */
-        background: rgba(255, 255, 255, 0.05) !important;
+        background: rgba(255, 255, 255, 0.05) !important; /* GLASSMORPHISM */
         backdrop-filter: blur(10px) !important;
         -webkit-backdrop-filter: blur(10px) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         color: #ffffff !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        transition: all 0.3s ease !important;
+        text-decoration: none !important;
+        overflow: hidden !important; /* Cegah inner span kotak keluar */
     }
 
-    /* 6. Halaman Aktif (NEON) */
-    .glass-pagination nav span.relative.z-0.inline-flex span[aria-current="page"] > span {
-        background: var(--volt) !important;
-        border-color: var(--volt) !important;
-        color: #000000 !important;
-        box-shadow: 0 0 20px rgba(204, 255, 0, 0.5) !important;
-    }
-
-    /* 7. Hover Effect untuk Link Aktif */
+    /* Hover effect khusus link (yang bisa di-klik) */
     .glass-pagination nav span.relative.z-0.inline-flex > a:hover { 
         background: rgba(204, 255, 0, 0.1) !important; 
         border-color: var(--volt) !important;
@@ -162,11 +141,35 @@
         box-shadow: 0 5px 15px rgba(204, 255, 0, 0.2) !important;
     }
 
-    /* 8. Fix Ukuran Panah SVG */
-    .glass-pagination nav svg {
+    /* KONDISI AKTIF (HALAMAN SAAT INI) */
+    .glass-pagination nav span.relative.z-0.inline-flex > span[aria-current="page"] {
+        background: var(--volt) !important; /* NEON VOLT */
+        border-color: var(--volt) !important;
+        color: #000000 !important;
+        box-shadow: 0 0 20px rgba(204, 255, 0, 0.5) !important; /* GLOWING EFEK */
+    }
+
+    /* HAPUS SEMUA STYLE BAWAAN DARI SPAN DALAM (Penyebab ada kotak di belakang) */
+    .glass-pagination nav span.relative.z-0.inline-flex > * > span,
+    .glass-pagination nav span.relative.z-0.inline-flex > * > svg {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        color: inherit !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    /* Sesuaikan ukuran icon SVG panah */
+    .glass-pagination nav span.relative.z-0.inline-flex > * > svg {
         width: 1.25rem !important;
         height: 1.25rem !important;
-        display: block !important;
     }
     /* ========================================================================= */
 </style>
