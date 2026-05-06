@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    /* RESET & TEMA PREMIUM SPORTS MINIMALIST */
     :root {
         --volt: #ccff00;      
         --dark: #050505;      
@@ -95,7 +94,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <span class="w-8 h-[2px] bg-volt"></span>
                 <span class="text-volt font-montserrat font-bold tracking-[0.2em] uppercase text-[10px] sm:text-xs">
-                    OFFICIAL BRAND PARTNER
+                    WillSports
                 </span>
             </div>
             <h2 class="font-bebas text-4xl sm:text-6xl text-white tracking-wide uppercase mb-4">{{ $brand->name }}</h2>
