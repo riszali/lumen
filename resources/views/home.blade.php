@@ -80,90 +80,6 @@
         will-change: transform;
         transform: translateZ(0);
     }
-
-    /* =========================================================================
-       CSS PAGINATION FIX: LINGKARAN MURNI
-       ========================================================================= */
-    
-    /* 1. Sembunyikan teks "Showing X to Y" & Posisikan Container ke Tengah */
-    .glass-pagination nav > div:first-of-type,
-    .glass-pagination nav > div:last-of-type > div:first-of-type { 
-        display: none !important; 
-    }
-    .glass-pagination nav > div:last-of-type {
-        display: flex !important;
-        justify-content: center !important;
-        width: 100% !important;
-    }
-
-    /* 2. Wrapper Utama: Hapus style Tailwind, ubah jadi Flex dengan Gap */
-    .glass-pagination nav span.relative.z-0.inline-flex {
-        box-shadow: none !important;
-        background: transparent !important;
-        border: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 12px !important;
-        align-items: center !important;
-    }
-
-    /* 3. KUNCI PERBAIKAN: Hilangkan pembungkus luar dari format render (mengatasi kotak bertumpuk) */
-    .glass-pagination nav span.relative.z-0.inline-flex > span {
-        display: contents !important; 
-    }
-
-    /* 4. Format elemen yang diklik / halaman saat ini sebagai lingkaran */
-    .glass-pagination nav span.relative.z-0.inline-flex > a,
-    .glass-pagination nav span.relative.z-0.inline-flex > span > span {
-        width: 45px !important;
-        height: 45px !important;
-        min-width: 45px !important;
-        margin: 0 !important; 
-        padding: 0 !important; 
-        border-radius: 50% !important; 
-        
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        
-        font-family: 'Montserrat', sans-serif !important;
-        font-weight: 700 !important;
-        font-size: 1rem !important;
-        text-decoration: none !important;
-        transition: all 0.3s ease !important;
-        
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        backdrop-filter: blur(10px) !important;
-        -webkit-backdrop-filter: blur(10px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        color: #ffffff !important;
-        box-shadow: none !important;
-    }
-
-    /* 5. Halaman Aktif */
-    .glass-pagination nav span[aria-current="page"] > span {
-        background-color: var(--volt) !important;
-        border-color: var(--volt) !important;
-        color: #000000 !important;
-        box-shadow: 0 0 15px rgba(204, 255, 0, 0.4) !important;
-    }
-
-    /* 6. Efek Hover */
-    .glass-pagination nav a:hover { 
-        background-color: rgba(204, 255, 0, 0.15) !important; 
-        border-color: var(--volt) !important;
-        color: var(--volt) !important;
-    }
-
-    /* 7. Icon SVG */
-    .glass-pagination nav svg {
-        width: 20px !important;
-        height: 20px !important;
-        display: block !important;
-    }
-    /* ========================================================================= */
 </style>
 
 <!-- 1. HERO SECTION -->
@@ -293,7 +209,7 @@
     </div>
 </section>
 
-<!-- 4.5 FEATURED GEAR DENGAN AJAX PAGINATION -->
+<!-- 4.5 FEATURED GEAR -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
     <div class="max-w-[1600px] mx-auto px-4 sm:px-6 relative z-10">
@@ -354,10 +270,57 @@
             @endforeach
         </div>
 
-        <!-- PAGINATION UNTUK FEATURED GEAR -->
-        @if($featuredProducts instanceof \Illuminate\Pagination\LengthAwarePaginator && $featuredProducts->hasPages())
-        <div class="mt-16 flex justify-center glass-pagination relative z-10">
-            {{ $featuredProducts->fragment('featured-gear')->links() }}
+        <!-- MANUAL PAGINATION: ANTI ERROR 500 & DIJAMIN BULAT MURNI -->
+        @if(method_exists($featuredProducts, 'hasPages') && $featuredProducts->hasPages())
+        <div class="mt-16 relative z-10 w-full flex justify-center">
+            <ul class="flex items-center gap-4">
+                {{-- Previous Page Link --}}
+                @if ($featuredProducts->onFirstPage())
+                    <li>
+                        <span class="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white/30 cursor-not-allowed backdrop-blur-md">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </span>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ $featuredProducts->previousPageUrl() }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all duration-300 backdrop-blur-md shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </a>
+                    </li>
+                @endif
+
+                {{-- Halaman Angka Looping Bebas Error --}}
+                @for ($page = 1; $page <= $featuredProducts->lastPage(); $page++)
+                    @if ($page == $featuredProducts->currentPage())
+                        <li>
+                            <span class="w-12 h-12 rounded-full flex items-center justify-center bg-[#ccff00] text-black border border-[#ccff00] font-montserrat font-bold text-base shadow-[0_0_15px_rgba(204,255,0,0.4)] cursor-default">
+                                {{ $page }}
+                            </span>
+                        </li>
+                    @else
+                        <li>
+                            <a href="{{ $featuredProducts->url($page) }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white font-montserrat font-bold text-base hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all duration-300 backdrop-blur-md">
+                                {{ $page }}
+                            </a>
+                        </li>
+                    @endif
+                @endfor
+
+                {{-- Next Page Link --}}
+                @if ($featuredProducts->hasMorePages())
+                    <li>
+                        <a href="{{ $featuredProducts->nextPageUrl() }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all duration-300 backdrop-blur-md shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </a>
+                    </li>
+                @else
+                    <li>
+                        <span class="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white/30 cursor-not-allowed backdrop-blur-md">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </span>
+                    </li>
+                @endif
+            </ul>
         </div>
         @endif
         
@@ -518,12 +481,13 @@
     </div>
 </section>
 
-<!-- SCRIPT GSAP & AJAX PAGINATION -->
+<!-- SCRIPT GSAP & REBUILD AJAX PAGINATION -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. CAROUSEL BANNER LOGIC ---
+
+        // --- CAROUSEL BANNER LOGIC ---
         const track = document.getElementById('full-banner-track');
         const indicators = document.querySelectorAll('.banner-indicator');
         let currentBanner = 0;
@@ -556,19 +520,16 @@
 
         if (bannerCount > 1) { resetInterval(); }
 
-        // --- 2. GSAP SCROLL ANIMATION & SHOWCASE 3D CAROUSEL ---
+        // --- GSAP SCROLL ANIMATION & SHOWCASE 3D CAROUSEL ---
         if (typeof gsap !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
 
-            // Hero Animation
             gsap.from(".gsap-hero", { y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1 });
             
-            // Fade Up Elements
             gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
                 gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 40, opacity: 0, duration: 1, ease: "power3.out" });
             });
 
-            // Showcase Slider Scroll
             const showcase = document.getElementById('showcase-pin');
             const textContainer = document.getElementById('text-container');
             const textWrap = document.getElementById('scroll-text-wrap');
@@ -594,51 +555,40 @@
             }
         }
 
-        // --- 3. AJAX PAGINATION (Mencegah Blinking Kasar & Full Reload) ---
+        // --- AJAX PAGINATION LISTENER ---
         document.addEventListener('click', function(e) {
-            // Cek jika yang diklik adalah link pagination
-            let paginationLink = e.target.closest('.glass-pagination nav a');
+            let paginationLink = e.target.closest('a.pagination-ajax-link');
             
             if (paginationLink) {
-                e.preventDefault(); // Stop browser reload
+                e.preventDefault(); 
                 let url = paginationLink.getAttribute('href');
                 let gearSection = document.getElementById('featured-gear');
                 
-                // Tambahkan efek loading transisi (biar smooth)
                 gearSection.style.opacity = '0.4';
                 gearSection.style.pointerEvents = 'none';
 
                 fetch(url)
                     .then(response => response.text())
                     .then(html => {
-                        // Ambil HTML baru
                         let parser = new DOMParser();
                         let doc = parser.parseFromString(html, 'text/html');
-                        
-                        // Cari bagian section '#featured-gear' yang baru
                         let newContent = doc.getElementById('featured-gear').innerHTML;
                         
-                        // Timpa konten lama dengan yang baru
                         gearSection.innerHTML = newContent;
                         
-                        // Kembalikan visibilitas (transisi selesai)
                         gearSection.style.opacity = '1';
                         gearSection.style.pointerEvents = 'auto';
-                        
-                        // Update link di bar URL tanpa merefresh halaman
                         window.history.pushState({path: url}, '', url);
-                        
-                        // NOTE: Bagian auto-scroll (scrollIntoView) sudah dihapus sesuai permintaan agar tidak loncat.
                     })
                     .catch(error => {
                         console.error('AJAX Fetch Error:', error);
-                        window.location.href = url; // Fallback jika gagal
+                        window.location.href = url;
                     });
             }
         });
     });
 
-    // --- 4. FUNGSI PEMBANTU GSAP 3D LOOP ---
+    // --- FUNGSI PEMBANTU GSAP 3D LOOP ---
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,
