@@ -141,48 +141,60 @@
                     </div>
                 </div>
 
-                <!-- Add to Cart Form -->
+                <!-- Add to Cart Form / Admin Notice -->
                 <div class="bg-white/5 backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-lg mt-auto">
-                    <form action="{{ route('cart.add') }}" method="POST" class="font-montserrat">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                        @if($product->variants->count() > 0)
-                        <div class="mb-6 relative">
-                            <label for="variant_id" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">Pilih Varian *</label>
-                            <select name="variant_id" id="variant_id" style="outline: none;" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-5 text-sm text-white appearance-none shadow-inner transition cursor-pointer [&>option]:bg-[#050505]" required>
-                                <option value="">-- Tentukan Pilihan --</option>
-                                @foreach($product->variants as $variant)
-                                    <option value="{{ $variant->id }}">
-                                        {{ $variant->material }} - {{ $variant->size }} (Sisa: {{ $variant->stock }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 bottom-0 top-[32px] flex items-center px-5 text-gray-400">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    
+                    @if(auth()->check() && auth()->user()->role === 'admin')
+                        <!-- Tampilan Khusus Admin Preview -->
+                        <div class="text-center py-6">
+                            <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/10 shadow-inner">
+                                <svg class="w-6 h-6 text-volt-custom" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                             </div>
+                            <p class="font-bebas text-2xl text-volt-custom tracking-wide mb-1">MODE PREVIEW ADMIN</p>
+                            <p class="text-[10px] text-gray-400 font-montserrat uppercase tracking-widest font-bold">Administrator tidak dapat melakukan pembelian</p>
                         </div>
-                        @endif
+                    @else
+                        <!-- Form Pembelian Normal untuk Customer / Guest -->
+                        <form action="{{ route('cart.add') }}" method="POST" class="font-montserrat">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
 
-                        <div class="flex items-end gap-4 mb-2">
-                            <div class="w-28 flex-shrink-0">
-                                <label for="quantity" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">Kuantitas</label>
-                                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" style="outline: none;" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-4 text-center text-sm text-white shadow-inner transition" required>
+                            @if($product->variants->count() > 0)
+                            <div class="mb-6 relative">
+                                <label for="variant_id" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">Pilih Varian *</label>
+                                <select name="variant_id" id="variant_id" style="outline: none;" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-5 text-sm text-white appearance-none shadow-inner transition cursor-pointer [&>option]:bg-[#050505]" required>
+                                    <option value="">-- Tentukan Pilihan --</option>
+                                    @foreach($product->variants as $variant)
+                                        <option value="{{ $variant->id }}">
+                                            {{ $variant->material }} - {{ $variant->size }} (Sisa: {{ $variant->stock }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 bottom-0 top-[32px] flex items-center px-5 text-gray-400">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </div>
+                            @endif
+
+                            <div class="flex items-end gap-4 mb-2">
+                                <div class="w-28 flex-shrink-0">
+                                    <label for="quantity" class="block text-[10px] uppercase tracking-widest text-gray-400 mb-3 font-bold">Kuantitas</label>
+                                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" style="outline: none;" class="w-full bg-black/40 border border-white/10 rounded-xl py-4 px-4 text-center text-sm text-white shadow-inner transition" required>
+                                </div>
+                                
+                                <button type="submit" class="flex-grow btn-volt-custom rounded-xl py-4 uppercase tracking-widest text-xs font-bold transition-all duration-300 shadow-[0_0_15px_rgba(204,255,0,0.2)] flex justify-center items-center gap-3">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                    Add to Cart
+                                </button>
                             </div>
                             
-                            <!-- TOMBOL ADD TO CART YANG SUDAH DI-FIX (DIJAMIN NYALA & BUKAN HITAM) -->
-                            <button type="submit" class="flex-grow btn-volt-custom rounded-xl py-4 uppercase tracking-widest text-xs font-bold transition-all duration-300 shadow-[0_0_15px_rgba(204,255,0,0.2)] flex justify-center items-center gap-3">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                                Add to Cart
-                            </button>
-                        </div>
-                        
-                        @if($product->stock <= 5 && $product->stock > 0)
-                            <p class="text-red-400 text-xs mt-4 italic tracking-wide">Tersisa {{ $product->stock }} produk dalam stok!</p>
-                        @elseif($product->stock == 0 && $product->variants->count() == 0)
-                            <p class="text-red-400 text-xs mt-4 italic tracking-wide">Produk sedang kehabisan stok.</p>
-                        @endif
-                    </form>
+                            @if($product->stock <= 5 && $product->stock > 0)
+                                <p class="text-red-400 text-xs mt-4 italic tracking-wide">Tersisa {{ $product->stock }} produk dalam stok!</p>
+                            @elseif($product->stock == 0 && $product->variants->count() == 0)
+                                <p class="text-red-400 text-xs mt-4 italic tracking-wide">Produk sedang kehabisan stok.</p>
+                            @endif
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -194,7 +206,7 @@
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 @foreach($relatedProducts as $related)
-                <div class="group cursor-pointer bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.08] transition-all duration-500 flex flex-col">
+                <div class="group cursor-pointer bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.08] hover:border-[#ccff00]/30 transition-all duration-500 flex flex-col">
                     
                     <a href="{{ route('shop.show', $related->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
                         @if($related->primaryImage)

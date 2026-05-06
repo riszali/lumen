@@ -85,11 +85,9 @@
 <!-- 1. HERO SECTION -->
 <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[var(--dark)]">
     <div class="absolute inset-0 z-0">
-        <!-- Video muncul di semua perangkat (Desktop & Mobile) -->
         <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="w-full h-full object-cover opacity-50">
             <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
         </video>
-        
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
     <div class="hidden md:block absolute top-[10%] left-[10%] w-[30%] h-[40%] bg-volt rounded-full filter blur-[100px] opacity-10 pointer-events-none z-0"></div>
@@ -151,8 +149,8 @@
                 <svg class="w-5 h-5 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"></path></svg>
             </button>
             
-            <!-- OPTIMASI: Posisikan di tengah murni pakai w-full flex justify-center -->
-            <div class="absolute bottom-6 md:bottom-10 left-0 w-full flex justify-center gap-2 sm:gap-3 z-30">
+            <!-- INDIKATOR CAROUSEL DI TENGAH -->
+            <div class="absolute bottom-6 md:bottom-10 left-1/2 transform -translate-x-1/2 flex justify-center gap-2 sm:gap-3 z-30 w-full max-w-[300px]">
                 @foreach($banners as $index => $banner)
                 <button onclick="goToBanner({{ $index }})" class="banner-indicator w-8 sm:w-16 h-1.5 rounded-full transition-all duration-300 {{ $index === 0 ? 'bg-volt' : 'bg-white/30' }}"></button>
                 @endforeach
@@ -211,16 +209,22 @@
     </div>
 </section>
 
-<!-- 4.5 FEATURED GEAR (MUNCUL JIKA ADA PRODUK YANG DICENTANG FEATURED DI ADMIN) -->
+<!-- 4.5 FEATURED GEAR (RATA TENGAH / CENTERED) -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
-        <div class="mb-14 gsap-fade-up text-center sm:text-left flex flex-col sm:flex-row justify-between items-end gap-4">
+        
+        <!-- Header Rata Tengah -->
+        <div class="mb-14 gsap-fade-up flex flex-col items-center text-center gap-5">
             <div>
                 <h2 class="font-bebas text-5xl md:text-6xl text-white uppercase tracking-wide mb-2">FEATURED <span class="text-volt">GEAR</span></h2>
-                <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase">Pilihan Utama Sang Juara</p>
+                <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-3">
+                    <span class="w-6 sm:w-10 h-[1px] bg-volt hidden sm:block"></span>
+                    Pilihan Utama Sang Juara
+                    <span class="w-6 sm:w-10 h-[1px] bg-volt hidden sm:block"></span>
+                </p>
             </div>
-            <a href="{{ route('shop.index') }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-6 py-3 rounded-full transition-all">Lihat Semua</a>
+            <a href="{{ route('shop.index') }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-8 py-3 rounded-full transition-all mt-2">Lihat Semua</a>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
@@ -233,12 +237,10 @@
                         <div class="w-full h-full flex items-center justify-center text-white/30 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
                     @endif
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-90 pointer-events-none"></div>
-                    <!-- Badge Featured Bintang -->
                     <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-volt text-black rounded-full p-1.5 shadow-md border border-[#000]">
                         <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
                     </div>
                 </a>
-                
                 <div class="text-center px-2 pb-3 flex-grow flex flex-col justify-end font-montserrat">
                     <h4 class="text-white font-bebas text-2xl tracking-wide mb-1 transition group-hover:text-volt line-clamp-1">
                         <a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a>
@@ -256,7 +258,8 @@
 <!-- 5. BENTO GRID KATEGORI -->
 <section class="pt-16 bg-white relative overflow-hidden z-20">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 pb-16 sm:pb-24">
-        <div class="mb-8 sm:mb-14 gsap-fade-up">
+        <!-- Header Kategori juga ikut dirata tengahkan biar balance -->
+        <div class="mb-8 sm:mb-14 gsap-fade-up flex flex-col items-center text-center">
             <h2 class="font-bebas text-4xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
             <p class="text-gray-600 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
         </div>
@@ -323,14 +326,6 @@
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NOX</span>
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">ADIDAS</span>
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NIKE</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BABOLAT</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BULLPADEL</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">HEAD</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">OXDOG</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">SIUX</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NOX</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">ADIDAS</span>
-            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NIKE</span>
         </div>
     </div>
 </section>
@@ -348,7 +343,6 @@
     <div class="relative z-10 w-[95%] max-w-[1000px] mx-auto px-4 sm:px-0">
         <div class="bg-[#0c0c0c]/80 backdrop-blur-2xl border border-white/10 rounded-[2rem] md:rounded-[3rem] p-8 sm:p-12 md:p-16 text-center shadow-[0_30px_60px_rgba(0,0,0,0.8)] relative overflow-hidden group">
             <div class="absolute inset-0 bg-gradient-to-br from-volt/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-            
             <div class="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-volt/50 rounded-tl-[2rem] md:rounded-tl-[3rem] opacity-50"></div>
             <div class="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-volt/50 rounded-br-[2rem] md:rounded-br-[3rem] opacity-50"></div>
 
@@ -358,22 +352,16 @@
                     Tingkatkan Levelmu
                     <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
                 </span>
-                
                 <h2 class="font-bebas text-5xl sm:text-7xl md:text-[90px] text-white leading-[0.9] mb-6 tracking-wide drop-shadow-lg">
                     MULAI DENGAN <br/> 
                     <span class="text-volt text-6xl sm:text-8xl md:text-[110px] drop-shadow-[0_0_25px_rgba(204,255,0,0.3)]">YANG TERBAIK</span>
                 </h2>
-                
                 <p class="text-gray-400 max-w-lg mx-auto font-montserrat text-xs sm:text-sm md:text-base font-light mb-10 leading-relaxed">
                     Berhenti berkompromi. Lengkapi dirimu dengan gear pilihan atlet profesional dan rasakan perbedaan kualitas di setiap permainanmu.
                 </p>
-                
                 <div class="flex flex-col sm:flex-row justify-center items-center gap-4 w-full sm:w-auto">
                     <a href="{{ route('shop.index') }}" class="w-full sm:w-auto bg-volt text-black px-10 py-4 rounded-full font-montserrat font-bold uppercase tracking-widest text-xs sm:text-sm hover:bg-white hover:-translate-y-1 transition-all duration-300 shadow-[0_0_20px_rgba(204,255,0,0.2)] hover:shadow-[0_0_30px_rgba(204,255,0,0.4)]">
                         Masuk ke Toko
-                    </a>
-                    <a href="#showcase-pin" class="w-full sm:w-auto bg-transparent text-white border border-white/30 px-10 py-4 rounded-full font-montserrat font-bold uppercase tracking-widest text-xs sm:text-sm hover:border-volt hover:text-volt hover:-translate-y-1 transition-all duration-300">
-                        Eksplor Produk
                     </a>
                 </div>
             </div>
@@ -381,12 +369,12 @@
     </div>
 </section>
 
-<!-- SCRIPT GSAP -->
+<!-- SCRIPT GSAP (INI YANG KEMARIN GAK SENGAJA KEHAPUS) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        // Carousel Admin Banner
+        // --- 1. CAROUSEL BANNER LOGIC ---
         const track = document.getElementById('full-banner-track');
         const indicators = document.querySelectorAll('.banner-indicator');
         let currentBanner = 0;
@@ -419,16 +407,19 @@
 
         if (bannerCount > 1) { resetInterval(); }
 
-        // GSAP ScrollTrigger
+        // --- 2. GSAP SCROLL ANIMATION & SHOWCASE 3D CAROUSEL ---
         if (typeof gsap !== 'undefined') {
             gsap.registerPlugin(ScrollTrigger);
 
+            // Hero Animation
             gsap.from(".gsap-hero", { y: 40, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.1 });
+            
+            // Fade Up Elements
             gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
                 gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 40, opacity: 0, duration: 1, ease: "power3.out" });
             });
 
-            // Showcase Slider Scroll
+            // Showcase Slider Scroll (Fungsi yang terhapus)
             const showcase = document.getElementById('showcase-pin');
             const textContainer = document.getElementById('text-container');
             const textWrap = document.getElementById('scroll-text-wrap');
@@ -455,6 +446,7 @@
         }
     });
 
+    // --- 3. FUNGSI PEMBANTU GSAP 3D LOOP (Fungsi yang terhapus) ---
     function buildSeamlessLoop(items, spacing) {
         let overlap = Math.ceil(1 / spacing),
             startTime = items.length * spacing + 0.5,

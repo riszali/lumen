@@ -41,21 +41,24 @@
             <div class="flex items-center justify-end min-w-[50px] md:min-w-[200px] space-x-4 sm:space-x-8 relative z-30 font-montserrat">
                 @auth
                     <div class="flex items-center space-x-4 sm:space-x-6">
+                        <!-- Pisahkan logika berdasarkan Role -->
                         @if(auth()->user()->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}" class="hidden sm:block text-[#ccff00] hover:text-white text-[10px] uppercase tracking-widest font-bold transition">Admin</a>
+                            <a href="{{ route('admin.dashboard') }}" class="hidden sm:block text-[#ccff00] hover:text-white text-[10px] uppercase tracking-widest font-bold transition">Admin Dashboard</a>
+                            <!-- Ikon Cart dihilangkan untuk Admin -->
                         @else
                             <a href="{{ route('orders.index') }}" class="hidden sm:block text-gray-400 hover:text-white text-[10px] uppercase tracking-widest font-bold transition">Account</a>
+                            
+                            <!-- Ikon Cart hanya muncul untuk Customer -->
+                            <a href="{{ route('cart.index') }}" class="text-gray-400 hover:text-white flex items-center group/cart relative transition-colors">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                                <span class="hidden sm:inline-block ml-2 text-[10px] uppercase tracking-widest font-bold">Cart</span>
+                                @if(auth()->user()->cart && auth()->user()->cart->items->count() > 0)
+                                    <span class="absolute -top-2 -right-2 sm:-right-3 bg-[#ccff00] text-black text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-md">
+                                        {{ auth()->user()->cart->items->count() }}
+                                    </span>
+                                @endif
+                            </a>
                         @endif
-                        
-                        <a href="{{ route('cart.index') }}" class="text-gray-400 hover:text-white flex items-center group/cart relative transition-colors">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                            <span class="hidden sm:inline-block ml-2 text-[10px] uppercase tracking-widest font-bold">Cart</span>
-                            @if(auth()->user()->cart && auth()->user()->cart->items->count() > 0)
-                                <span class="absolute -top-2 -right-2 sm:-right-3 bg-[#ccff00] text-black text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold shadow-md">
-                                    {{ auth()->user()->cart->items->count() }}
-                                </span>
-                            @endif
-                        </a>
 
                         <form method="POST" action="{{ route('logout') }}" class="hidden sm:inline">
                             @csrf
@@ -84,6 +87,13 @@
                             <a href="{{ route('admin.dashboard') }}" class="text-[#ccff00] text-2xl font-bebas tracking-wide border-b border-white/5 pb-3">ADMIN PANEL</a>
                         @else
                             <a href="{{ route('orders.index') }}" class="text-white text-2xl font-bebas tracking-wide border-b border-white/5 pb-3">MY ACCOUNT</a>
+                            <!-- Tambahan menu keranjang khusus HP untuk customer -->
+                            <a href="{{ route('cart.index') }}" class="text-white text-2xl font-bebas tracking-wide border-b border-white/5 pb-3 flex justify-between items-center">
+                                KERANJANG
+                                @if(auth()->user()->cart && auth()->user()->cart->items->count() > 0)
+                                    <span class="bg-[#ccff00] text-black text-xs px-2.5 py-0.5 rounded-full">{{ auth()->user()->cart->items->count() }}</span>
+                                @endif
+                            </a>
                         @endif
                         <form method="POST" action="{{ route('logout') }}" class="pt-2">
                             @csrf
