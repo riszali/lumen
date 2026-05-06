@@ -40,14 +40,17 @@
         box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 25px rgba(204, 255, 0, 0.1);
         transform: translateY(-5px);
     }
+
+    /* Scrollbar untuk dropdown custom */
+    .custom-dropdown-list::-webkit-scrollbar { width: 4px; }
+    .custom-dropdown-list::-webkit-scrollbar-track { background: transparent; }
+    .custom-dropdown-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 </style>
 
 <!-- 1. BRAND HERO BANNER (CLEAN Tanpa Teks Overlay) -->
-<!-- Tinggi disesuaikan agar proporsional menampilkan banner -->
 <section class="relative w-full h-[40vh] md:h-[60vh] flex items-center justify-center overflow-hidden bg-[#0a0a0a] border-b border-white/5 pt-navbar">
     <div class="absolute inset-0 z-0 pt-navbar">
         @if($brand->banner_path)
-            <!-- Opacity 100% agar banner dari admin terlihat jelas & cerah -->
             <img src="{{ Storage::url($brand->banner_path) }}" alt="{{ $brand->name }}" class="w-full h-full object-cover">
         @else
             <div class="w-full h-full bg-[#111] flex items-center justify-center">
@@ -55,16 +58,39 @@
             </div>
         @endif
         
-        <!-- Gradient sangat tipis hanya di bagian bawah untuk transisi halus ke section selanjutnya -->
         <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--dark)] to-transparent pointer-events-none"></div>
     </div>
 </section>
+
+<!-- BRAND LOGO TRAY (Logos Below Centered Title) -->
+@php $allBrands = \App\Models\Brand::where('is_active', true)->get(); @endphp
+@if($allBrands->count() > 0)
+<div class="w-full bg-[#080808] border-b border-white/5 py-12 overflow-hidden relative z-20 shadow-inner text-center">
+    <div class="max-w-[1400px] mx-auto px-4">
+        <h3 class="text-gray-500 font-montserrat text-[10px] uppercase font-bold tracking-[0.4em] mb-10">
+            SHOP BY BRAND
+        </h3>
+        
+        <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-8 sm:gap-x-16 sm:gap-y-12">
+            @foreach($allBrands as $b)
+                <a href="{{ route('brand.show', $b->slug) }}" class="group relative block transition duration-300 hover:-translate-y-1 {{ $b->id == $brand->id ? 'pointer-events-none' : '' }}" title="{{ $b->name }}">
+                    @if($b->logo_path)
+                        <img src="{{ Storage::url($b->logo_path) }}" alt="{{ $b->name }}" class="h-6 sm:h-8 w-auto max-w-[120px] object-contain transition-all duration-300 {{ $b->id == $brand->id ? 'opacity-100 filter-none' : 'opacity-40 grayscale group-hover:opacity-100 group-hover:grayscale-0' }} drop-shadow-sm">
+                    @else
+                        <span class="font-bebas text-2xl tracking-wide {{ $b->id == $brand->id ? 'text-volt' : 'text-gray-500 group-hover:text-white' }} transition-colors">{{ $b->name }}</span>
+                    @endif
+                </a>
+            @endforeach
+        </div>
+    </div>
+</div>
+@endif
 
 <!-- 2. PRODUCT GRID & BRAND INFO -->
 <section class="relative w-full bg-[var(--dark)] py-12 lg:py-16 z-20 min-h-screen">
     <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
-        <!-- BRAND DESCRIPTION (Teks Deskripsi ditaruh paling atas) -->
+        <!-- BRAND DESCRIPTION -->
         <div class="mb-8 max-w-4xl">
             <div class="flex items-center gap-3 mb-4">
                 <span class="w-8 h-[2px] bg-volt"></span>
@@ -81,53 +107,66 @@
             @endif
         </div>
 
-        <!-- CLIENT CUSTOM FILTER & SEARCH BAR -->
+        <!-- CLIENT CUSTOM FILTER & SEARCH BAR (FIXED UI) -->
         <div class="mb-12 pb-8 border-b border-white/10">
-            <form id="filter_form" action="{{ route('brand.show', $brand->slug) }}" method="GET" class="w-full flex flex-col md:flex-row gap-3 bg-[#0a0a0a] p-3 rounded-3xl border border-white/10 shadow-inner">
+            <form id="filter_form" action="{{ route('brand.show', $brand->slug) }}" method="GET" class="w-full flex flex-col md:flex-row gap-3 md:gap-4">
                 
                 <!-- Search Input -->
-                <div class="relative flex-grow">
+                <div class="relative flex-grow w-full md:w-auto">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari gear andalanmu..." class="w-full pl-12 pr-4 py-4 bg-white text-gray-900 font-montserrat font-bold text-[13px] rounded-2xl focus:outline-none focus:ring-2 focus:ring-volt placeholder-gray-500 transition-shadow">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari gear andalanmu..." class="w-full pl-12 pr-4 h-[56px] bg-white text-gray-900 font-montserrat font-bold text-[13px] rounded-2xl focus:outline-none focus:ring-2 focus:ring-volt placeholder-gray-500 transition-shadow">
                 </div>
 
-                <!-- Category Dropdown -->
-                <div class="relative w-full md:w-[300px] flex-shrink-0">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
-                    </div>
-                    <select name="category" onchange="this.form.submit()" class="w-full pl-12 pr-10 py-4 bg-white text-gray-900 font-montserrat font-bold text-[13px] uppercase tracking-wider rounded-2xl appearance-none focus:outline-none focus:ring-2 focus:ring-volt cursor-pointer truncate transition-shadow">
-                        <option value="">SEMUA KATEGORI</option>
-                        @foreach(\App\Models\Category::all() as $cat)
-                            <option value="{{ $cat->slug }}" {{ request('category') == $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
-                    <div class="absolute inset-y-0 right-0 pr-5 flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                </div>
-
-                <!-- Sort Button (Menyatu dengan opsi) -->
-                <div class="relative flex-shrink-0">
-                    <!-- Dropdown Sort tersembunyi sebagai pemicu (transparent di atas tombol) -->
-                    <select name="sort" onchange="this.form.submit()" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" title="Urutkan Produk">
-                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Terbaru</option>
-                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Harga Terendah</option>
-                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Harga Tertinggi</option>
-                    </select>
+                <!-- Wrapper Category & Sort (Bersebelahan di HP) -->
+                <div class="flex flex-row gap-3 md:gap-4 w-full md:w-auto">
                     
-                    <button type="button" class="w-full md:w-[56px] h-[56px] bg-white rounded-2xl flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors focus:outline-none">
-                        <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <!-- Icon Sort persis seperti di gambar -->
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h9M4 12h7M4 18h5m6-4l3-3m0 0l3 3m-3-3v10"></path>
-                        </svg>
-                        <span class="md:hidden ml-2 font-montserrat font-bold text-[13px]">URUTKAN</span>
-                    </button>
+                    <!-- CUSTOM Category Dropdown -->
+                    <div class="relative flex-grow md:w-[280px]" id="cat_dropdown_wrapper">
+                        <input type="hidden" name="category" id="cat_input" value="{{ request('category') }}">
+                        <button type="button" onclick="toggleCatMenu()" class="w-full h-[56px] pl-12 pr-10 bg-white text-gray-900 font-montserrat font-bold text-[13px] uppercase tracking-wider rounded-2xl flex items-center justify-between shadow-sm focus:outline-none focus:ring-2 focus:ring-volt transition-all">
+                            <div class="absolute left-4">
+                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                            </div>
+                            <span id="cat_label" class="truncate">
+                                {{ request('category') ? (\App\Models\Category::where('slug', request('category'))->first()->name ?? 'SEMUA KATEGORI') : 'SEMUA KATEGORI' }}
+                            </span>
+                            <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+
+                        <!-- Options Menu (Floating) -->
+                        <div id="cat_menu" class="hidden absolute top-full left-0 w-full mt-2 bg-[#0c0c0c]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[60] overflow-hidden">
+                            <ul class="max-h-60 overflow-y-auto custom-dropdown-list py-2">
+                                <li onclick="selectCat('', 'SEMUA KATEGORI')" class="px-5 py-3 text-[11px] font-bold text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer uppercase tracking-widest transition">Semua Kategori</li>
+                                @foreach(\App\Models\Category::all() as $cat)
+                                    <li onclick="selectCat('{{ $cat->slug }}', '{{ $cat->name }}')" class="px-5 py-3 text-[11px] font-bold {{ request('category') == $cat->slug ? 'text-volt' : 'text-gray-200' }} hover:bg-white/5 cursor-pointer uppercase tracking-widest transition">{{ $cat->name }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- CUSTOM Sort Dropdown -->
+                    <div class="relative flex-shrink-0" id="sort_dropdown_wrapper">
+                        <input type="hidden" name="sort" id="sort_input" value="{{ request('sort', 'newest') }}">
+                        <button type="button" onclick="toggleSortMenu()" class="w-[56px] h-[56px] bg-white rounded-2xl flex items-center justify-center text-gray-900 hover:bg-gray-100 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-volt">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h9M4 12h7M4 18h5m6-4l3-3m0 0l3 3m-3-3v10"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Options Menu (Floating) -->
+                        <div id="sort_menu" class="hidden absolute top-full right-0 w-48 mt-2 bg-[#0c0c0c]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[60] overflow-hidden">
+                            <ul class="py-2">
+                                <li onclick="selectSort('newest')" class="px-5 py-3 text-[11px] font-bold {{ request('sort') == 'newest' || !request('sort') ? 'text-volt' : 'text-gray-200' }} hover:bg-white/5 cursor-pointer uppercase tracking-widest transition">Terbaru</li>
+                                <li onclick="selectSort('price_asc')" class="px-5 py-3 text-[11px] font-bold {{ request('sort') == 'price_asc' ? 'text-volt' : 'text-gray-200' }} hover:bg-white/5 cursor-pointer uppercase tracking-widest transition">Harga Terendah</li>
+                                <li onclick="selectSort('price_desc')" class="px-5 py-3 text-[11px] font-bold {{ request('sort') == 'price_desc' ? 'text-volt' : 'text-gray-200' }} hover:bg-white/5 cursor-pointer uppercase tracking-widest transition">Harga Tertinggi</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Tombol Submit Tersembunyi (Biar bisa search pake Enter) -->
+                <!-- Hidden Submit -->
                 <button type="submit" class="hidden"></button>
             </form>
         </div>
@@ -217,5 +256,34 @@
         color: #000000 !important;
     }
 </style>
+
+<!-- SCRIPT CUSTOM DROPDOWN -->
+<script>
+    function toggleCatMenu() {
+        document.getElementById('cat_menu').classList.toggle('hidden');
+        document.getElementById('sort_menu').classList.add('hidden');
+    }
+    function toggleSortMenu() {
+        document.getElementById('sort_menu').classList.toggle('hidden');
+        document.getElementById('cat_menu').classList.add('hidden');
+    }
+    function selectCat(slug, name) {
+        document.getElementById('cat_input').value = slug;
+        document.getElementById('filter_form').submit();
+    }
+    function selectSort(val) {
+        document.getElementById('sort_input').value = val;
+        document.getElementById('filter_form').submit();
+    }
+    // Tutup dropdown kalau klik di luar
+    window.onclick = function(event) {
+        if (!event.target.closest('#cat_dropdown_wrapper') && !event.target.closest('#sort_dropdown_wrapper')) {
+            const catMenu = document.getElementById('cat_menu');
+            const sortMenu = document.getElementById('sort_menu');
+            if (catMenu) catMenu.classList.add('hidden');
+            if (sortMenu) sortMenu.classList.add('hidden');
+        }
+    }
+</script>
 
 @endsection

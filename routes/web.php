@@ -82,6 +82,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // TAMBAHAN INI: Brands Management Admin
     Route::get('/manage-brands', [AdminController::class, 'brandsIndex'])->name('brands.index');
     Route::post('/manage-brands', [AdminController::class, 'brandsStore'])->name('brands.store');
+    Route::get('/manage-brands/{brand}/edit', [AdminController::class, 'brandsEdit'])->name('brands.edit');
+    Route::put('/manage-brands/{brand}', [AdminController::class, 'brandsUpdate'])->name('brands.update');
     Route::delete('/manage-brands/{brand}', [AdminController::class, 'brandsDestroy'])->name('brands.destroy');
 
     // Subscribers Management

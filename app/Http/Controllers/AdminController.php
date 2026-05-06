@@ -312,6 +312,43 @@ class AdminController extends Controller
         return back()->with('success', 'Brand beserta logo dan banner berhasil ditambahkan.');
     }
 
+    public function brandsEdit(Brand $brand)
+    {
+        return view('admin.brands.edit', compact('brand'));
+    }
+
+    public function brandsUpdate(Request $request, Brand $brand)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255|unique:brands,name,' . $brand->id,
+            'description' => 'nullable|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,svg,webp|max:2048',
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240'
+        ]);
+
+        if ($request->hasFile('banner')) {
+            if ($brand->banner_path) {
+                Storage::disk('public')->delete($brand->banner_path);
+            }
+            $brand->banner_path = $request->file('banner')->store('brands/banners', 'public');
+        }
+
+        if ($request->hasFile('logo')) {
+            if ($brand->logo_path) {
+                Storage::disk('public')->delete($brand->logo_path);
+            }
+            $brand->logo_path = $request->file('logo')->store('brands/logos', 'public');
+        }
+
+        $brand->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('admin.brands.index')->with('success', 'Data Brand berhasil diperbarui.');
+    }
+
     public function brandsDestroy(Brand $brand)
     {
         if ($brand->banner_path) {
