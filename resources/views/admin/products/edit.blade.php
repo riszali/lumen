@@ -4,13 +4,10 @@
 @section('header_title', 'Edit Product')
 
 @section('content')
-<!-- Ambient Background Wrapper for Glassmorphism -->
 <div class="relative w-full min-h-[85vh] rounded-[2.5rem] overflow-hidden bg-white/40 dark:bg-white/[0.02] p-4 sm:p-6 lg:p-8 shadow-sm dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-gray-200 dark:border-white/10 backdrop-blur-2xl transition-colors duration-500">
     
-    <!-- Animated Glow/Blobs behind the glass -->
     <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-teal-400 dark:bg-[#00E5FF] rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[120px] opacity-20 dark:opacity-10 pointer-events-none transition-colors duration-500"></div>
 
-    <!-- Main Content Layer -->
     <div class="relative z-10 max-w-4xl mx-auto space-y-8">
         
         <div>
@@ -18,7 +15,6 @@
             <h2 class="font-bebas text-4xl text-gray-900 dark:text-white tracking-wide drop-shadow-sm dark:drop-shadow-md transition-colors duration-500">EDIT: <span class="text-emerald-600 dark:text-volt">{{ $product->name }}</span></h2>
         </div>
 
-        <!-- Glass Form Container -->
         <div class="bg-white/70 dark:bg-white/[0.03] backdrop-blur-2xl border border-gray-200 dark:border-white/10 rounded-[2rem] shadow-sm dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] p-8 transition-colors duration-500">
             <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6 font-montserrat">
                 @csrf
@@ -28,7 +24,7 @@
                     <!-- Name -->
                     <div class="md:col-span-2">
                         <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Product Name *</label>
-                        <input type="text" name="name" value="{{ old('name', $product->name) }}" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white transition-all duration-300 outline-none">
+                        <input type="text" name="name" value="{{ old('name', $product->name) }}" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white transition-all outline-none">
                         @error('name') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                     </div>
 
@@ -39,7 +35,6 @@
                             <button type="button" onclick="toggleNewCategoryMode()" id="toggle_cat_btn" class="text-[10px] text-emerald-600 dark:text-volt font-bold hover:underline transition-colors focus:outline-none">+ New Category</button>
                         </div>
                         
-                        <!-- Input Select / Dropdown Mode -->
                         <div id="existing_category_wrapper" class="relative">
                             @php
                                 $oldCatId = old('category_id', $product->category_id);
@@ -49,206 +44,198 @@
                                     if($cat) $oldCatName = $cat->name;
                                 }
                             @endphp
-
                             <input type="hidden" name="category_id" id="category_id" value="{{ $oldCatId }}">
-                            
-                            <button type="button" onclick="toggleCategoryDropdown()" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 flex justify-between items-center transition-all duration-300 hover:bg-gray-50 dark:hover:bg-black/30 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-volt">
+                            <button type="button" onclick="toggleCategoryDropdown()" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 flex justify-between items-center transition-all hover:bg-gray-50 dark:hover:bg-black/30 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-volt">
                                 <span id="selected_category_text" class="text-sm font-medium {{ $oldCatId ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500' }}">{{ $oldCatName }}</span>
                                 <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
-
-                            <ul id="category_options" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] max-h-60 overflow-y-auto py-2 transition-colors duration-500">
-                                <li class="px-5 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer transition" onclick="selectCategory('', '-- Select Category --')">-- Select Category --</li>
+                            <ul id="category_options" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg max-h-60 overflow-y-auto py-2 transition-colors duration-500 z-50">
+                                <li class="px-5 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer" onclick="selectCategory('', '-- Select Category --')">-- Select Category --</li>
                                 @foreach(\App\Models\Category::all() as $category)
-                                    <li class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition border-t border-gray-100 dark:border-white/5" onclick="selectCategory('{{ $category->id }}', '{{ $category->name }}')">{{ $category->name }}</li>
+                                    <li class="px-5 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer border-t border-gray-100 dark:border-white/5" onclick="selectCategory('{{ $category->id }}', '{{ $category->name }}')">{{ $category->name }}</li>
                                 @endforeach
                             </ul>
                         </div>
 
-                        <!-- Input Text Mode (New Category) -->
                         <div id="new_category_wrapper" class="hidden relative">
-                            <input type="text" name="new_category_name" id="new_category_name" placeholder="Type new category name..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">
+                            <input type="text" name="new_category_name" id="new_category_name" placeholder="Type new category name..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none">
                         </div>
-
-                        @error('category_id') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
-                        @error('new_category_name') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Brand / Subcategory Field -->
                     <div class="relative z-40">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 font-bold transition-colors duration-500">Brand / Merk *</label>
-                            <button type="button" onclick="toggleNewBrandMode()" id="toggle_brand_btn" class="text-[10px] text-emerald-600 dark:text-volt font-bold hover:underline transition-colors focus:outline-none">+ New Brand</button>
+                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 font-bold">Brand / Merk *</label>
+                            <button type="button" onclick="toggleNewBrandMode()" id="toggle_brand_btn" class="text-[10px] text-emerald-600 dark:text-volt font-bold hover:underline focus:outline-none">+ New Brand</button>
                         </div>
                         
-                        <!-- Input Select / Dropdown Mode -->
                         <div id="existing_brand_wrapper" class="relative">
                             <input type="hidden" name="brand" id="brand" value="{{ old('brand', $product->brand) }}">
-
-                            <button type="button" onclick="toggleBrandDropdown()" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 flex justify-between items-center transition-all duration-300 hover:bg-gray-50 dark:hover:bg-black/30 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-volt">
+                            <button type="button" onclick="toggleBrandDropdown()" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-black/30 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:focus:ring-volt">
                                 <span id="selected_brand_text" class="text-sm font-medium {{ old('brand', $product->brand) ? 'text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500' }}">{{ old('brand', $product->brand) ?: '-- Select Brand --' }}</span>
-                                <svg class="h-4 w-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                             </button>
-
-                            <ul id="brand_options" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.6)] max-h-72 overflow-y-auto py-2 transition-colors duration-500">
-                                <li class="px-5 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer transition" onclick="selectBrand('', '-- Select Brand --')">-- Select Brand --</li>
-                                
-                                <div class="px-5 py-2 mt-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-volt border-y border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/40">Padel Rackets</div>
-                                @foreach(['Babolat', 'Bullpadel', 'HEAD', 'Oxdog', 'Siux', 'Nox', 'StarVie', 'Adidas Padel', 'Kuikma', 'Drop Shot', 'Dunlop', 'Coello Edition'] as $b)
-                                    <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition pl-8" onclick="selectBrand('{{ $b }}', '{{ $b }}')">{{ $b }}</li>
+                            <ul id="brand_options" class="hidden absolute top-full left-0 w-full mt-2 bg-white/95 dark:bg-[#111111]/95 backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-2xl shadow-lg max-h-72 overflow-y-auto py-2 z-50">
+                                <li class="px-5 py-3 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer" onclick="selectBrand('', '-- Select Brand --')">-- Select Brand --</li>
+                                @foreach(['Babolat', 'Bullpadel', 'HEAD', 'Oxdog', 'Siux', 'Nike', 'Adidas', 'SiS GO', 'Optimum Nutrition'] as $b)
+                                    <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer pl-8" onclick="selectBrand('{{ $b }}', '{{ $b }}')">{{ $b }}</li>
                                 @endforeach
-
-                                <div class="px-5 py-2 mt-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-volt border-y border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/40">Sports Shoes</div>
-                                @foreach(['Nike', 'Adidas', 'Asics', 'Mizuno', 'Babolat', 'Bullpadel', 'K-Swiss', 'Joma'] as $b)
-                                    <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition pl-8" onclick="selectBrand('{{ $b }}', '{{ $b }}')">{{ $b }}</li>
-                                @endforeach
-
-                                <div class="px-5 py-2 mt-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-volt border-y border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/40">Supplements</div>
-                                @foreach(['SiS GO', 'Xtend', 'Cellucor C4', 'MuscleTech', 'Covita', 'Optimum Nutrition', 'MyProtein', 'BSN'] as $b)
-                                    <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition pl-8" onclick="selectBrand('{{ $b }}', '{{ $b }}')">{{ $b }}</li>
-                                @endforeach
-
-                                <div class="px-5 py-2 mt-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-volt border-y border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/40">Apparel & Gear</div>
-                                @foreach(['Under Armour', 'Puma', 'Lululemon', 'Gymshark', 'Castore', '2XU', 'Wilson', 'Yonex', 'Hesacore', 'Tourna'] as $b)
-                                    <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition pl-8" onclick="selectBrand('{{ $b }}', '{{ $b }}')">{{ $b }}</li>
-                                @endforeach
-
-                                <div class="px-5 py-2 mt-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-volt border-y border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/40">Others</div>
-                                <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer transition pl-8" onclick="selectBrand('Other', 'Other Brand')">Other Brand</li>
+                                <li class="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-volt/20 hover:text-emerald-600 dark:hover:text-volt cursor-pointer pl-8 border-t border-white/5 mt-2" onclick="selectBrand('Other', 'Other Brand')">Other Brand</li>
                             </ul>
                         </div>
 
-                        <!-- Input Text Mode (New Brand) -->
                         <div id="new_brand_wrapper" class="hidden relative">
-                            <input type="text" name="new_brand_name" id="new_brand_name" placeholder="Type new brand name..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">
+                            <input type="text" name="new_brand_name" id="new_brand_name" placeholder="Type new brand name..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none">
                         </div>
+                    </div>
+                </div>
 
-                        @error('brand') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
-                        @error('new_brand_name') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                <!-- Price, Discount, Stock (Grid 3 Kolom) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Normal Price -->
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold">Harga Normal (Rp) *</label>
+                        <input type="hidden" name="price" id="price_raw" value="{{ old('price', (int)$product->price) }}">
+                        <input type="text" id="price_formatted" value="{{ old('price') ? number_format(old('price'), 0, ',', '.') : number_format((int)$product->price, 0, ',', '.') }}" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white outline-none" oninput="formatRupiah(this, 'price_raw'); calculateDiscount();">
+                        @error('price') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                     </div>
 
-                    <!-- Price -->
+                    <!-- Discount Price -->
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Price (Rp) *</label>
-                        <!-- Hidden input untuk disubmit ke form (berisi angka integer asli tanpa titik) -->
-                        <input type="hidden" name="price" id="price_raw" value="{{ old('price', (int)$product->price) }}">
-                        <!-- Visible input untuk display user (menggunakan titik ribuan) -->
-                        <input type="text" id="price_formatted" value="{{ old('price') ? number_format(old('price'), 0, ',', '.') : number_format((int)$product->price, 0, ',', '.') }}" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white transition-all duration-300 outline-none" oninput="formatRupiah(this)">
-                        @error('price') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-[10px] uppercase tracking-widest text-emerald-600 dark:text-volt font-bold">Harga Diskon (Opsional)</label>
+                            <span id="discount_percentage" class="hidden text-emerald-600 dark:text-volt font-bebas text-sm tracking-widest bg-emerald-100 dark:bg-volt/20 px-2 rounded"></span>
+                        </div>
+                        <input type="hidden" name="discount_price" id="discount_raw" value="{{ old('discount_price', (int)$product->discount_price) }}">
+                        <input type="text" id="discount_formatted" value="{{ old('discount_price') ? number_format(old('discount_price'), 0, ',', '.') : ($product->discount_price ? number_format((int)$product->discount_price, 0, ',', '.') : '') }}" class="w-full bg-emerald-50/30 dark:bg-volt/5 border border-emerald-200 dark:border-volt/30 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white placeholder-emerald-300 dark:placeholder-volt/40 outline-none" placeholder="Kosongkan jika tidak diskon" oninput="formatRupiah(this, 'discount_raw'); calculateDiscount();">
+                        @error('discount_price') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Stock -->
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Base Stock *</label>
-                        <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" required min="0" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white transition-all duration-300 outline-none">
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold">Base Stock *</label>
+                        <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" required min="0" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white outline-none">
                         @error('stock') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
-                <!-- Description & Specification (Split 2 Column for Desktop) -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Description -->
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Description *</label>
-                        <textarea name="description" rows="6" required placeholder="Jelaskan deskripsi umum produk ini..." class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('description', $product->description) }}</textarea>
-                        @error('description') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold">Description *</label>
+                        <textarea name="description" rows="6" required class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white outline-none">{{ old('description', $product->description) }}</textarea>
                     </div>
 
                     <!-- Specification -->
                     <div>
-                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold transition-colors duration-500">Specification (Optional)</label>
-                        <textarea name="specification" rows="6" placeholder="Contoh:&#10;Berat: 365g&#10;Material: 12K Carbon&#10;Tebal: 38mm" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-3.5 focus:ring-emerald-500 dark:focus:ring-volt focus:border-emerald-500 dark:focus:border-volt text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/20 transition-all duration-300 outline-none">{{ old('specification', $product->specification) }}</textarea>
-                        @error('specification') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
+                        <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2 font-bold">Specification (Optional)</label>
+                        <textarea name="specification" rows="6" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm p-3.5 focus:ring-emerald-500 dark:focus:ring-volt text-sm text-gray-900 dark:text-white outline-none">{{ old('specification', $product->specification) }}</textarea>
                     </div>
                 </div>
 
-                <!-- Multi-Image Upload & Preview -->
+                <!-- DRAG & DROP MULTI-IMAGE GALLERY (EDIT MODE) -->
                 <div class="bg-gray-50/50 dark:bg-black/10 rounded-2xl border border-gray-200 dark:border-white/5 p-6 transition-colors duration-500">
-                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4 font-bold transition-colors duration-500">Product Images Gallery</label>
+                    <label class="block text-[10px] uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4 font-bold">Product Images Gallery</label>
                     
-                    <!-- Form Kirim Data Primary -->
+                    <!-- Form Kirim Data Primary (Untuk Backend) -->
+                    <!-- Jika isi id berarti pilih gambar lama. Jika index berarti pilih upload baru -->
                     <input type="hidden" name="primary_image_id" id="primary_image_id" value="{{ $product->primaryImage->id ?? '' }}">
                     <input type="hidden" name="primary_image_index" id="primary_image_index" value="">
 
-                    <!-- Menampilkan Gambar yang Sudah Ada -->
+                    <!-- Menampilkan Gambar Existing -->
                     @if($product->images->count() > 0)
-                        <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Current Images ({{ $product->images->count() }}): <strong class="text-emerald-600 dark:text-volt">Klik pada gambar di bawah untuk menjadikannya foto utama (Primary).</strong></p>
+                        <p class="text-[10px] font-medium text-gray-400 dark:text-gray-500 mb-3">Foto Saat Ini ({{ $product->images->count() }}): <strong class="text-emerald-600 dark:text-volt">Klik foto untuk jadikan Utama (Primary).</strong></p>
                         <div id="existing_images_container" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
                             @foreach($product->images as $image)
                                 <div class="img-item relative aspect-square bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 {{ $image->is_primary ? 'border-2 border-emerald-500 dark:border-volt scale-105 shadow-lg' : 'border border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30' }}"
                                      onclick="setExistingPrimary(this, {{ $image->id }})">
-                                    
-                                    <img src="{{ Storage::url($image->image_path) }}" class="w-full h-full object-cover">
-                                    
-                                    <!-- Badge -->
-                                    <div class="primary-badge absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md {{ $image->is_primary ? '' : 'hidden' }}">
-                                        Primary
-                                    </div>
+                                    <img src="{{ Storage::url($image->image_path) }}" class="w-full h-full object-cover pointer-events-none">
+                                    <div class="primary-badge absolute top-2 right-2 bg-emerald-500 dark:bg-volt text-white dark:text-black text-[8px] font-bold px-2 py-1 rounded-full uppercase tracking-widest shadow-md {{ $image->is_primary ? '' : 'hidden' }}">Primary</div>
                                 </div>
                             @endforeach
                         </div>
                     @endif
 
-                    <!-- Upload Gambar Baru -->
+                    <!-- Upload Gambar Baru dengan Drag & Drop -->
                     <div class="border-t border-gray-200 dark:border-white/10 pt-6">
-                        <p class="text-[10px] font-medium text-yellow-600 dark:text-yellow-500 mb-3 uppercase tracking-widest">
-                            <span class="font-bold">Note:</span> Mengunggah gambar baru akan menimpa (replace) semua gambar lama yang ada di atas. Biarkan kosong jika tidak ingin mengubah gambar.
+                        <p class="text-[10px] font-medium text-yellow-600 dark:text-yellow-500 mb-3 uppercase tracking-widest leading-relaxed">
+                            <span class="font-bold">Peringatan Edit:</span> Mengunggah (Upload/Drop) gambar baru akan <strong class="text-red-500">MENGHAPUS & MENIMPA (Replace)</strong> semua foto lama di atas. Biarkan area bawah ini kosong jika Anda hanya ingin mengubah mana foto yang jadi Primary.
                         </p>
-                        <div class="relative">
-                            <input type="file" name="images[]" id="images_input" multiple accept="image/*" class="w-full bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-2xl shadow-sm dark:shadow-inner p-2.5 text-sm text-gray-600 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-bold file:uppercase file:tracking-widest file:bg-emerald-50 dark:file:bg-volt/20 file:text-emerald-600 dark:file:text-volt hover:file:bg-emerald-100 dark:hover:file:bg-volt/30 file:transition-colors cursor-pointer transition-colors duration-500">
-                        </div>
-                        @error('images') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
-                        @error('images.*') <span class="text-red-500 dark:text-red-400 text-xs mt-1 font-semibold block">{{ $message }}</span> @enderror
                         
-                        <!-- Tempat Preview Gambar Baru via JS -->
-                        <div id="image_preview_container" class="mt-4 grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                        <input type="file" name="images[]" id="images_input" multiple accept="image/*" class="hidden">
+
+                        <div id="multi_dropzone" onclick="document.getElementById('images_input').click()" class="relative border-2 border-dashed border-gray-300 dark:border-white/20 rounded-2xl p-8 text-center hover:border-emerald-500 dark:hover:border-volt hover:bg-emerald-50/30 dark:hover:bg-volt/5 transition-all duration-300 cursor-pointer mb-4">
+                            <div class="pointer-events-none flex flex-col items-center justify-center">
+                                <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                                <span class="text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">Klik di sini atau Seret Gambar Baru</span>
+                            </div>
+                        </div>
+
+                        @error('images') <span class="text-red-500 dark:text-red-400 text-xs font-semibold block">{{ $message }}</span> @enderror
+                        @error('images.*') <span class="text-red-500 dark:text-red-400 text-xs font-semibold block">{{ $message }}</span> @enderror
+                        
+                        <div id="image_preview_container" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4"></div>
                     </div>
                 </div>
 
                 <!-- Options -->
                 <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 p-5 bg-gray-50/50 dark:bg-black/10 rounded-2xl border border-gray-200 dark:border-white/5 transition-colors duration-500">
                     <label class="flex items-center cursor-pointer group">
-                        <input type="checkbox" name="is_active" value="1" {{ $product->is_active ? 'checked' : '' }} class="w-5 h-5 rounded border-gray-300 dark:border-white/20 bg-white dark:bg-black/40 text-emerald-500 dark:text-volt shadow-sm focus:ring-emerald-500 dark:focus:ring-volt focus:ring-offset-0 focus:ring-offset-transparent transition cursor-pointer">
-                        <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">Active (Visible in shop)</span>
+                        <input type="checkbox" name="is_active" value="1" {{ $product->is_active ? 'checked' : '' }} class="w-5 h-5 rounded border-gray-300 dark:border-white/20 bg-white dark:bg-black/40 text-emerald-500 dark:text-volt shadow-sm focus:ring-emerald-500 dark:focus:ring-volt transition cursor-pointer">
+                        <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition">Active (Visible in shop)</span>
                     </label>
                     <label class="flex items-center cursor-pointer group">
-                        <input type="checkbox" name="is_featured" value="1" {{ $product->is_featured ? 'checked' : '' }} class="w-5 h-5 rounded border-gray-300 dark:border-white/20 bg-white dark:bg-black/40 text-emerald-500 dark:text-volt shadow-sm focus:ring-emerald-500 dark:focus:ring-volt focus:ring-offset-0 focus:ring-offset-transparent transition cursor-pointer">
-                        <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">Featured (Show on homepage)</span>
+                        <input type="checkbox" name="is_featured" value="1" {{ $product->is_featured ? 'checked' : '' }} class="w-5 h-5 rounded border-gray-300 dark:border-white/20 bg-white dark:bg-black/40 text-emerald-500 dark:text-volt shadow-sm focus:ring-emerald-500 dark:focus:ring-volt transition cursor-pointer">
+                        <span class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition">Featured (Show on homepage)</span>
                     </label>
                 </div>
 
                 <div class="pt-6 border-t border-gray-200 dark:border-white/10 flex flex-col-reverse sm:flex-row justify-end gap-4 mt-8 transition-colors duration-500">
                     <a href="{{ route('admin.products.index') }}" class="px-8 py-3.5 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white text-[10px] uppercase tracking-widest font-bold transition text-center shadow-sm">Cancel</a>
-                    <button type="submit" class="px-8 py-3.5 bg-emerald-50 dark:bg-volt/20 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/30 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-100 dark:hover:bg-volt/30 hover:-translate-y-1 transition-all duration-300 shadow-sm dark:shadow-[0_0_15px_rgba(204,255,0,0.15)] backdrop-blur-md">Update Product</button>
+                    <button type="submit" class="px-8 py-3.5 bg-emerald-50 dark:bg-volt/20 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/30 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-100 dark:hover:bg-volt/30 hover:-translate-y-1 transition-all shadow-sm backdrop-blur-md">Update Product</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Script untuk Multi-Image Preview, Custom Dropdowns, dan Format Rupiah -->
 <script>
-
-    // --- Logika Format Rupiah ---
-    function formatRupiah(input) {
-        // Hapus karakter selain angka
+    // Format Rupiah
+    function formatRupiah(input, hiddenId) {
         let numericValue = input.value.replace(/[^0-9]/g, '');
-        
-        // Simpan nilai murni ke hidden input untuk database
-        document.getElementById('price_raw').value = numericValue;
-        
-        // Update input display dengan format titik ribuan
-        if (numericValue) {
-            input.value = new Intl.NumberFormat('id-ID').format(numericValue);
-        } else {
-            input.value = '';
+        document.getElementById(hiddenId).value = numericValue;
+        if (numericValue) { 
+            input.value = new Intl.NumberFormat('id-ID').format(numericValue); 
+        } else { 
+            input.value = ''; 
         }
     }
+
+    // Kalkulator Persentase Diskon Real-time
+    function calculateDiscount() {
+        let price = parseInt(document.getElementById('price_raw').value) || 0;
+        let discount = parseInt(document.getElementById('discount_raw').value) || 0;
+        let percentageEl = document.getElementById('discount_percentage');
+
+        if (price > 0 && discount > 0 && discount < price) {
+            let perc = Math.round(((price - discount) / price) * 100);
+            percentageEl.innerText = `-${perc}% OFF`;
+            percentageEl.classList.remove('hidden');
+        } else {
+            percentageEl.classList.add('hidden');
+            percentageEl.innerText = '';
+        }
+    }
+    
+    // Panggil kalkulator saat pertama kali load (jika ada data diskon sebelumnya)
+    document.addEventListener("DOMContentLoaded", () => {
+        calculateDiscount();
+    });
 
     // Klik Foto Existing untuk Jadikan Primary
     function setExistingPrimary(element, id) {
         document.getElementById('primary_image_id').value = id;
-        document.getElementById('primary_image_index').value = ''; // Clear new
+        document.getElementById('primary_image_index').value = ''; // Matikan index baru
         
         // Reset old badges
         document.querySelectorAll('#existing_images_container .img-item').forEach(item => {
@@ -265,25 +252,26 @@
         if (badge) badge.classList.remove('hidden');
     }
 
-    // --- Logika Live Preview Multiple Images Baru ---
-    document.getElementById('images_input').addEventListener('change', function() {
-        const previewContainer = document.getElementById('image_preview_container');
+    // Drag & Drop Multi-Image Logic
+    const fileInput = document.getElementById('images_input');
+    const dropzone = document.getElementById('multi_dropzone');
+    const previewContainer = document.getElementById('image_preview_container');
+
+    function handleMultiFiles(files) {
         previewContainer.innerHTML = ''; 
-        
-        // Jika pilih gambar baru, prioritas primary pindah ke gambar baru (index 0)
         document.getElementById('primary_image_index').value = 0; 
         document.getElementById('primary_image_id').value = ''; 
         
-        // Lepas highlight dari existing image jika ada
+        // Bikin gambar lama jadi redup biar admin tau ini bakal ketimpa
         document.querySelectorAll('#existing_images_container .img-item').forEach(item => {
             item.classList.remove('border-2', 'border-emerald-500', 'dark:border-volt', 'scale-105', 'shadow-lg');
-            item.classList.add('border', 'border-gray-200', 'dark:border-white/10', 'opacity-50'); // Kasih efek redup karena akan dihapus
+            item.classList.add('border', 'border-gray-200', 'dark:border-white/10', 'opacity-50'); 
             const badge = item.querySelector('.primary-badge');
             if (badge) badge.classList.add('hidden');
         });
 
-        if (this.files) {
-            Array.from(this.files).forEach((file, index) => {
+        if (files && files.length > 0) {
+            Array.from(files).forEach((file, index) => {
                 if (!/\.(jpe?g|png|gif|webp)$/i.test(file.name)) return; 
                 
                 const reader = new FileReader();
@@ -291,12 +279,15 @@
                     const div = document.createElement('div');
                     const isPrimary = index === 0;
                     
-                    div.className = `img-item relative aspect-square bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden shadow-sm dark:shadow-inner cursor-pointer transition-all duration-300 ${isPrimary ? 'border-2 border-emerald-500 dark:border-volt scale-105 shadow-lg' : 'border border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30'}`;
-                    div.onclick = function() { setNewPrimary(this, index); };
+                    div.className = `img-item relative aspect-square bg-gray-100 dark:bg-black/40 rounded-xl overflow-hidden shadow-sm cursor-pointer transition-all duration-300 ${isPrimary ? 'border-2 border-emerald-500 dark:border-volt scale-105 shadow-lg' : 'border border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30'}`;
+                    
+                    div.onclick = function() { 
+                        setNewPrimary(this, index); 
+                    };
                     
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.className = 'w-full h-full object-cover';
+                    img.className = 'w-full h-full object-cover pointer-events-none';
                     div.appendChild(img);
 
                     const badge = document.createElement('div');
@@ -308,6 +299,34 @@
                 };
                 reader.readAsDataURL(file);
             });
+        }
+    }
+
+    fileInput.addEventListener('change', function() { 
+        handleMultiFiles(this.files); 
+    });
+
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault(); 
+        e.stopPropagation();
+        dropzone.classList.add('border-emerald-500', 'dark:border-volt', 'bg-emerald-50/50', 'dark:bg-volt/10');
+    });
+
+    dropzone.addEventListener('dragleave', (e) => {
+        e.preventDefault(); 
+        e.stopPropagation();
+        dropzone.classList.remove('border-emerald-500', 'dark:border-volt', 'bg-emerald-50/50', 'dark:bg-volt/10');
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+        e.preventDefault(); 
+        e.stopPropagation();
+        dropzone.classList.remove('border-emerald-500', 'dark:border-volt', 'bg-emerald-50/50', 'dark:bg-volt/10');
+        
+        const files = e.dataTransfer.files;
+        if(files.length > 0) {
+            fileInput.files = files; 
+            handleMultiFiles(files);
         }
     });
 
@@ -328,135 +347,91 @@
         if (badge) badge.classList.remove('hidden');
     }
 
-    // --- Logika Input Kategori Baru ---
+    // Toggle logic Category
     let isNewCategoryMode = false;
     function toggleNewCategoryMode() {
-        isNewCategoryMode = !isNewCategoryMode;
-        const existingWrapper = document.getElementById('existing_category_wrapper');
-        const newWrapper = document.getElementById('new_category_wrapper');
-        const toggleBtn = document.getElementById('toggle_cat_btn');
-        const catIdInput = document.getElementById('category_id');
-        const newCatInput = document.getElementById('new_category_name');
-        const catOptions = document.getElementById('category_options');
-
-        if(isNewCategoryMode) {
-            existingWrapper.classList.add('hidden');
-            catOptions.classList.add('hidden');
-            newWrapper.classList.remove('hidden');
-            
-            toggleBtn.innerText = 'Cancel';
-            toggleBtn.classList.remove('text-emerald-600', 'dark:text-volt');
-            toggleBtn.classList.add('text-red-500', 'dark:text-red-400');
-            
-            catIdInput.value = ''; // Hapus seleksi
-            document.getElementById('selected_category_text').innerText = '-- Select Category --';
-            document.getElementById('selected_category_text').classList.replace('text-gray-900', 'text-gray-400');
-            document.getElementById('selected_category_text').classList.replace('dark:text-white', 'dark:text-gray-500');
-            
-            newCatInput.focus();
-        } else {
-            existingWrapper.classList.remove('hidden');
-            newWrapper.classList.add('hidden');
-            
-            toggleBtn.innerText = '+ New Category';
-            toggleBtn.classList.remove('text-red-500', 'dark:text-red-400');
-            toggleBtn.classList.add('text-emerald-600', 'dark:text-volt');
-            
-            newCatInput.value = ''; // Kosongkan input
+        isNewCategoryMode = !isNewCategoryMode; 
+        const exWrap = document.getElementById('existing_category_wrapper');
+        const newWrap = document.getElementById('new_category_wrapper');
+        const btn = document.getElementById('toggle_cat_btn');
+        
+        if(isNewCategoryMode) { 
+            exWrap.classList.add('hidden'); 
+            newWrap.classList.remove('hidden'); 
+            btn.innerText = 'Cancel'; 
+            btn.classList.replace('text-emerald-600', 'text-red-500'); 
+            btn.classList.replace('dark:text-volt', 'dark:text-red-400'); 
+            document.getElementById('category_id').value = ''; 
+            document.getElementById('new_category_name').focus();
+        } else { 
+            exWrap.classList.remove('hidden'); 
+            newWrap.classList.add('hidden'); 
+            btn.innerText = '+ New Category'; 
+            btn.classList.replace('text-red-500', 'text-emerald-600'); 
+            btn.classList.replace('dark:text-red-400', 'dark:text-volt'); 
         }
     }
 
-    // --- Logika Input Brand Baru ---
+    // Toggle logic Brand
     let isNewBrandMode = false;
     function toggleNewBrandMode() {
-        isNewBrandMode = !isNewBrandMode;
-        const existingWrapper = document.getElementById('existing_brand_wrapper');
-        const newWrapper = document.getElementById('new_brand_wrapper');
-        const toggleBtn = document.getElementById('toggle_brand_btn');
-        const brandInput = document.getElementById('brand');
-        const newBrandInput = document.getElementById('new_brand_name');
-        const brandOptions = document.getElementById('brand_options');
-
-        if(isNewBrandMode) {
-            existingWrapper.classList.add('hidden');
-            brandOptions.classList.add('hidden');
-            newWrapper.classList.remove('hidden');
-            
-            toggleBtn.innerText = 'Cancel';
-            toggleBtn.classList.remove('text-emerald-600', 'dark:text-volt');
-            toggleBtn.classList.add('text-red-500', 'dark:text-red-400');
-            
-            brandInput.value = ''; // Hapus seleksi
-            document.getElementById('selected_brand_text').innerText = '-- Select Brand --';
-            document.getElementById('selected_brand_text').classList.replace('text-gray-900', 'text-gray-400');
-            document.getElementById('selected_brand_text').classList.replace('dark:text-white', 'dark:text-gray-500');
-            
-            newBrandInput.focus();
-        } else {
-            existingWrapper.classList.remove('hidden');
-            newWrapper.classList.add('hidden');
-            
-            toggleBtn.innerText = '+ New Brand';
-            toggleBtn.classList.remove('text-red-500', 'dark:text-red-400');
-            toggleBtn.classList.add('text-emerald-600', 'dark:text-volt');
-            
-            newBrandInput.value = ''; // Kosongkan input
+        isNewBrandMode = !isNewBrandMode; 
+        const exWrap = document.getElementById('existing_brand_wrapper');
+        const newWrap = document.getElementById('new_brand_wrapper');
+        const btn = document.getElementById('toggle_brand_btn');
+        
+        if(isNewBrandMode) { 
+            exWrap.classList.add('hidden'); 
+            newWrap.classList.remove('hidden'); 
+            btn.innerText = 'Cancel'; 
+            btn.classList.replace('text-emerald-600', 'text-red-500'); 
+            btn.classList.replace('dark:text-volt', 'dark:text-red-400'); 
+            document.getElementById('brand').value = ''; 
+            document.getElementById('new_brand_name').focus();
+        } else { 
+            exWrap.classList.remove('hidden'); 
+            newWrap.classList.add('hidden'); 
+            btn.innerText = '+ New Brand'; 
+            btn.classList.replace('text-red-500', 'text-emerald-600'); 
+            btn.classList.replace('dark:text-red-400', 'dark:text-volt'); 
         }
     }
 
-    // --- Logika Custom Dropdown Murni ---
-    function toggleCategoryDropdown() {
-        document.getElementById('category_options').classList.toggle('hidden');
+    function toggleCategoryDropdown() { 
+        document.getElementById('category_options').classList.toggle('hidden'); 
         document.getElementById('brand_options').classList.add('hidden'); 
     }
 
-    function selectCategory(id, name) {
-        document.getElementById('category_id').value = id;
-        const textElement = document.getElementById('selected_category_text');
-        textElement.innerText = name;
-        
-        if (id !== '') {
-            textElement.classList.remove('text-gray-400', 'dark:text-gray-500');
-            textElement.classList.add('text-gray-900', 'dark:text-white');
-        } else {
-            textElement.classList.remove('text-gray-900', 'dark:text-white');
-            textElement.classList.add('text-gray-400', 'dark:text-gray-500');
-        }
-        document.getElementById('category_options').classList.add('hidden');
-    }
-
-    function toggleBrandDropdown() {
-        document.getElementById('brand_options').classList.toggle('hidden');
+    function selectCategory(id, name) { 
+        document.getElementById('category_id').value = id; 
+        document.getElementById('selected_category_text').innerText = name; 
         document.getElementById('category_options').classList.add('hidden'); 
     }
 
-    function selectBrand(val, text) {
-        document.getElementById('brand').value = val;
-        const textElement = document.getElementById('selected_brand_text');
-        textElement.innerText = text;
-        
-        if (val !== '') {
-            textElement.classList.remove('text-gray-400', 'dark:text-gray-500');
-            textElement.classList.add('text-gray-900', 'dark:text-white');
-        } else {
-            textElement.classList.remove('text-gray-900', 'dark:text-white');
-            textElement.classList.add('text-gray-400', 'dark:text-gray-500');
-        }
-        document.getElementById('brand_options').classList.add('hidden');
+    function toggleBrandDropdown() { 
+        document.getElementById('brand_options').classList.toggle('hidden'); 
+        document.getElementById('category_options').classList.add('hidden'); 
     }
 
-    // Menutup dropdown jika klik di area luar
+    function selectBrand(val, text) { 
+        document.getElementById('brand').value = val; 
+        document.getElementById('selected_brand_text').innerText = text; 
+        document.getElementById('brand_options').classList.add('hidden'); 
+    }
+
+    // Menutup dropdown ketika klik di area lain
     document.addEventListener('click', function(event) {
         const catWrapper = document.getElementById('existing_category_wrapper');
-        const catOptions = document.getElementById('category_options');
-        if (catWrapper && !catWrapper.contains(event.target) && event.target.id !== 'toggle_cat_btn') {
-            catOptions.classList.add('hidden');
-        }
-
+        const catBtn = document.getElementById('toggle_cat_btn');
         const brandWrapper = document.getElementById('existing_brand_wrapper');
-        const brandOptions = document.getElementById('brand_options');
-        if (brandWrapper && !brandWrapper.contains(event.target) && event.target.id !== 'toggle_brand_btn') {
-            brandOptions.classList.add('hidden');
+        const brandBtn = document.getElementById('toggle_brand_btn');
+
+        if (!catWrapper.contains(event.target) && event.target !== catBtn) {
+            document.getElementById('category_options').classList.add('hidden');
+        }
+        
+        if (!brandWrapper.contains(event.target) && event.target !== brandBtn) {
+            document.getElementById('brand_options').classList.add('hidden');
         }
     });
 </script>

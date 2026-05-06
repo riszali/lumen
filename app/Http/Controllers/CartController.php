@@ -21,6 +21,11 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
+        // PROTEKSI BACKEND MUTLAK: Tolak mentah-mentah jika Admin mencoba Add to Cart
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            return back()->with('error', 'Akun Administrator tidak diizinkan melakukan pembelian produk.');
+        }
+
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
@@ -29,6 +34,7 @@ class CartController extends Controller
 
         $product = Product::findOrFail($request->product_id);
         
+        // Stock validation
         $stockAvailable = $product->stock;
         if ($request->variant_id) {
             $variant = ProductVariant::findOrFail($request->variant_id);
@@ -71,6 +77,7 @@ class CartController extends Controller
 
         $cartItem = CartItem::findOrFail($id);
         
+        // Verify ownership
         if ($cartItem->cart->user_id !== Auth::id()) {
             abort(403);
         }

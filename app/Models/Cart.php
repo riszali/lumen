@@ -23,7 +23,8 @@ class Cart extends Model
     public function getTotalAttribute()
     {
         return $this->items->sum(function($item) {
-            return $item->product->price * $item->quantity;
+            // PERBAIKAN: Gunakan effective_price agar diskon masuk ke hitungan total
+            return $item->product->effective_price * $item->quantity;
         });
     }
 }

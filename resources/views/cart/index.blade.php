@@ -58,6 +58,13 @@
                 </a>
             </div>
         @else
+            @php
+                // FAIL-SAFE: Kalkulasi total langsung di Blade agar kebal dari error Model
+                $cartTotal = $cart->items->sum(function($item) {
+                    $hargaItem = ($item->product->discount_price && $item->product->discount_price > 0) ? $item->product->discount_price : $item->product->price;
+                    return $hargaItem * $item->quantity;
+                });
+            @endphp
             <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
                 <!-- Cart Items (Glass Container) -->
                 <div class="w-full lg:w-2/3">
@@ -74,6 +81,10 @@
                         <!-- Item List -->
                         <div class="divide-y divide-white/5">
                             @foreach($cart->items as $item)
+                            @php
+                                // Tentukan harga final per item
+                                $hargaFix = ($item->product->discount_price && $item->product->discount_price > 0) ? $item->product->discount_price : $item->product->price;
+                            @endphp
                             <div class="grid grid-cols-1 sm:grid-cols-6 items-center p-6 gap-6 sm:gap-0 hover:bg-white/5 transition duration-300 group">
                                 <div class="col-span-3 flex items-center gap-4">
                                     <!-- Image (Glass Frame) -->
@@ -100,7 +111,14 @@
                                 </div>
 
                                 <div class="col-span-1 text-center text-sm text-gray-400 hidden sm:block font-bold">
-                                    Rp {{ number_format($item->product->price, 0, ',', '.') }}
+                                    @if($item->product->discount_price && $item->product->discount_price > 0)
+                                        <div class="flex flex-col items-center">
+                                            <span class="line-through text-[10px] text-gray-600 mb-0.5">Rp {{ number_format($item->product->price, 0, ',', '.') }}</span>
+                                            <span class="text-volt-custom">Rp {{ number_format($hargaFix, 0, ',', '.') }}</span>
+                                        </div>
+                                    @else
+                                        Rp {{ number_format($hargaFix, 0, ',', '.') }}
+                                    @endif
                                 </div>
 
                                 <div class="col-span-1 flex justify-center">
@@ -111,8 +129,9 @@
                                     </form>
                                 </div>
 
+                                <!-- PERBAIKAN: Menggunakan Harga Fix yang Kebal Error -->
                                 <div class="col-span-1 text-right text-sm font-bold text-volt-custom sm:pr-2">
-                                    Rp {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
+                                    Rp {{ number_format($hargaFix * $item->quantity, 0, ',', '.') }}
                                 </div>
                             </div>
                             @endforeach
@@ -128,7 +147,7 @@
                         <div class="space-y-4 mb-8 text-sm font-light tracking-wide text-gray-400">
                             <div class="flex justify-between">
                                 <span>Subtotal</span>
-                                <span class="text-white font-bold">Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
+                                <span class="text-white font-bold">Rp {{ number_format($cartTotal, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between">
                                 <span>Pengiriman</span>
@@ -136,7 +155,7 @@
                             </div>
                             <div class="border-t border-white/10 pt-5 flex justify-between items-center mt-2">
                                 <span class="font-bold text-white uppercase tracking-wider text-[10px]">Estimasi Total</span>
-                                <span class="font-bold text-2xl text-volt-custom font-bebas">Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
+                                <span class="font-bold text-2xl text-volt-custom font-bebas">Rp {{ number_format($cartTotal, 0, ',', '.') }}</span>
                             </div>
                         </div>
 

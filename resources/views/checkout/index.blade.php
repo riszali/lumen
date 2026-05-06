@@ -137,8 +137,9 @@
                                 @endif
                                 <p class="text-[10px] text-gray-400 mt-1 font-bold">Qty: {{ $item->quantity }}</p>
                             </div>
+                            <!-- PERBAIKAN: Menggunakan effective_price -->
                             <div class="text-xs font-bold text-volt-custom flex items-center whitespace-nowrap">
-                                Rp {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
+                                Rp {{ number_format($item->product->effective_price * $item->quantity, 0, ',', '.') }}
                             </div>
                         </div>
                         @endforeach

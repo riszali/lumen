@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
+    // Tambahkan discount_price ke dalam array
     protected $fillable = [
         'category_id', 'brand', 'name', 'slug', 'description', 'specification',
-        'price', 'stock', 'is_active', 'is_featured'
+        'price', 'discount_price', 'stock', 'is_active', 'is_featured'
     ];
 
     public function category(): BelongsTo

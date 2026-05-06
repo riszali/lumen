@@ -171,6 +171,15 @@
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/90 via-transparent to-transparent opacity-80 pointer-events-none"></div>
                         
+                        <!-- BADGE LOGIC -->
+                        @if($product->discount_price)
+                            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+                                <span class="bg-red-600 text-white font-montserrat text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg border border-red-800">
+                                    -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}%
+                                </span>
+                            </div>
+                        @endif
+
                         @if($product->is_featured)
                             <div class="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
                                 <span class="bg-[#ccff00] text-black font-montserrat text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md border border-black/20">Featured</span>
@@ -186,9 +195,18 @@
                             {{ $product->brand ?? $product->category->name }}
                         </p>
                         
-                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/10">
-                            <p class="text-[#ccff00] font-montserrat text-xs sm:text-sm font-bold tracking-wider">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center group-hover:bg-[#ccff00] group-hover:border-[#ccff00] group-hover:text-black text-white transition-colors duration-300">
+                        <div class="flex items-end justify-between mt-auto pt-4 border-t border-white/10">
+                            <!-- PRICE LOGIC -->
+                            <div class="flex flex-col">
+                                @if($product->discount_price)
+                                    <span class="text-gray-500 line-through text-[10px] font-bold font-montserrat mb-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                                    <span class="text-[#ccff00] font-montserrat text-sm sm:text-base font-bold tracking-wider leading-none">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</span>
+                                @else
+                                    <span class="text-[#ccff00] font-montserrat text-sm sm:text-base font-bold tracking-wider leading-none">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                                @endif
+                            </div>
+
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm flex items-center justify-center group-hover:bg-[#ccff00] group-hover:border-[#ccff00] group-hover:text-black text-white transition-colors duration-300 flex-shrink-0">
                                 <svg class="w-4 h-4 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </div>
                         </div>

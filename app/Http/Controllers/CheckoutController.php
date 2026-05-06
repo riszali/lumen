@@ -39,13 +39,19 @@ class CheckoutController extends Controller
             return redirect()->route('shop.index');
         }
 
+        // KALKULASI TOTAL FAIL-SAFE: Hitung manual dari setiap item
+        $cartTotal = $cart->items->sum(function($item) {
+            $price = ($item->product->discount_price && $item->product->discount_price > 0) ? $item->product->discount_price : $item->product->price;
+            return $price * $item->quantity;
+        });
+
         DB::beginTransaction();
         try {
             // Create Order
             $order = Order::create([
                 'user_id' => Auth::id(),
-                'order_number' => 'WSP-' . strtoupper(Str::random(8)), // Diubah dari LMN menjadi WSP (Willsports)
-                'total_amount' => $cart->total,
+                'order_number' => 'WSP-' . strtoupper(Str::random(8)),
+                'total_amount' => $cartTotal, // Pakai total manual yang kebal error
                 'status' => 'pending',
                 'shipping_address' => $request->address,
                 'payment_method' => $request->payment_method
@@ -53,12 +59,15 @@ class CheckoutController extends Controller
 
             // Create Order Items and Deduct Stock
             foreach ($cart->items as $item) {
+                // Tentukan harga final
+                $hargaFix = ($item->product->discount_price && $item->product->discount_price > 0) ? $item->product->discount_price : $item->product->price;
+
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
                     'product_variant_id' => $item->product_variant_id,
                     'product_name' => $item->product->name,
-                    'price' => $item->product->price,
+                    'price' => $hargaFix, // Pakai harga fix manual
                     'quantity' => $item->quantity
                 ]);
 

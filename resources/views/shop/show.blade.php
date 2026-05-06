@@ -91,6 +91,16 @@
                                 <div class="swiper-slide flex items-center justify-center text-white/30 uppercase tracking-widest text-xs font-montserrat">No Image</div>
                             @endforelse
                         </div>
+                        
+                        <!-- BADGE LOGIC DI GAMBAR UTAMA -->
+                        @if($product->discount_price)
+                            <div class="absolute top-4 left-4 sm:top-6 sm:left-6 z-20 pointer-events-none">
+                                <span class="bg-red-600 text-white font-montserrat text-xs sm:text-sm font-extrabold uppercase tracking-widest px-4 py-2 rounded-full shadow-lg border border-red-800">
+                                    -{{ round((($product->price - $product->discount_price) / $product->price) * 100) }}% SALE
+                                </span>
+                            </div>
+                        @endif
+
                         <!-- Add Arrows -->
                         <div class="swiper-button-next"></div>
                         <div class="swiper-button-prev"></div>
@@ -115,7 +125,21 @@
                 
                 <h1 class="font-bebas text-5xl lg:text-7xl text-white mb-2 tracking-wide drop-shadow-md leading-none">{{ $product->name }}</h1>
                 <p class="text-sm text-gray-400 font-montserrat font-bold tracking-widest uppercase mb-6">{{ $product->brand ?? $product->category->name }}</p>
-                <p class="text-3xl text-volt-custom font-bebas tracking-wide mb-8">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                
+                <!-- PRICE LOGIC BESAR -->
+                @if($product->discount_price)
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3">
+                            <p class="text-gray-500 line-through text-2xl font-bebas tracking-wide">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                            <span class="bg-red-500/20 text-red-500 border border-red-500/30 px-3 py-1 rounded-lg text-xs font-bold font-montserrat uppercase tracking-widest">
+                                Hemat Rp {{ number_format($product->price - $product->discount_price, 0, ',', '.') }}
+                            </span>
+                        </div>
+                        <p class="text-4xl sm:text-5xl text-volt-custom font-bebas tracking-wide mt-1">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</p>
+                    </div>
+                @else
+                    <p class="text-4xl sm:text-5xl text-volt-custom font-bebas tracking-wide mb-8">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                @endif
                 
                 <!-- TABS: Description & Specification -->
                 <div class="font-montserrat">
@@ -141,20 +165,20 @@
                     </div>
                 </div>
 
-                <!-- Add to Cart Form / Admin Notice -->
+                <!-- Add to Cart Form / Admin Restriction -->
                 <div class="bg-white/5 backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-lg mt-auto">
                     
                     @if(auth()->check() && auth()->user()->role === 'admin')
-                        <!-- Tampilan Khusus Admin Preview -->
-                        <div class="text-center py-6">
-                            <div class="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/10 shadow-inner">
-                                <svg class="w-6 h-6 text-volt-custom" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            </div>
-                            <p class="font-bebas text-2xl text-volt-custom tracking-wide mb-1">MODE PREVIEW ADMIN</p>
-                            <p class="text-[10px] text-gray-400 font-montserrat uppercase tracking-widest font-bold">Administrator tidak dapat melakukan pembelian</p>
+                        <!-- Tampilan Khusus Admin (Tidak bisa Add to Cart) -->
+                        <div class="text-center py-4 font-montserrat">
+                            <svg class="w-12 h-12 text-gray-500 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            <p class="text-gray-400 text-xs sm:text-sm tracking-wide mb-4">Akun Administrator tidak dapat melakukan pembelian produk.</p>
+                            <a href="{{ route('admin.products.edit', $product->id) }}" class="inline-block border border-[#ccff00] text-[#ccff00] hover:bg-[#ccff00] hover:text-black rounded-xl px-6 py-3 uppercase tracking-widest text-[10px] sm:text-xs font-bold transition-all duration-300">
+                                Edit Produk Ini
+                            </a>
                         </div>
                     @else
-                        <!-- Form Pembelian Normal untuk Customer / Guest -->
+                        <!-- Form Add to Cart Normal (Untuk Customer/Guest) -->
                         <form action="{{ route('cart.add') }}" method="POST" class="font-montserrat">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -206,7 +230,7 @@
             
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
                 @foreach($relatedProducts as $related)
-                <div class="group cursor-pointer bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.08] hover:border-[#ccff00]/30 transition-all duration-500 flex flex-col">
+                <div class="group cursor-pointer bg-white/[0.03] backdrop-blur-md md:backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-white/[0.08] hover:border-[#ccff00]/30 transition-all duration-500 flex flex-col relative">
                     
                     <a href="{{ route('shop.show', $related->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
                         @if($related->primaryImage)
@@ -215,6 +239,15 @@
                             <div class="w-full h-full flex items-center justify-center text-white/30 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
                         @endif
                         <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-90 pointer-events-none"></div>
+                        
+                        <!-- BADGE LOGIC RELATED PRODUCTS -->
+                        @if($related->discount_price)
+                            <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 pointer-events-none">
+                                <span class="bg-red-600 text-white font-montserrat text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-lg border border-red-800">
+                                    -{{ round((($related->price - $related->discount_price) / $related->price) * 100) }}%
+                                </span>
+                            </div>
+                        @endif
                     </a>
                     
                     <div class="text-center px-2 pb-3 flex-grow flex flex-col justify-end font-montserrat">
@@ -222,7 +255,16 @@
                             <a href="{{ route('shop.show', $related->slug) }}">{{ $related->name }}</a>
                         </h4>
                         <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $related->brand ?? $related->category->name }}</p>
-                        <p class="text-volt-custom text-sm font-bold tracking-wider">Rp {{ number_format($related->price, 0, ',', '.') }}</p>
+                        
+                        <!-- PRICE LOGIC RELATED PRODUCTS -->
+                        <div class="flex flex-col items-center">
+                            @if($related->discount_price)
+                                <span class="text-gray-500 line-through text-[9px] font-bold mb-0.5">Rp {{ number_format($related->price, 0, ',', '.') }}</span>
+                                <span class="text-volt-custom text-sm font-bold tracking-wider leading-none">Rp {{ number_format($related->discount_price, 0, ',', '.') }}</span>
+                            @else
+                                <span class="text-volt-custom text-sm font-bold tracking-wider leading-none mt-3">Rp {{ number_format($related->price, 0, ',', '.') }}</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 @endforeach

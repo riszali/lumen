@@ -29,6 +29,7 @@ class AdminController extends Controller
     {
         $totalProducts = Product::count();
         $totalOrders = Order::count();
+        
         // Hanya menghitung pendapatan dari pesanan yang sudah selesai/lunas
         $revenue = Order::where('status', 'completed')->sum('total_amount');
         $recentOrders = Order::with('user')->latest()->take(5)->get();
@@ -46,6 +47,7 @@ class AdminController extends Controller
     public function productsIndex()
     {
         $products = Product::with('category')->latest()->paginate(10);
+        
         return view('admin.products.index', compact('products'));
     }
 
@@ -55,11 +57,12 @@ class AdminController extends Controller
     public function productsCreate()
     {
         $categories = Category::all();
+        
         return view('admin.products.create', compact('categories'));
     }
 
     /**
-     * Menyimpan data produk baru ke database termasuk multi-image upload.
+     * Menyimpan data produk baru ke database termasuk multi-image upload & diskon.
      */
     public function productsStore(Request $request)
     {
@@ -72,9 +75,10 @@ class AdminController extends Controller
             'description' => 'required',
             'specification' => 'nullable',
             'price' => 'required|numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0|lt:price', // Diskon ga boleh lebih besar dari harga asli
             'stock' => 'required|integer|min:0',
             'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048'
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120' // Max 5MB per gambar
         ]);
 
         // Logika untuk menangani input Kategori Baru secara langsung
@@ -102,18 +106,19 @@ class AdminController extends Controller
             'description' => $request->description,
             'specification' => $request->specification,
             'price' => $request->price,
+            'discount_price' => $request->discount_price,
             'stock' => $request->stock,
             'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        // Menyimpan banyak gambar sekaligus
+        // Menyimpan banyak gambar sekaligus dan set mana yang jadi Primary
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
                 $path = $image->store('products', 'public');
                 $product->images()->create([
                     'image_path' => $path,
-                    'is_primary' => ($index == $request->primary_image_index)
+                    'is_primary' => ((string)$request->primary_image_index === (string)$index)
                 ]);
             }
         }
@@ -127,11 +132,12 @@ class AdminController extends Controller
     public function productsEdit(Product $product)
     {
         $categories = Category::all();
+        
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
     /**
-     * Memperbarui data produk dan mengelola perubahan gambar.
+     * Memperbarui data produk dan mengelola perubahan gambar / diskon.
      */
     public function productsUpdate(Request $request, Product $product)
     {
@@ -140,7 +146,10 @@ class AdminController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0|lt:price',
             'stock' => 'required|integer|min:0',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120'
         ]);
 
         $product->update([
@@ -151,24 +160,37 @@ class AdminController extends Controller
             'description' => $request->description,
             'specification' => $request->specification,
             'price' => $request->price,
+            'discount_price' => $request->discount_price,
             'stock' => $request->stock,
             'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
         ]);
 
-        // Jika user mengupload gambar baru, gambar lama akan dihapus (Sistem Replace)
+        // Logika 1: Jika admin mengupload gambar baru (MENGGANTI TOTAL)
         if ($request->hasFile('images')) {
+            // Hapus gambar lama dari storage & database
             foreach ($product->images as $img) {
                 Storage::disk('public')->delete($img->image_path);
             }
             $product->images()->delete();
 
+            // Masukkan gambar baru dan set primary berdasarkan pilihan
             foreach ($request->file('images') as $index => $image) {
                 $path = $image->store('products', 'public');
                 $product->images()->create([
                     'image_path' => $path,
-                    'is_primary' => ($index == $request->primary_image_index)
+                    'is_primary' => ((string)$request->primary_image_index === (string)$index)
                 ]);
+            }
+        } 
+        // Logika 2: Jika admin HANYA mengubah gambar primary dari galeri yang sudah ada
+        else {
+            if ($request->filled('primary_image_id')) {
+                // Matikan semua flag primary untuk produk ini
+                $product->images()->update(['is_primary' => false]);
+                
+                // Nyalakan primary hanya pada gambar yang dipilih admin
+                $product->images()->where('id', $request->primary_image_id)->update(['is_primary' => true]);
             }
         }
 
@@ -183,7 +205,9 @@ class AdminController extends Controller
         foreach ($product->images as $image) {
             Storage::disk('public')->delete($image->image_path);
         }
+        
         $product->delete();
+        
         return redirect()->route('admin.products.index')->with('success', 'Produk telah dihapus dari sistem.');
     }
 
@@ -197,6 +221,7 @@ class AdminController extends Controller
     public function ordersIndex()
     {
         $orders = Order::with('user')->latest()->paginate(15);
+        
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -209,24 +234,30 @@ class AdminController extends Controller
             'status' => 'required|in:pending,paid,processing,shipped,completed,cancelled'
         ]);
 
-        $order->update(['status' => $request->status]);
+        $order->update([
+            'status' => $request->status
+        ]);
 
         return back()->with('success', 'Status pesanan #' . $order->order_number . ' diperbarui.');
     }
 
     // =========================================================================
-    // 3. MANAJEMEN KONTEN (BANNERS & BRANDS)
+    // 3. MANAJEMEN BANNER HOME (SHOWCASE CAROUSEL)
     // =========================================================================
 
     /**
-     * Manajemen Banner Slider di Halaman Depan.
+     * Menampilkan daftar banner di halaman depan.
      */
     public function bannersIndex()
     {
         $banners = Banner::latest()->get();
+        
         return view('admin.banners.index', compact('banners'));
     }
 
+    /**
+     * Mengunggah banner baru.
+     */
     public function bannersStore(Request $request)
     {
         $request->validate([
@@ -245,22 +276,37 @@ class AdminController extends Controller
         return back()->with('success', 'Banner promosi berhasil diunggah.');
     }
 
+    /**
+     * Menghapus banner.
+     */
     public function bannersDestroy(Banner $banner)
     {
-        Storage::disk('public')->delete($banner->image_path);
+        if ($banner->image_path) {
+            Storage::disk('public')->delete($banner->image_path);
+        }
+        
         $banner->delete();
+        
         return back()->with('success', 'Banner berhasil dihapus.');
     }
 
+    // =========================================================================
+    // 4. MANAJEMEN BRAND (HALAMAN KHUSUS MERK)
+    // =========================================================================
+
     /**
-     * Manajemen Brand (Landing Page Khusus Merk).
+     * Menampilkan daftar halaman Brand.
      */
     public function brandsIndex()
     {
         $brands = Brand::latest()->get();
+        
         return view('admin.brands.index', compact('brands'));
     }
 
+    /**
+     * Membuat halaman khusus brand baru (beserta logo dan banner).
+     */
     public function brandsStore(Request $request)
     {
         $request->validate([
@@ -285,13 +331,20 @@ class AdminController extends Controller
         return back()->with('success', 'Halaman brand berhasil dibuat.');
     }
 
+    /**
+     * Membuka form edit halaman brand.
+     */
     public function brandsEdit(Brand $brand)
     {
-        // $brands ditarik lagi untuk menu navigasi sidebar agar tidak error
+        // Menarik semua data brand agar menu navigasi sidebar admin tidak error (Undefined variable $brands)
         $brands = Brand::latest()->get(); 
+        
         return view('admin.brands.edit', compact('brand', 'brands'));
     }
 
+    /**
+     * Memperbarui informasi brand, logo, atau bannernya.
+     */
     public function brandsUpdate(Request $request, Brand $brand)
     {
         $request->validate([
@@ -301,13 +354,19 @@ class AdminController extends Controller
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240'
         ]);
 
+        // Cek jika admin upload banner baru
         if ($request->hasFile('banner')) {
-            if ($brand->banner_path) Storage::disk('public')->delete($brand->banner_path);
+            if ($brand->banner_path) {
+                Storage::disk('public')->delete($brand->banner_path);
+            }
             $brand->banner_path = $request->file('banner')->store('brands/banners', 'public');
         }
 
+        // Cek jika admin upload logo baru
         if ($request->hasFile('logo')) {
-            if ($brand->logo_path) Storage::disk('public')->delete($brand->logo_path);
+            if ($brand->logo_path) {
+                Storage::disk('public')->delete($brand->logo_path);
+            }
             $brand->logo_path = $request->file('logo')->store('brands/logos', 'public');
         }
 
@@ -315,22 +374,32 @@ class AdminController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'description' => $request->description,
+            'is_active' => $request->has('is_active'),
         ]);
 
         return redirect()->route('admin.brands.index')->with('success', 'Konten brand berhasil diperbarui.');
     }
 
+    /**
+     * Menghapus brand.
+     */
     public function brandsDestroy(Brand $brand)
     {
-        if ($brand->banner_path) Storage::disk('public')->delete($brand->banner_path);
-        if ($brand->logo_path) Storage::disk('public')->delete($brand->logo_path);
+        if ($brand->banner_path) {
+            Storage::disk('public')->delete($brand->banner_path);
+        }
+        
+        if ($brand->logo_path) {
+            Storage::disk('public')->delete($brand->logo_path);
+        }
+        
         $brand->delete();
 
         return back()->with('success', 'Halaman brand telah dihapus.');
     }
 
     // =========================================================================
-    // 4. MANAJEMEN USER & PROFIL (USER MANAGEMENT)
+    // 5. MANAJEMEN USER & PROFIL (USER MANAGEMENT)
     // =========================================================================
 
     /**
@@ -339,18 +408,23 @@ class AdminController extends Controller
     public function usersIndex()
     {
         $users = User::latest()->paginate(15);
+        
         return view('admin.users.index', compact('users'));
     }
 
     /**
-     * Mengelola Profil Akun Admin yang Sedang Login.
+     * Membuka halaman pengaturan Profil Akun Admin yang Sedang Login.
      */
     public function profileEdit()
     {
         $user = auth()->user();
+        
         return view('admin.profile.edit', compact('user'));
     }
 
+    /**
+     * Menyimpan perubahan profil dan password admin.
+     */
     public function profileUpdate(Request $request)
     {
         $user = auth()->user();
@@ -362,28 +436,33 @@ class AdminController extends Controller
             'new_password' => 'nullable|min:8|confirmed'
         ]);
 
-        // Verifikasi password lama jika ingin ganti password baru
+        // Verifikasi password lama jika ingin mengganti dengan password baru
         if ($request->filled('new_password')) {
             if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Password saat ini tidak cocok.']);
+                return back()->withErrors(['current_password' => 'Password saat ini tidak cocok dengan catatan kami.']);
             }
             $user->password = Hash::make($request->new_password);
         }
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
 
         return back()->with('success', 'Profil administrator berhasil diperbarui.');
     }
 
     // =========================================================================
-    // 5. MANAJEMEN SUBSCRIBERS
+    // 6. MANAJEMEN SUBSCRIBERS NEWSLETTER
     // =========================================================================
 
+    /**
+     * Menampilkan daftar pelanggan newsletter.
+     */
     public function subscribersIndex()
     {
         $subscribers = Subscriber::latest()->paginate(15);
+        
         return view('admin.subscribers.index', compact('subscribers'));
     }
 }
