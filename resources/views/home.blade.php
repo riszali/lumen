@@ -225,34 +225,34 @@
 
 <!-- 4.5 FEATURED GEAR -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
-<section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
+<section id="featured-gear" class="py-24 bg-white relative overflow-hidden z-20 border-b border-gray-200 transition-opacity duration-300">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10">
         
         <!-- Header Rata Tengah -->
         <div class="mb-14 gsap-fade-up flex flex-col items-center text-center gap-5">
             <div>
-                <h2 class="font-bebas text-5xl md:text-6xl text-white uppercase tracking-wide mb-2">FEATURED <span class="text-volt">GEAR</span></h2>
+                <!-- Mengubah warna teks GEAR menjadi hijau stabilo (text-volt) -->
+                <h2 class="font-bebas text-5xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">FEATURED <span class="text-volt">GEAR</span></h2>
                 <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-3">
-                    <span class="w-6 sm:w-10 h-[1px] bg-volt hidden sm:block"></span>
+                    <span class="w-6 sm:w-10 h-[1px] bg-gray-300 hidden sm:block"></span>
                     Pilihan Utama Sang Juara
-                    <span class="w-6 sm:w-10 h-[1px] bg-volt hidden sm:block"></span>
+                    <span class="w-6 sm:w-10 h-[1px] bg-gray-300 hidden sm:block"></span>
                 </p>
             </div>
-            <a href="{{ route('shop.index') }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-8 py-3 rounded-full transition-all mt-2">Lihat Semua</a>
+            <a href="{{ route('shop.index') }}" class="text-[10px] text-gray-900 font-montserrat font-bold uppercase tracking-widest border border-gray-300 hover:border-black hover:bg-black hover:text-white px-8 py-3 rounded-full transition-all mt-2">Lihat Semua</a>
         </div>
         
         <!-- PERBAIKAN: Set grid Mobile = 2 kolom, Tablet = 4 kolom, Desktop = 5 kolom -->
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
             @foreach($featuredProducts as $product)
-            <!-- TRIK SAKTI: Jika ini produk ke-5, sembunyikan di HP/Tablet ('hidden'), dan tampilkan sebagai 'flex' HANYA di Desktop ('lg:flex') -->
-            <div class="{{ $loop->iteration == 5 ? 'hidden lg:flex' : 'flex' }} flex-col bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group relative">
-                <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
+            <!-- Card menggunakan warna "Smokey" (Whitesmoke) agar lebih kontras di atas background putih -->
+            <div class="{{ $loop->iteration == 5 ? 'hidden lg:flex' : 'flex' }} flex-col bg-[#F5F5F5] border border-gray-200/60 rounded-[2rem] p-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-gray-300 transition-all duration-500 group relative">
+                <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] bg-white shadow-sm">
                     @if($product->primaryImage)
                         <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700">
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-white/30 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
+                        <div class="w-full h-full flex items-center justify-center text-gray-400 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
                     @endif
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-90 pointer-events-none"></div>
                     
                     <!-- BADGE DISKON -->
                     @if($product->discount_price)
@@ -268,17 +268,17 @@
                     </div>
                 </a>
                 <div class="text-center px-2 pb-3 flex-grow flex flex-col justify-end font-montserrat">
-                    <h4 class="text-white font-bebas text-2xl tracking-wide mb-1 transition group-hover:text-volt line-clamp-1">
+                    <h4 class="text-gray-900 font-bebas text-2xl tracking-wide mb-1 transition group-hover:opacity-70 line-clamp-1">
                         <a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a>
                     </h4>
-                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
+                    <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
                     
                     <div class="flex flex-col items-center">
                         @if($product->discount_price)
                             <span class="text-gray-500 line-through text-[9px] font-bold mb-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                            <span class="text-volt text-sm font-bold tracking-wider leading-none">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</span>
+                            <span class="text-black text-sm font-extrabold tracking-wider leading-none">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</span>
                         @else
-                            <span class="text-volt text-sm font-bold tracking-wider leading-none mt-3">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                            <span class="text-black text-sm font-extrabold tracking-wider leading-none mt-3">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                         @endif
                     </div>
                 </div>
@@ -286,26 +286,26 @@
             @endforeach
         </div>
 
-        <!-- MANUAL PAGINATION: ANTI ERROR 500 & DIJAMIN BULAT MURNI -->
+        <!-- MANUAL PAGINATION: Penyesuaian tema terang -->
         @if(method_exists($featuredProducts, 'hasPages') && $featuredProducts->hasPages())
         <div class="mt-16 relative z-10 w-full flex justify-center">
             <ul class="flex items-center gap-4">
                 {{-- Previous Page Link --}}
                 @if ($featuredProducts->onFirstPage())
                     <li>
-                        <span class="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white/30 cursor-not-allowed backdrop-blur-md">
+                        <span class="w-12 h-12 rounded-full flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-300 cursor-not-allowed">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         </span>
                     </li>
                 @else
                     <li>
-                        <a href="{{ $featuredProducts->previousPageUrl() }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all duration-300 backdrop-blur-md shadow-sm">
+                        <a href="{{ $featuredProducts->previousPageUrl() }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         </a>
                     </li>
                 @endif
 
-                {{-- Halaman Angka Looping Bebas Error --}}
+                {{-- Halaman Angka Looping --}}
                 @for ($page = 1; $page <= $featuredProducts->lastPage(); $page++)
                     @if ($page == $featuredProducts->currentPage())
                         <li>
@@ -315,7 +315,7 @@
                         </li>
                     @else
                         <li>
-                            <a href="{{ $featuredProducts->url($page) }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white font-montserrat font-bold text-base hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all duration-300 backdrop-blur-md">
+                            <a href="{{ $featuredProducts->url($page) }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white border border-gray-300 text-gray-700 font-montserrat font-bold text-base hover:bg-black hover:text-white hover:border-black transition-all duration-300">
                                 {{ $page }}
                             </a>
                         </li>
@@ -325,13 +325,13 @@
                 {{-- Next Page Link --}}
                 @if ($featuredProducts->hasMorePages())
                     <li>
-                        <a href="{{ $featuredProducts->nextPageUrl() }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all duration-300 backdrop-blur-md shadow-sm">
+                        <a href="{{ $featuredProducts->nextPageUrl() }}#featured-gear" class="pagination-ajax-link w-12 h-12 rounded-full flex items-center justify-center bg-white border border-gray-300 text-gray-700 hover:bg-black hover:text-white hover:border-black transition-all duration-300 shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </a>
                     </li>
                 @else
                     <li>
-                        <span class="w-12 h-12 rounded-full flex items-center justify-center bg-white/5 border border-white/10 text-white/30 cursor-not-allowed backdrop-blur-md">
+                        <span class="w-12 h-12 rounded-full flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-300 cursor-not-allowed">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </span>
                     </li>
