@@ -223,6 +223,33 @@
     </div>
 </section>
 
+<!-- 4.3 SUPPLEMENTS INTRO -->
+<!-- Latar belakang diubah menjadi putih (bg-white) -->
+<section class="py-20 md:py-28 bg-white relative z-20 border-b border-gray-200">
+    <div class="max-w-[900px] mx-auto px-4 text-center gsap-fade-up">
+        <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-4 flex items-center justify-center gap-3">
+            <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
+            Bahan Bakar Sang Juara
+            <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
+        </span>
+        <!-- Teks utama diubah menjadi gelap (text-gray-900) agar terlihat di bg putih -->
+        <h2 class="font-bebas text-5xl md:text-7xl text-gray-900 uppercase tracking-wide mb-6">
+            MAXIMIZE YOUR <span class="text-volt">PERFORMANCE</span>
+        </h2>
+        <!-- Teks paragraf diubah menjadi text-gray-600 -->
+        <p class="text-gray-600 font-montserrat text-sm md:text-base font-medium leading-relaxed max-w-2xl mx-auto">
+            Nutrisi adalah kunci dari setiap kemenangan yang konsisten. Rangkaian suplemen premium kami diformulasikan secara khusus untuk memberikan energi instan, menjaga fokus mental Anda tetap tajam, dan memastikan otot pulih lebih cepat setelah pertandingan sengit di lapangan.
+        </p>
+    </div>
+</section>
+
+<!-- 4.4 GYM BACKGROUND BANNER -->
+<!-- Ditambahkan md:aspect-auto dan md:h-[40vh] agar di desktop tidak memenuhi seluruh tinggi layar -->
+<section class="w-full aspect-video md:aspect-auto md:h-[40vh] relative overflow-hidden z-20 bg-cover bg-center bg-no-repeat border-b border-gray-200" style="background-image: url('{{ asset('assets/images/gym.jpg') }}');">
+    <!-- Overlay gradasi transparan disesuaikan (dari putih ke putih) agar nyambung dengan section atas dan bawahnya -->
+    <div class="absolute inset-0 bg-gradient-to-b from-white/90 via-black/10 to-white/90 pointer-events-none"></div>
+</section>
+
 <!-- 4.5 FEATURED GEAR -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section id="featured-gear" class="py-24 bg-white relative overflow-hidden z-20 border-b border-gray-200 transition-opacity duration-300">
