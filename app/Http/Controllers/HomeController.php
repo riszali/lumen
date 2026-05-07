@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // 1. FEATURED GEAR (Semua produk featured KECUALI kategori supplements)
+        // 1. FEATURED GEAR (Menampilkan produk unggulan KECUALI yang berkategori suplemen)
         $featuredProducts = Product::with('primaryImage')
                             ->where('is_active', true)
                             ->where('is_featured', true)
@@ -19,14 +19,14 @@ class HomeController extends Controller
                             })
                             ->paginate(5);
 
-        // 2. FEATURED SUPPLEMENTS (HANYA produk featured dari kategori supplements)
+        // 2. TOP SUPPLEMENTS (Menampilkan KHUSUS produk unggulan dari kategori suplemen)
         $featuredSupplements = Product::with('primaryImage')
                             ->where('is_active', true)
                             ->where('is_featured', true)
                             ->whereHas('category', function ($query) {
                                 $query->where('slug', 'supplements');
                             })
-                            ->take(5)
+                            ->take(5) // Maksimal 5 agar pas dengan grid yang kita buat
                             ->get();
 
         // 3. NEW ARRIVALS
@@ -39,6 +39,7 @@ class HomeController extends Controller
         // 4. BANNERS
         $banners = Banner::where('is_active', true)->latest()->get();
 
+        // Mengirimkan semua data (termasuk $featuredSupplements) ke view home.blade.php
         return view('home', compact('featuredProducts', 'featuredSupplements', 'newArrivals', 'banners'));
     }
 }
