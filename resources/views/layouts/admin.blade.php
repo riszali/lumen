@@ -129,16 +129,20 @@
                 <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Home Banners</span>
             </a>
 
-            <!-- TAMBAHAN MENU MANAGE BRANDS INI -->
             <a href="{{ route('admin.brands.index') }}" class="flex items-center px-4 py-3.5 rounded-2xl transition-colors duration-150 group {{ request()->routeIs('admin.brands.*') ? 'bg-emerald-50 dark:bg-volt/10 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                 <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Manage Brands</span>
             </a>
 
-            <!-- TAMBAHAN MENU SUBSCRIBER -->
             <a href="{{ route('admin.subscribers.index') }}" class="flex items-center px-4 py-3.5 rounded-2xl transition-colors duration-150 group {{ request()->routeIs('admin.subscribers.*') ? 'bg-emerald-50 dark:bg-volt/10 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent' }}">
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Subscribers</span>
+            </a>
+
+            <!-- TAMBAHAN MENU PROMO & VOUCHER -->
+            <a href="{{ route('admin.promos.index') ?? '#' }}" class="flex items-center px-4 py-3.5 rounded-2xl transition-colors duration-150 group {{ request()->routeIs('admin.promos.*') ? 'bg-emerald-50 dark:bg-volt/10 text-emerald-600 dark:text-volt border border-emerald-200 dark:border-volt/20' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white border border-transparent' }}">
+                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                <span class="sidebar-text ml-4 text-[11px] font-bold uppercase tracking-widest whitespace-nowrap">Promos & Vouchers</span>
             </a>
         </nav>
 

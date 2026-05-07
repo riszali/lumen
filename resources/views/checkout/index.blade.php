@@ -42,7 +42,7 @@
 <!-- Main Wrapper with Dark Background -->
 <div class="relative w-full min-h-screen bg-[#050505] overflow-hidden pt-navbar pb-24 transform translate-z-0 font-montserrat text-white">
     
-    <!-- Ambient Light Effects (Teroptimasi) -->
+    <!-- Ambient Light Effects -->
     <div class="absolute top-[-10%] left-[-30%] w-[120vw] h-[120vw] md:w-[60vw] md:h-[60vw] bg-glow-cyan pointer-events-none z-0"></div>
     <div class="absolute bottom-[-10%] right-[-20%] w-[100vw] h-[100vw] md:w-[50vw] md:h-[50vw] bg-glow-volt pointer-events-none z-0"></div>
 
@@ -52,77 +52,77 @@
             <p class="text-gray-400 text-sm mt-2 tracking-[0.2em] uppercase font-bold text-[10px]">Selesaikan Pembelian Anda</p>
         </div>
 
-        <form action="{{ route('checkout.process') }}" method="POST" class="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            @csrf
-
-            <!-- Shipping & Payment Details -->
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12">
+            <!-- Shipping & Payment Details (Kiri) -->
             <div class="w-full lg:w-2/3 space-y-8">
                 
-                <!-- Customer Information (Glass Card) -->
-                <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
-                    <h2 class="text-xl font-bebas tracking-wider text-white mb-6 border-b border-white/10 pb-4">1. INFORMASI PENGIRIMAN</h2>
-                    
-                    <div class="grid grid-cols-1 gap-6">
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2 font-bold">Nama Lengkap</label>
-                            <input type="text" value="{{ auth()->user()->name }}" class="w-full bg-black/40 border border-white/5 rounded-xl py-3.5 px-4 text-sm text-gray-500 opacity-70 cursor-not-allowed shadow-inner" disabled>
-                        </div>
+                <form id="checkoutForm" action="{{ route('checkout.process') }}" method="POST" class="space-y-8">
+                    @csrf
+                    <!-- Customer Information -->
+                    <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+                        <h2 class="text-xl font-bebas tracking-wider text-white mb-6 border-b border-white/10 pb-4">1. INFORMASI PENGIRIMAN</h2>
                         
-                        <div>
-                            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2 font-bold">Alamat Email</label>
-                            <input type="email" value="{{ auth()->user()->email }}" class="w-full bg-black/40 border border-white/5 rounded-xl py-3.5 px-4 text-sm text-gray-500 opacity-70 cursor-not-allowed shadow-inner" disabled>
-                        </div>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2 font-bold">Nama Lengkap</label>
+                                <input type="text" value="{{ auth()->user()->name }}" class="w-full bg-black/40 border border-white/5 rounded-xl py-3.5 px-4 text-sm text-gray-500 opacity-70 cursor-not-allowed shadow-inner" disabled>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2 font-bold">Alamat Email</label>
+                                <input type="email" value="{{ auth()->user()->email }}" class="w-full bg-black/40 border border-white/5 rounded-xl py-3.5 px-4 text-sm text-gray-500 opacity-70 cursor-not-allowed shadow-inner" disabled>
+                            </div>
 
-                        <div>
-                            <label for="phone" class="block text-[10px] uppercase tracking-widest text-white mb-2 font-bold">Nomor Telepon *</label>
-                            <input type="text" name="phone" id="phone" value="{{ old('phone', auth()->user()->phone) }}" class="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 px-4 focus:ring-[#ccff00] focus:border-[#ccff00] text-sm text-white placeholder-white/20 shadow-inner transition outline-none" required placeholder="Contoh: 08123456789">
-                            @error('phone') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
-                        </div>
+                            <div>
+                                <label for="phone" class="block text-[10px] uppercase tracking-widest text-white mb-2 font-bold">Nomor Telepon *</label>
+                                <input type="text" name="phone" id="phone" value="{{ old('phone', auth()->user()->phone) }}" class="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 px-4 focus:ring-[#ccff00] focus:border-[#ccff00] text-sm text-white placeholder-white/20 shadow-inner transition outline-none" required placeholder="Contoh: 08123456789">
+                                @error('phone') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                            </div>
 
-                        <div>
-                            <label for="address" class="block text-[10px] uppercase tracking-widest text-white mb-2 font-bold">Alamat Pengiriman Lengkap *</label>
-                            <textarea name="address" id="address" rows="4" class="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 px-4 focus:ring-[#ccff00] focus:border-[#ccff00] text-sm text-white placeholder-white/20 shadow-inner transition outline-none" required placeholder="Nama Jalan, Gedung, No. Rumah, RT/RW, Kecamatan, Kota, Provinsi, Kode Pos">{{ old('address', auth()->user()->address) }}</textarea>
-                            @error('address') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                            <div>
+                                <label for="address" class="block text-[10px] uppercase tracking-widest text-white mb-2 font-bold">Alamat Pengiriman Lengkap *</label>
+                                <textarea name="address" id="address" rows="4" class="w-full bg-black/20 border border-white/10 rounded-xl py-3.5 px-4 focus:ring-[#ccff00] focus:border-[#ccff00] text-sm text-white placeholder-white/20 shadow-inner transition outline-none" required placeholder="Nama Jalan, Gedung, No. Rumah, RT/RW, Kecamatan, Kota, Provinsi, Kode Pos">{{ old('address', auth()->user()->address) }}</textarea>
+                                @error('address') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Payment Method (Glass Card) -->
-                <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
-                    <h2 class="text-xl font-bebas tracking-wider text-white mb-6 border-b border-white/10 pb-4">2. METODE PEMBAYARAN</h2>
-                    
-                    <div class="space-y-4">
-                        <label class="flex items-center p-5 bg-black/20 border border-white/10 rounded-xl cursor-pointer hover:bg-white/5 transition group">
-                            <!-- OPTIMASI: Focus ring disesuaikan tanpa tailwind custom class yang rumit -->
-                            <input type="radio" name="payment_method" value="bank_transfer" class="text-[#ccff00] focus:ring-[#ccff00] w-5 h-5 bg-black/40 border-white/20" checked>
-                            <span class="ml-4 flex flex-col">
-                                <span class="font-bold text-white tracking-wide group-hover:text-[#ccff00] transition">Transfer Bank Manual</span>
-                                <span class="text-[10px] text-gray-400 mt-1 font-bold uppercase tracking-widest">Transfer langsung ke rekening BCA / Mandiri.</span>
-                            </span>
-                        </label>
+                    <!-- Payment Method -->
+                    <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+                        <h2 class="text-xl font-bebas tracking-wider text-white mb-6 border-b border-white/10 pb-4">2. METODE PEMBAYARAN</h2>
+                        
+                        <div class="space-y-4">
+                            <label class="flex items-center p-5 bg-black/20 border border-white/10 rounded-xl cursor-pointer hover:bg-white/5 transition group">
+                                <input type="radio" name="payment_method" value="bank_transfer" class="text-[#ccff00] focus:ring-[#ccff00] w-5 h-5 bg-black/40 border-white/20" checked>
+                                <span class="ml-4 flex flex-col">
+                                    <span class="font-bold text-white tracking-wide group-hover:text-[#ccff00] transition">Transfer Bank Manual</span>
+                                    <span class="text-[10px] text-gray-400 mt-1 font-bold uppercase tracking-widest">Transfer langsung ke rekening BCA / Mandiri.</span>
+                                </span>
+                            </label>
 
-                        <label class="flex items-center p-5 bg-black/20 border border-white/10 rounded-xl cursor-pointer hover:bg-white/5 transition group opacity-50" title="Coming Soon">
-                            <input type="radio" name="payment_method" value="credit_card" class="text-[#ccff00] focus:ring-[#ccff00] w-5 h-5 bg-black/40 border-white/20" disabled>
-                            <span class="ml-4 flex flex-col">
-                                <span class="font-bold text-white tracking-wide">Credit Card / E-Wallet (Segera Hadir)</span>
-                                <span class="text-[10px] text-gray-400 mt-1 font-bold uppercase tracking-widest">Pembayaran otomatis via Midtrans.</span>
-                            </span>
-                        </label>
-                        @error('payment_method') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                            <label class="flex items-center p-5 bg-black/20 border border-white/10 rounded-xl cursor-pointer hover:bg-white/5 transition group opacity-50" title="Coming Soon">
+                                <input type="radio" name="payment_method" value="credit_card" class="text-[#ccff00] focus:ring-[#ccff00] w-5 h-5 bg-black/40 border-white/20" disabled>
+                                <span class="ml-4 flex flex-col">
+                                    <span class="font-bold text-white tracking-wide">Credit Card / E-Wallet (Segera Hadir)</span>
+                                    <span class="text-[10px] text-gray-400 mt-1 font-bold uppercase tracking-widest">Pembayaran otomatis via Midtrans.</span>
+                                </span>
+                            </label>
+                            @error('payment_method') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
                     </div>
-                </div>
-
+                </form>
             </div>
 
-            <!-- Order Review -->
+            <!-- Order Review (Kanan) -->
             <div class="w-full lg:w-1/3">
                 <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] sticky top-28">
                     <h2 class="text-xl font-bebas tracking-wider text-white mb-6 border-b border-white/10 pb-4">RINGKASAN PESANAN</h2>
                     
                     <div class="space-y-6 mb-6 max-h-72 overflow-y-auto pr-2 custom-scrollbar">
+                        @php $subtotalCalculated = 0; @endphp
                         @foreach($cart->items as $item)
+                        @php $subtotalCalculated += ($item->product->effective_price * $item->quantity); @endphp
                         <div class="flex gap-4">
-                            <!-- Image Glass Frame -->
                             <div class="w-16 h-20 bg-black/40 border border-white/10 rounded-lg flex-shrink-0 overflow-hidden shadow-inner relative">
                                 @if($item->product->primaryImage)
                                     <img src="{{ Storage::url($item->product->primaryImage->image_path) }}" class="w-full h-full object-cover">
@@ -137,7 +137,6 @@
                                 @endif
                                 <p class="text-[10px] text-gray-400 mt-1 font-bold">Qty: {{ $item->quantity }}</p>
                             </div>
-                            <!-- PERBAIKAN: Menggunakan effective_price -->
                             <div class="text-xs font-bold text-volt-custom flex items-center whitespace-nowrap">
                                 Rp {{ number_format($item->product->effective_price * $item->quantity, 0, ',', '.') }}
                             </div>
@@ -145,28 +144,80 @@
                         @endforeach
                     </div>
 
-                    <div class="border-t border-white/10 pt-5 space-y-4 mb-8">
+                    <!-- KOTAK VOUCHER (TAMBAHAN BARU) -->
+                    <div class="mb-6 border-t border-b border-white/10 py-4">
+                        @if(session('applied_voucher'))
+                            <!-- State: Voucher Terpasang -->
+                            <div class="flex justify-between items-center bg-[#ccff00]/10 border border-[#ccff00]/20 p-3 rounded-xl">
+                                <div>
+                                    <span class="text-xs text-volt-custom font-bold tracking-widest uppercase">{{ session('applied_voucher')->code }}</span>
+                                    <p class="text-[10px] text-volt-custom/70 font-bold mt-1">Voucher Diterapkan!</p>
+                                </div>
+                                <form action="{{ route('checkout.voucher.remove') ?? '#' }}" method="POST">
+                                    @csrf
+                                    <!-- Jika route belum ada, ganti form method ke url manual sementara -->
+                                    <button type="submit" class="text-red-400 hover:text-red-300 text-[10px] font-bold uppercase tracking-widest border border-red-500/20 px-3 py-1.5 rounded-lg bg-red-500/10 transition">Hapus</button>
+                                </form>
+                            </div>
+                        @else
+                            <!-- State: Form Input Voucher -->
+                            <form action="{{ route('checkout.voucher.apply') ?? '#' }}" method="POST" class="flex gap-2">
+                                @csrf
+                                <input type="text" name="code" placeholder="KODE VOUCHER" class="flex-grow bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs font-bold text-white placeholder-gray-500 focus:ring-volt-custom focus:border-volt-custom outline-none uppercase" required>
+                                <button type="submit" class="bg-white/10 hover:bg-white/20 border border-white/10 text-white px-4 py-2.5 rounded-xl text-[10px] font-bold tracking-widest uppercase transition">Terapkan</button>
+                            </form>
+                        @endif
+                    </div>
+
+                    <!-- Kalkulasi Harga Final -->
+                    @php
+                        $discountAmount = 0;
+                        if(session('applied_voucher')) {
+                            $v = session('applied_voucher');
+                            if ($v->type == 'percentage') {
+                                $discountAmount = $subtotalCalculated * ($v->value / 100);
+                                if ($v->max_discount && $discountAmount > $v->max_discount) {
+                                    $discountAmount = $v->max_discount;
+                                }
+                            } else {
+                                $discountAmount = $v->value;
+                            }
+                        }
+                        $finalTotal = max(0, $subtotalCalculated - $discountAmount);
+                    @endphp
+
+                    <div class="space-y-4 mb-8">
                         <div class="flex justify-between text-sm font-bold tracking-wide">
                             <span class="text-gray-400">Subtotal</span>
-                            <span class="text-white">Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
+                            <span class="text-white">Rp {{ number_format($subtotalCalculated, 0, ',', '.') }}</span>
                         </div>
                         <div class="flex justify-between text-sm font-bold tracking-wide">
                             <span class="text-gray-400">Pengiriman</span>
                             <span class="text-volt-custom uppercase text-[10px] tracking-widest mt-1">Gratis (Promo)</span>
                         </div>
+                        
+                        <!-- Tampilkan baris potongan harga jika ada voucher -->
+                        @if($discountAmount > 0)
+                        <div class="flex justify-between text-sm font-bold tracking-wide">
+                            <span class="text-gray-400">Diskon Voucher</span>
+                            <span class="text-red-400">- Rp {{ number_format($discountAmount, 0, ',', '.') }}</span>
+                        </div>
+                        @endif
+
                         <div class="border-t border-white/10 pt-5 flex justify-between items-center">
                             <span class="font-bold text-white uppercase tracking-wider text-[11px]">Total Bayar</span>
-                            <span class="font-bebas text-2xl text-volt-custom drop-shadow-md">Rp {{ number_format($cart->total, 0, ',', '.') }}</span>
+                            <span class="font-bebas text-2xl text-volt-custom drop-shadow-md">Rp {{ number_format($finalTotal, 0, ',', '.') }}</span>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full btn-volt-custom rounded-xl px-8 py-4 uppercase tracking-widest text-[11px] font-bold transition duration-300 shadow-[0_0_15px_rgba(204,255,0,0.15)]">
+                    <!-- Tombol Pemicu Form Utama (Diluar Form) -->
+                    <button type="button" onclick="document.getElementById('checkoutForm').submit();" class="w-full btn-volt-custom rounded-xl px-8 py-4 uppercase tracking-widest text-[11px] font-bold transition duration-300 shadow-[0_0_15px_rgba(204,255,0,0.15)]">
                         BUAT PESANAN SEKARANG
                     </button>
                     <p class="text-center text-[9px] uppercase tracking-widest text-gray-500 mt-6 font-bold">Dengan membuat pesanan, Anda menyetujui Syarat & Ketentuan kami.</p>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 @endsection

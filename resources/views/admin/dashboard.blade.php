@@ -23,15 +23,14 @@
         </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+    <!-- Stats Cards (Diubah menjadi 4 Kolom untuk menyisipkan Info Promo) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <!-- Revenue Card -->
-        <!-- OPTIMASI HP: Padding p-5 di HP -->
         <div class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-5 sm:p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
             <div class="flex justify-between items-start mb-4 sm:mb-6">
                 <h3 class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs font-montserrat font-bold uppercase tracking-widest group-hover:text-emerald-700 dark:group-hover:text-white transition">Total Pendapatan</h3>
                 <div class="p-2 sm:p-2.5 bg-gray-100 dark:bg-black/40 rounded-xl border border-gray-200 dark:border-white/10 text-emerald-600 dark:text-volt group-hover:bg-emerald-100 dark:group-hover:bg-volt group-hover:text-emerald-700 dark:group-hover:text-black transition shadow-inner">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08-.402-2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
             </div>
             <p class="text-3xl sm:text-4xl md:text-5xl font-bebas text-gray-900 dark:text-white tracking-wider transition-colors duration-500">Rp {{ number_format($revenue ?? 0, 0, ',', '.') }}</p>
@@ -57,6 +56,17 @@
                 </div>
             </div>
             <p class="text-3xl sm:text-4xl md:text-5xl font-bebas text-gray-900 dark:text-white tracking-wider transition-colors duration-500">{{ number_format($totalProducts ?? 0) }}</p>
+        </div>
+
+        <!-- NEW: Active Promos Card -->
+        <div class="bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/10 rounded-[1.5rem] p-5 sm:p-6 hover:bg-white dark:hover:bg-white/[0.08] hover:border-emerald-300 dark:hover:border-volt/50 shadow-sm hover:shadow-md dark:shadow-lg dark:hover:shadow-[0_10px_30px_rgba(204,255,0,0.1)] transition-all duration-300 group">
+            <div class="flex justify-between items-start mb-4 sm:mb-6">
+                <h3 class="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs font-montserrat font-bold uppercase tracking-widest group-hover:text-emerald-700 dark:group-hover:text-white transition">Promo Aktif</h3>
+                <div class="p-2 sm:p-2.5 bg-gray-100 dark:bg-black/40 rounded-xl border border-gray-200 dark:border-white/10 text-emerald-600 dark:text-volt group-hover:bg-emerald-100 dark:group-hover:bg-volt group-hover:text-emerald-700 dark:group-hover:text-black transition shadow-inner">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                </div>
+            </div>
+            <p class="text-3xl sm:text-4xl md:text-5xl font-bebas text-gray-900 dark:text-white tracking-wider transition-colors duration-500">{{ $activePromos ?? 0 }}</p>
         </div>
     </div>
 

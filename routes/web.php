@@ -43,6 +43,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    
+    // TAMBAHAN: Route Checkout Voucher (Menyelesaikan error checkout.voucher.apply)
+    Route::post('/checkout/voucher/apply', [CheckoutController::class, 'applyVoucher'])->name('checkout.voucher.apply');
+    Route::post('/checkout/voucher/remove', [CheckoutController::class, 'removeVoucher'])->name('checkout.voucher.remove');
+    
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
 
@@ -89,4 +94,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Subscribers Management
     Route::get('/subscribers', [AdminController::class, 'subscribersIndex'])->name('subscribers.index');
     Route::delete('/subscribers/{subscriber}', [SubscriberController::class, 'destroy'])->name('subscribers.destroy');
+
+    // =========================================================================
+    // TAMBAHAN: Promos, Vouchers & Flash Sales Management
+    // =========================================================================
+    Route::get('/promos', [AdminController::class, 'promosIndex'])->name('promos.index');
+    
+    // Voucher Routes
+    Route::post('/promos/vouchers', [AdminController::class, 'vouchersStore'])->name('vouchers.store');
+    Route::delete('/promos/vouchers/{voucher}', [AdminController::class, 'vouchersDestroy'])->name('vouchers.destroy');
+    
+    // Flash Sales Routes (Menyelesaikan error admin.flashsales.store)
+    Route::post('/promos/flashsales', [AdminController::class, 'flashSalesStore'])->name('flashsales.store');
+    Route::delete('/promos/flashsales/{product}', [AdminController::class, 'flashSalesDestroy'])->name('flashsales.destroy');
 });
