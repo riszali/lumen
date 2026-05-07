@@ -80,10 +80,23 @@
                     <span class="absolute -bottom-2 left-0 w-1/2 h-[2px] bg-[#ccff00]"></span>
                 </h4>
                 
-                <p class="text-gray-400 text-sm font-light mb-6">
-                    Punya pertanyaan atau butuh konsultasi gear?<br>
-                    <a href="mailto:hello@willsports.com" class="text-white hover:text-[#ccff00] font-medium transition-colors">hello@willsports.com</a>
-                </p>
+                <div class="space-y-6 mb-6">
+                    <!-- Address -->
+                    <div class="flex flex-col items-center sm:items-start">
+                        <p class="text-[#ccff00] text-[10px] uppercase tracking-[0.2em] font-bold mb-2">Offline Store</p>
+                        <p class="text-gray-400 text-xs sm:text-sm font-light leading-relaxed">
+                            Jl. Gading Elok Raya Utara Blok FA2 No.2, RT.14/RW.11, Klp. Gading Tim., Kec. Klp. Gading, Jkt Utara, Daerah Khusus Ibukota Jakarta 14240
+                        </p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="flex flex-col items-center sm:items-start">
+                        <p class="text-[#ccff00] text-[10px] uppercase tracking-[0.2em] font-bold mb-2">Inquiries</p>
+                        <p class="text-gray-400 text-sm font-light">
+                            <a href="mailto:hello@willsports.com" class="text-white hover:text-[#ccff00] font-medium transition-colors">hello@willsports.com</a>
+                        </p>
+                    </div>
+                </div>
 
                 <!-- Social Icons in Circles -->
                 <div class="flex flex-row justify-center sm:justify-start gap-4">
@@ -119,8 +132,8 @@
                 
                 <!-- Powered By Section -->
                 <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition duration-300">
-                    <span class="text-[9px] uppercase tracking-widest text-gray-500">Powered by</span>
-                    <img src="{{ asset('assets/logo/logo lundor 3.png') }}" alt="Lundor Logo" class="h-4 object-contain brightness-200">
+                    <span class="text-[9px] uppercase tracking-widest text-white/50">Powered by</span>
+                    <img src="{{ asset('assets/logo/logo-lundor-white.png') }}" alt="Lundor Logo" class="h-4 object-contain brightness-200">
                 </div>
             </div>
 
