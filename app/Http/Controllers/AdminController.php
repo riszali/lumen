@@ -130,6 +130,7 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'nullable|exists:categories,id',
+            'new_category_name' => 'nullable|string|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|lt:price',
@@ -138,10 +139,26 @@ class AdminController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240'
         ]);
 
+        // LOGIKA KATEGORI BARU 
+        $categoryId = $request->category_id;
+        if ($request->filled('new_category_name')) {
+            $newCat = Category::create([
+                'name' => $request->new_category_name,
+                'slug' => Str::slug($request->new_category_name)
+            ]);
+            $categoryId = $newCat->id;
+        }
+
+        // PERBAIKAN: Mencegah error "1048 Column 'category_id' cannot be null"
+        // Jika tidak ada kategori yang dipilih, pertahankan ID kategori yang lama
+        if (!$categoryId) {
+            $categoryId = $product->category_id; 
+        }
+
         $product->update([
             'name' => $request->name,
             'slug' => Str::slug($request->name),
-            'category_id' => $request->category_id,
+            'category_id' => $categoryId,
             'brand' => $request->filled('new_brand_name') ? $request->new_brand_name : $request->brand,
             'description' => $request->description,
             'specification' => $request->specification,
