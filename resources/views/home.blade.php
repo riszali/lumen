@@ -76,7 +76,8 @@
     .animate-marquee {
         display: flex;
         width: max-content;
-        animation: marquee 20s linear infinite;
+        /* Kecepatan disesuaikan menjadi 30s agar mulus setelah item diduplikasi */
+        animation: marquee 30s linear infinite; 
         will-change: transform;
         transform: translateZ(0);
     }
@@ -86,7 +87,8 @@
 <section class="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-[var(--dark)]">
     <div class="absolute inset-0 z-0">
         <video autoplay loop muted playsinline disablePictureInPicture disableRemotePlayback preload="metadata" class="w-full h-full object-cover opacity-50">
-            <source src="{{ asset('assets/videos/viper.mp4') }}" type="video/mp4">
+            <!-- Menambahkan #t=3 agar video mulai dari detik ke-3 -->
+            <source src="{{ asset('assets/videos/viper.mp4') }}#t=3" type="video/mp4">
         </video>
         <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/10 via-[#050505]/40 to-[#050505]"></div>
     </div>
@@ -115,6 +117,12 @@
 <!-- 2. MARQUEE BANNER -->
 <div class="w-full bg-[#0a0a0a] border-y border-white/5 py-3 overflow-hidden relative z-20">
     <div class="animate-marquee font-bebas text-2xl text-gray-500 tracking-widest uppercase flex items-center opacity-80">
+        <!-- SET 1 -->
+        <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
+        <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
+        <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
+        <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
+        <!-- SET 2 (Diduplikasi untuk mencegah jeda terputus) -->
         <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
         <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
         <span class="px-8 flex items-center">KENDALI MUTLAK <span class="text-volt mx-6">//</span> AGILITAS TINGGI <span class="text-volt mx-6">//</span> PERFORMA PUNCAK <span class="text-volt mx-6">//</span></span>
@@ -212,7 +220,7 @@
 <!-- 4.5 FEATURED GEAR -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section id="featured-gear" class="py-24 bg-[#0a0a0a] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
-    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 relative z-10">
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10">
         
         <!-- Header Rata Tengah -->
         <div class="mb-14 gsap-fade-up flex flex-col items-center text-center gap-5">
@@ -227,9 +235,11 @@
             <a href="{{ route('shop.index') }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-8 py-3 rounded-full transition-all mt-2">Lihat Semua</a>
         </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+        <!-- PERBAIKAN: Set grid Mobile = 2 kolom, Tablet = 4 kolom, Desktop = 5 kolom -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
             @foreach($featuredProducts as $product)
-            <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group flex flex-col relative">
+            <!-- TRIK SAKTI: Jika ini produk ke-5, sembunyikan di HP/Tablet ('hidden'), dan tampilkan sebagai 'flex' HANYA di Desktop ('lg:flex') -->
+            <div class="{{ $loop->iteration == 5 ? 'hidden lg:flex' : 'flex' }} flex-col bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group relative">
                 <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
                     @if($product->primaryImage)
                         <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700">
@@ -329,17 +339,21 @@
 @endif
 
 <!-- 5. BENTO GRID KATEGORI -->
-<section class="pt-16 bg-white relative overflow-hidden z-20">
+<section class="pt-16 relative overflow-hidden z-20 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/BG21.jpg') }}');">
+    <!-- Overlay Gelap (Opsional, agar teks tetap terbaca jika gambar terang/ramai) -->
+    <div class="absolute inset-0 bg-[#050505]/80 z-0"></div>
+
     <div class="max-w-[1400px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 pb-16 sm:pb-24">
         <!-- Header Kategori -->
         <div class="mb-8 sm:mb-14 gsap-fade-up flex flex-col items-center text-center">
-            <h2 class="font-bebas text-4xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">JELAJAHI KOLEKSI KAMI</h2>
-            <p class="text-gray-600 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
+            <!-- Menambahkan span dengan warna text-volt pada kata KOLEKSI KAMI -->
+            <h2 class="font-bebas text-5xl md:text-6xl text-white uppercase tracking-wide mb-2">JELAJAHI <span class="text-volt">KOLEKSI KAMI</span></h2>
+            <p class="text-gray-400 font-montserrat text-[10px] sm:text-sm font-medium tracking-widest uppercase">Peralatan untuk Setiap Lini Permainan</p>
         </div>
         
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 auto-rows-[180px] sm:auto-rows-[220px] md:auto-rows-[300px]">
             <!-- Card Padel -->
-            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+            <a href="{{ route('shop.index', ['category' => 'padel-rackets']) }}" class="col-span-1 md:col-span-2 md:row-span-2 group relative overflow-hidden bg-[#0c0c0c]/80 backdrop-blur-sm border border-white/10 rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_rgba(204,255,0,0.15)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/padel-rack-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=800'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
@@ -350,7 +364,7 @@
                 </div>
             </a>
             <!-- Card Shoes -->
-            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+            <a href="{{ route('shop.index', ['category' => 'sports-shoes']) }}" class="col-span-1 md:col-span-2 group relative overflow-hidden bg-[#0c0c0c]/80 backdrop-blur-sm border border-white/10 rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_rgba(204,255,0,0.15)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/shoes-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
@@ -361,7 +375,7 @@
                 </div>
             </a>
             <!-- Card Supplements -->
-            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c]/80 backdrop-blur-sm border border-white/10 rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_rgba(204,255,0,0.15)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/supp-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1593095948071-474c5cc2989d?q=80&w=600'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
@@ -372,7 +386,7 @@
                 </div>
             </a>
             <!-- Card Activewear -->
-            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c] rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:-translate-y-1">
+            <a href="{{ route('shop.index', ['category' => 'activewear']) }}" class="col-span-1 group relative overflow-hidden bg-[#0c0c0c]/80 backdrop-blur-sm border border-white/10 rounded-2xl md:rounded-3xl transition-all duration-500 shadow-[0_10px_30px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_40px_rgba(204,255,0,0.15)] hover:-translate-y-1">
                 <div class="relative w-full h-full">
                     <img src="{{ asset('assets/images/wear-1.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=600'" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent"></div>
@@ -386,11 +400,21 @@
     </div>
 
     <!-- BRAND LOGOS (MARQUEE) -->
-    <div class="w-full overflow-hidden py-5 sm:py-8 bg-[#080808] relative gsap-fade-up border-t border-white/5">
-        <div class="absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#080808] to-transparent z-10 pointer-events-none"></div>
-        <div class="absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#080808] to-transparent z-10 pointer-events-none"></div>
+    <div class="w-full overflow-hidden py-5 sm:py-8 relative gsap-fade-up border-t border-white/5 bg-[#080808]/50 backdrop-blur-sm">
+        <div class="absolute inset-y-0 left-0 w-12 sm:w-24 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none"></div>
+        <div class="absolute inset-y-0 right-0 w-12 sm:w-24 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none"></div>
         
         <div class="animate-marquee flex items-center whitespace-nowrap opacity-40">
+            <!-- SET 1 -->
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BABOLAT</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BULLPADEL</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">HEAD</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">OXDOG</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">SIUX</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NOX</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">ADIDAS</span>
+            <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">NIKE</span>
+            <!-- SET 2 (Diduplikasi agar rotasi mulus dan tidak terputus di tengah jalan) -->
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BABOLAT</span>
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">BULLPADEL</span>
             <span class="mx-6 sm:mx-12 font-bebas text-3xl sm:text-5xl tracking-widest text-white hover:text-volt transition-colors cursor-default">HEAD</span>
@@ -419,22 +443,20 @@
         <div class="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10 gsap-fade-up">
             <!-- Tokopedia -->
             <a href="https://www.tokopedia.com/willsportsid" target="_blank" class="group flex flex-col items-center">
-                <!-- FRAME TIPIS (STROKE) -->
-                <div class="relative px-8 py-4 sm:px-10 sm:py-5 bg-white/[0.02] backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center hover:bg-white/[0.05] hover:border-[#42B549]/80 transition-all duration-300 overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.2)] group-hover:-translate-y-1 mb-3">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#42B549]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <!-- LOGO DENGAN BATASAN PANJANG/TINGGI YG IDENTIK -->
-                    <img src="{{ asset('assets/logo/images (1).png') }}" alt="Tokopedia" class="w-28 sm:w-36 h-8 sm:h-10 object-contain opacity-80 group-hover:opacity-100 transition duration-300 relative z-10">
+                <!-- FRAME FULL COVER -->
+                <div class="relative w-48 h-16 sm:w-56 sm:h-20 bg-white/[0.02] backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center hover:border-[#42B549]/80 transition-all duration-300 overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.2)] group-hover:-translate-y-1 mb-3">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#42B549]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
+                    <img src="{{ asset('assets/logo/images (1).png') }}" alt="Tokopedia" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition duration-300 relative z-0">
                 </div>
                 <span class="font-montserrat font-bold text-gray-400 tracking-widest text-[10px] sm:text-xs uppercase group-hover:text-[#42B549] transition-colors duration-300">Belanja di Tokopedia</span>
             </a>
 
             <!-- Shopee -->
             <a href="https://shopee.co.id/willsports.id" target="_blank" class="group flex flex-col items-center">
-                <!-- FRAME TIPIS (STROKE) -->
-                <div class="relative px-8 py-4 sm:px-10 sm:py-5 bg-white/[0.02] backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center hover:bg-white/[0.05] hover:border-[#EE4D2D]/80 transition-all duration-300 overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.2)] group-hover:-translate-y-1 mb-3">
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#EE4D2D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <!-- LOGO DENGAN BATASAN PANJANG/TINGGI YG IDENTIK -->
-                    <img src="{{ asset('assets/logo/26c9324913c021677768.png') }}" alt="Shopee" class="w-28 sm:w-36 h-8 sm:h-10 object-contain opacity-80 group-hover:opacity-100 transition duration-300 relative z-10">
+                <!-- FRAME FULL COVER -->
+                <div class="relative w-48 h-16 sm:w-56 sm:h-20 bg-white/[0.02] backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center hover:border-[#EE4D2D]/80 transition-all duration-300 overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.2)] group-hover:-translate-y-1 mb-3">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#EE4D2D]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
+                    <img src="{{ asset('assets/logo/26c9324913c021677768.png') }}" alt="Shopee" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition duration-300 relative z-0">
                 </div>
                 <span class="font-montserrat font-bold text-gray-400 tracking-widest text-[10px] sm:text-xs uppercase group-hover:text-[#EE4D2D] transition-colors duration-300">Belanja di Shopee</span>
             </a>

@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // PERBAIKAN: Menggunakan paginate(5) agar tampil 5 item sebaris dan mengaktifkan fitur paginasi
+
         $featuredProducts = Product::with('primaryImage')
                             ->where('is_active', true)
                             ->where('is_featured', true)
@@ -19,10 +19,9 @@ class HomeController extends Controller
         $newArrivals = Product::with('primaryImage')
                         ->where('is_active', true)
                         ->latest()
-                        ->take(5)
+                        ->take(4)
                         ->get();
 
-        // Ambil gambar banner dinamis dari database
         $banners = Banner::where('is_active', true)->latest()->get();
 
         return view('home', compact('featuredProducts', 'newArrivals', 'banners'));

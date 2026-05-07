@@ -14,17 +14,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * AdminController
- * Mengatur seluruh operasi backend untuk Dashboard Admin WILLSPORTS.
- * Mencakup manajemen katalog, pesanan, konten visual, dan data pengguna.
- */
 class AdminController extends Controller
 {
-    /**
-     * Tampilan Ringkasan Dashboard Admin
-     * Menampilkan statistik cepat pendapatan, pesanan, dan produk.
-     */
+
     public function dashboard()
     {
         $totalProducts = Product::count();
@@ -41,9 +33,6 @@ class AdminController extends Controller
     // 1. MANAJEMEN PRODUK (CATALOG MANAGEMENT)
     // =========================================================================
 
-    /**
-     * Menampilkan daftar semua produk dengan sistem paginasi.
-     */
     public function productsIndex()
     {
         $products = Product::with('category')->latest()->paginate(10);
@@ -51,9 +40,6 @@ class AdminController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
-    /**
-     * Membuka form tambah produk baru.
-     */
     public function productsCreate()
     {
         $categories = Category::all();
@@ -78,7 +64,7 @@ class AdminController extends Controller
             'discount_price' => 'nullable|numeric|min:0|lt:price', // Diskon ga boleh lebih besar dari harga asli
             'stock' => 'required|integer|min:0',
             'images' => 'required|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120' // Max 5MB per gambar
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240' // Max 10MB per gambar
         ]);
 
         // Logika untuk menangani input Kategori Baru secara langsung
@@ -149,7 +135,7 @@ class AdminController extends Controller
             'discount_price' => 'nullable|numeric|min:0|lt:price',
             'stock' => 'required|integer|min:0',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120'
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:10240'
         ]);
 
         $product->update([
@@ -261,7 +247,7 @@ class AdminController extends Controller
     public function bannersStore(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
             'title' => 'nullable|string|max:255'
         ]);
 
