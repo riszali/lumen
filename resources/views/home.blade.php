@@ -161,7 +161,7 @@
     @endif
 </section>
 
-<!-- 3. MARQUEE BANNER -->
+<!-- 3. MARQUEE BANNER (Dipindah ke bawah Banner Carousel) -->
 <div class="w-full bg-[#0a0a0a] border-y border-white/5 py-3 overflow-hidden relative z-20">
     <div class="animate-marquee font-bebas text-2xl text-gray-500 tracking-widest uppercase flex items-center opacity-80">
         <!-- SET 1 -->
@@ -224,57 +224,58 @@
 </section>
 
 <!-- 4.3 SUPPLEMENTS INTRO -->
-<section class="py-20 md:py-28 bg-white relative z-20 border-b border-gray-200">
+<section class="py-20 md:py-28 bg-[var(--dark)] relative z-20 border-b border-white/5">
     <div class="max-w-[900px] mx-auto px-4 text-center gsap-fade-up">
         <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-4 flex items-center justify-center gap-3">
             <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
             Bahan Bakar Sang Juara
             <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
         </span>
-        <h2 class="font-bebas text-5xl md:text-7xl text-gray-900 uppercase tracking-wide mb-6">
+        <h2 class="font-bebas text-5xl md:text-7xl text-white uppercase tracking-wide mb-6">
             MAXIMIZE YOUR <span class="text-volt">PERFORMANCE</span>
         </h2>
-        <p class="text-gray-600 font-montserrat text-sm md:text-base font-medium leading-relaxed max-w-2xl mx-auto">
+        <p class="text-gray-400 font-montserrat text-sm md:text-base font-light leading-relaxed max-w-2xl mx-auto">
             Nutrisi adalah kunci dari setiap kemenangan yang konsisten. Rangkaian suplemen premium kami diformulasikan secara khusus untuk memberikan energi instan, menjaga fokus mental Anda tetap tajam, dan memastikan otot pulih lebih cepat setelah pertandingan sengit di lapangan.
         </p>
     </div>
 </section>
 
 <!-- 4.4 GYM BACKGROUND BANNER -->
-<section class="w-full aspect-video md:aspect-auto md:h-[40vh] relative overflow-hidden z-20 bg-cover bg-center bg-no-repeat border-b border-gray-200" style="background-image: url('{{ asset('assets/images/gym.jpg') }}');">
-    <!-- Overlay gradasi transparan dari putih ke putih -->
-    <div class="absolute inset-0 bg-gradient-to-b from-white/90 via-black/10 to-white/90 pointer-events-none"></div>
+<section class="w-full aspect-video md:aspect-auto md:h-[40vh] relative overflow-hidden z-20 bg-cover bg-center bg-no-repeat border-b border-white/5" style="background-image: url('{{ asset('assets/images/gym.jpg') }}');">
+    <!-- Overlay gradasi transparan disesuaikan (Gelap ke Gelap) -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-black/20 to-[#050505] pointer-events-none"></div>
 </section>
 
 <!-- 4.4.5 FEATURED SUPPLEMENTS -->
 @if(isset($featuredSupplements) && $featuredSupplements->count() > 0)
-<section id="featured-supplements" class="py-24 bg-white relative overflow-hidden z-20 border-b border-gray-200 transition-opacity duration-300">
+<section id="featured-supplements" class="py-24 bg-[#050505] relative overflow-hidden z-20 border-b border-white/5 transition-opacity duration-300">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10">
         
         <!-- Header Rata Tengah -->
         <div class="mb-14 gsap-fade-up flex flex-col items-center text-center gap-5">
             <div>
-                <h2 class="font-bebas text-5xl md:text-6xl text-gray-900 uppercase tracking-wide mb-2">TOP <span class="text-volt">SUPPLEMENTS</span></h2>
-                <p class="text-gray-500 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-3">
-                    <span class="w-6 sm:w-10 h-[1px] bg-gray-300 hidden sm:block"></span>
+                <h2 class="font-bebas text-5xl md:text-6xl text-white uppercase tracking-wide mb-2">TOP <span class="text-volt">SUPPLEMENTS</span></h2>
+                <p class="text-gray-400 font-montserrat text-xs sm:text-sm font-bold tracking-widest uppercase flex items-center justify-center gap-3">
+                    <span class="w-6 sm:w-10 h-[1px] bg-white/20 hidden sm:block"></span>
                     Kekuatan untuk Juara
-                    <span class="w-6 sm:w-10 h-[1px] bg-gray-300 hidden sm:block"></span>
+                    <span class="w-6 sm:w-10 h-[1px] bg-white/20 hidden sm:block"></span>
                 </p>
             </div>
-            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="text-[10px] text-gray-900 font-montserrat font-bold uppercase tracking-widest border border-gray-300 hover:border-black hover:bg-black hover:text-white px-8 py-3 rounded-full transition-all mt-2">Lihat Semua Suplemen</a>
+            <a href="{{ route('shop.index', ['category' => 'supplements']) }}" class="text-[10px] text-white font-montserrat font-bold uppercase tracking-widest border border-white/20 hover:border-volt hover:text-volt px-8 py-3 rounded-full transition-all mt-2">Lihat Semua Suplemen</a>
         </div>
         
         <!-- Grid Mobile = 2 kolom, Tablet = 4 kolom, Desktop = 5 kolom -->
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
             @foreach($featuredSupplements as $product)
-            <!-- Card Smokey -->
-            <div class="{{ $loop->iteration == 5 ? 'hidden lg:flex' : 'flex' }} flex-col bg-[#F5F5F5] border border-gray-200/60 rounded-[2rem] p-3 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 hover:border-gray-300 transition-all duration-500 group relative">
-                <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] bg-white shadow-sm">
+            <!-- Card menggunakan Glassmorphism Gelap agar senada dengan background hitam -->
+            <div class="{{ $loop->iteration == 5 ? 'hidden lg:flex' : 'flex' }} flex-col bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-3 shadow-lg hover:bg-white/[0.08] hover:border-volt/30 transition-all duration-500 group relative">
+                <a href="{{ route('shop.show', $product->slug) }}" class="block relative overflow-hidden mb-4 aspect-square rounded-[1.5rem] shadow-inner bg-black/50">
                     @if($product->primaryImage)
                         <img src="{{ Storage::url($product->primaryImage->image_path) }}" alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-110 transition duration-700">
                     @else
-                        <div class="w-full h-full flex items-center justify-center text-gray-400 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
+                        <div class="w-full h-full flex items-center justify-center text-white/30 text-[10px] uppercase font-bold tracking-widest font-montserrat">No Image</div>
                     @endif
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-90 pointer-events-none"></div>
                     
                     @if($product->discount_price)
                         <div class="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 pointer-events-none">
@@ -289,17 +290,17 @@
                     </div>
                 </a>
                 <div class="text-center px-2 pb-3 flex-grow flex flex-col justify-end font-montserrat">
-                    <h4 class="text-gray-900 font-bebas text-2xl tracking-wide mb-1 transition group-hover:opacity-70 line-clamp-1">
+                    <h4 class="text-white font-bebas text-2xl tracking-wide mb-1 transition group-hover:text-volt line-clamp-1">
                         <a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a>
                     </h4>
-                    <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
+                    <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2">{{ $product->brand ?? $product->category->name }}</p>
                     
                     <div class="flex flex-col items-center">
                         @if($product->discount_price)
                             <span class="text-gray-500 line-through text-[9px] font-bold mb-0.5">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
-                            <span class="text-black text-sm font-extrabold tracking-wider leading-none">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</span>
+                            <span class="text-volt text-sm font-bold tracking-wider leading-none">Rp {{ number_format($product->discount_price, 0, ',', '.') }}</span>
                         @else
-                            <span class="text-black text-sm font-extrabold tracking-wider leading-none mt-3">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                            <span class="text-volt text-sm font-bold tracking-wider leading-none mt-3">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
                         @endif
                     </div>
                 </div>
@@ -311,6 +312,7 @@
 @endif
 
 <!-- 4.6 FEATURED GEAR -->
+<!-- Bagian Featured Gear (selain suplemen) ini dibiarkan tetap putih sesuai konfigurasi sebelumnya -->
 @if(isset($featuredProducts) && $featuredProducts->count() > 0)
 <section id="featured-gear" class="py-24 bg-white relative overflow-hidden z-20 border-b border-gray-200 transition-opacity duration-300">
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10">
