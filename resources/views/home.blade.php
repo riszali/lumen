@@ -224,17 +224,17 @@
 </section>
 
 <!-- 4.3 SUPPLEMENTS INTRO -->
-<section class="py-20 md:py-28 bg-[var(--dark)] relative z-20 border-b border-white/5">
+<section class="py-20 md:py-28 bg-white relative z-20 border-b border-gray-200">
     <div class="max-w-[900px] mx-auto px-4 text-center gsap-fade-up">
         <span class="text-volt font-montserrat font-bold text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-4 flex items-center justify-center gap-3">
             <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
             Bahan Bakar Sang Juara
             <span class="w-6 sm:w-10 h-[1px] bg-volt"></span>
         </span>
-        <h2 class="font-bebas text-5xl md:text-7xl text-white uppercase tracking-wide mb-6">
+        <h2 class="font-bebas text-5xl md:text-7xl text-gray-900 uppercase tracking-wide mb-6">
             MAXIMIZE YOUR <span class="text-volt">PERFORMANCE</span>
         </h2>
-        <p class="text-gray-400 font-montserrat text-sm md:text-base font-light leading-relaxed max-w-2xl mx-auto">
+        <p class="text-gray-600 font-montserrat text-sm md:text-base font-medium leading-relaxed max-w-2xl mx-auto">
             Nutrisi adalah kunci dari setiap kemenangan yang konsisten. Rangkaian suplemen premium kami diformulasikan secara khusus untuk memberikan energi instan, menjaga fokus mental Anda tetap tajam, dan memastikan otot pulih lebih cepat setelah pertandingan sengit di lapangan.
         </p>
     </div>
@@ -242,8 +242,8 @@
 
 <!-- 4.4 GYM BACKGROUND BANNER -->
 <section class="w-full aspect-video md:aspect-auto md:h-[40vh] relative overflow-hidden z-20 bg-cover bg-center bg-no-repeat border-b border-white/5" style="background-image: url('{{ asset('assets/images/gym.jpg') }}');">
-    <!-- Overlay gradasi transparan disesuaikan (Gelap ke Gelap) -->
-    <div class="absolute inset-0 bg-gradient-to-b from-[#050505] via-black/20 to-[#050505] pointer-events-none"></div>
+    <!-- Overlay gradasi transparan disesuaikan (Transisi dari putih ke gelap) -->
+    <div class="absolute inset-0 bg-gradient-to-b from-white/95 via-black/40 to-[#050505] pointer-events-none"></div>
 </section>
 
 <!-- 4.4.5 FEATURED SUPPLEMENTS -->
