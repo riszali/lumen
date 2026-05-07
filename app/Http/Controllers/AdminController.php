@@ -83,6 +83,9 @@ class AdminController extends Controller
             $brandName = $request->new_brand_name;
         }
 
+        // PENGAMAN DISKON: Jika diskon 0 atau kosong, ubah jadi null agar tidak jadi produk gratis
+        $discountPrice = ($request->discount_price > 0) ? $request->discount_price : null;
+
         // Membuat record produk utama
         $product = Product::create([
             'category_id' => $categoryId,
@@ -92,7 +95,7 @@ class AdminController extends Controller
             'description' => $request->description,
             'specification' => $request->specification,
             'price' => $request->price,
-            'discount_price' => $request->discount_price,
+            'discount_price' => $discountPrice, // Variabel yang sudah diamankan
             'stock' => $request->stock,
             'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
@@ -149,11 +152,13 @@ class AdminController extends Controller
             $categoryId = $newCat->id;
         }
 
-        // PERBAIKAN: Mencegah error "1048 Column 'category_id' cannot be null"
-        // Jika tidak ada kategori yang dipilih, pertahankan ID kategori yang lama
+        // Mencegah error "1048 Column 'category_id' cannot be null"
         if (!$categoryId) {
             $categoryId = $product->category_id; 
         }
+
+        // PENGAMAN DISKON: Jika diskon 0 atau kosong, ubah jadi null agar tidak jadi produk gratis
+        $discountPrice = ($request->discount_price > 0) ? $request->discount_price : null;
 
         $product->update([
             'name' => $request->name,
@@ -163,7 +168,7 @@ class AdminController extends Controller
             'description' => $request->description,
             'specification' => $request->specification,
             'price' => $request->price,
-            'discount_price' => $request->discount_price,
+            'discount_price' => $discountPrice, // Variabel yang sudah diamankan
             'stock' => $request->stock,
             'is_active' => $request->has('is_active'),
             'is_featured' => $request->has('is_featured'),
