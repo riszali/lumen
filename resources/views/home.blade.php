@@ -63,9 +63,10 @@
     }
     .cards li img { width: 100%; height: 100%; object-fit: cover; opacity: 1 !important; }
 
+    /* UKURAN HP DISESUAIKAN AGAR TIDAK NABRAK HEADER */
     @media (max-width: 768px) {
-        .cards { width: 14rem; height: 18rem; }
-        .cards li { width: 14rem; height: 18rem; }
+        .cards { width: 12rem; height: 16rem; }
+        .cards li { width: 12rem; height: 16rem; }
     }
 
     /* CSS Marquee */
@@ -174,7 +175,8 @@
 
 <!-- 4. THE SHOWCASE (SCROLL TRIGGER AKTIF) -->
 <section id="showcase-pin" class="w-full h-screen flex flex-col md:flex-row bg-[var(--dark)] overflow-hidden relative border-b border-white/5">
-    <div class="w-full md:w-1/2 h-[50vh] md:h-screen flex items-center justify-center relative z-10 bg-[#050505]">
+    <!-- PADDING DITAMBAHKAN DI SINI (pt-16 sm:pt-20 md:pt-0) AGAR CAROUSEL HP TIDAK NABRAK HEADER -->
+    <div class="w-full md:w-1/2 h-[50vh] md:h-screen flex items-center justify-center relative z-10 bg-[#050505] pt-16 sm:pt-20 md:pt-0">
         <div class="hidden md:block absolute w-[300px] h-[300px] bg-white rounded-full mix-blend-screen filter blur-[150px] opacity-5"></div>
         <ul class="cards z-20">
             <li><img src="{{ asset('assets/images/erjola-qerimi-cosoQpE-4iM-unsplash.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=600'" loading="lazy" decoding="async"></li>
