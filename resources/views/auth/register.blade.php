@@ -26,28 +26,37 @@
         letter-spacing: 0.02em;
     }
 
+    /* OPTIMASI 1: Ganti SVG Noise yang berat dengan gambar pattern noise yang ringan */
     .bg-noise {
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+        background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+        opacity: 0.4; /* Sesuaikan intensitas noise di sini */
     }
 </style>
 
 <!-- Main Wrapper -->
-<div class="relative w-full min-h-screen bg-[var(--dark)] bg-noise flex items-center justify-center pt-28 pb-16 overflow-hidden">
+<div class="relative w-full min-h-screen bg-[var(--dark)] flex items-center justify-center pt-28 pb-16 overflow-hidden">
     
+    <!-- Background Noise Layer -->
+    <div class="absolute inset-0 z-0 bg-noise pointer-events-none"></div>
+
     <!-- Background Image Tipis -->
     <div class="absolute inset-0 z-0 pointer-events-none">
-        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" class="w-full h-full object-cover opacity-5 filter grayscale">
+        <!-- OPTIMASI 2: Jika memungkinkan, gunakan gambar yang memang sudah hitam putih. 
+             Filter grayscale via CSS masih oke, tapi lebih baik jika gambarnya sudah teroptimasi -->
+        <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=2000" class="w-full h-full object-cover opacity-5 grayscale">
         <div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/80 to-[#050505]/80"></div>
     </div>
 
-    <!-- Cahaya Pendar Halus (Glassmorphism Ambient) -->
-    <div class="absolute top-[10%] left-[20%] w-[30%] h-[40%] bg-[#00E5FF] rounded-full mix-blend-screen filter blur-[150px] opacity-5 pointer-events-none z-0"></div>
-    <div class="absolute bottom-[10%] right-[10%] w-[40%] h-[50%] bg-volt rounded-full mix-blend-screen filter blur-[150px] opacity-10 pointer-events-none z-0"></div>
+    <!-- OPTIMASI 3: Ganti blur-[150px] yang sangat berat dengan CSS Radial Gradient.
+         Hasilnya sama-sama menghasilkan cahaya pendar, namun sangat ringan untuk di-render browser -->
+    <div class="absolute top-[-10%] left-[10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[radial-gradient(circle,rgba(0,229,255,0.08)_0%,transparent_60%)] pointer-events-none z-0"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[radial-gradient(circle,rgba(204,255,0,0.08)_0%,transparent_60%)] pointer-events-none z-0"></div>
 
     <div class="max-w-2xl w-full px-4 relative z-20">
         
-        <!-- Glassmorphism Form Container (Rounded & Blur) -->
-        <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 lg:p-12 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]">
+        <!-- Glassmorphism Form Container -->
+        <!-- Karena background di belakangnya sudah dioptimasi, backdrop-blur-2xl sekarang akan berjalan mulus -->
+        <div class="bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 lg:p-12 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] will-change-transform">
             
             <div class="text-center mb-10 border-b border-white/10 pb-6">
                 <h2 class="font-bebas text-5xl text-white tracking-wide mb-1 drop-shadow-md">DAFTAR <span class="text-volt">AKUN</span></h2>

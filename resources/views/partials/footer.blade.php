@@ -83,7 +83,7 @@
                 <div class="space-y-6 mb-6">
                     <!-- Address -->
                     <div class="flex flex-col items-center sm:items-start">
-                        <p class="text-[#ccff00] text-[10px] uppercase tracking-[0.2em] font-bold mb-2">Offline Store</p>
+                        <p class="text-[#ccff00] text-[10px] uppercase tracking-[0.2em] font-bold mb-2">Our Studio</p>
                         <p class="text-gray-400 text-xs sm:text-sm font-light leading-relaxed">
                             Jl. Gading Elok Raya Utara Blok FA2 No.2, RT.14/RW.11, Klp. Gading Tim., Kec. Klp. Gading, Jkt Utara, Daerah Khusus Ibukota Jakarta 14240
                         </p>
@@ -124,22 +124,23 @@
             </div>
         </div>
         
-        <!-- Bottom Bar: Copyright & Terms -->
-        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-light gap-6 md:gap-0">
+        <!-- Bottom Bar: Copyright, Terms & Powered By -->
+        <div class="border-t border-white/10 pt-10 flex flex-col items-center gap-8 text-center">
             
-            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-center sm:text-left">
+            <!-- Links & Copyright Container -->
+            <div class="w-full flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-light gap-6 md:gap-0">
                 <p>&copy; {{ date('Y') }} WILLSPORTS. All rights reserved.</p>
                 
-                <!-- Powered By Section -->
-                <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition duration-300">
-                    <span class="text-[9px] uppercase tracking-widest text-white/50">Powered by</span>
-                    <img src="{{ asset('assets/logo/logo-lundor-white.png') }}" alt="Lundor Logo" class="h-4 object-contain brightness-200">
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white after:transition-all hover:after:w-full">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white after:transition-all hover:after:w-full">Terms of Service</a>
                 </div>
             </div>
 
-            <div class="flex space-x-6">
-                <a href="#" class="hover:text-white transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white after:transition-all hover:after:w-full">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white after:transition-all hover:after:w-full">Terms of Service</a>
+            <!-- Powered By Section (Centered and Enlarged) -->
+            <div class="flex flex-col items-center gap-3 opacity-50 hover:opacity-100 transition duration-300 group">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-gray-500 group-hover:text-[#ccff00] transition-colors">Powered by</span>
+                <img src="{{ asset('assets/logo/logo-lundor-white.png') }}" alt="Lundor Logo" class="h-8 md:h-10 w-auto object-contain brightness-110">
             </div>
 
         </div>
