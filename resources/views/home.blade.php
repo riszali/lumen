@@ -242,8 +242,6 @@
 
 <!-- 4.4 GYM BACKGROUND BANNER -->
 <section class="w-full aspect-video md:aspect-auto md:h-[40vh] relative overflow-hidden z-20 bg-cover bg-center bg-no-repeat border-b border-white/5" style="background-image: url('{{ asset('assets/images/gym.jpg') }}');">
-    <!-- Overlay gradasi transparan disesuaikan (Transisi dari putih ke gelap) -->
-    <div class="absolute inset-0 bg-gradient-to-b from-white/95 via-black/40 to-[#050505] pointer-events-none"></div>
 </section>
 
 <!-- 4.4.5 FEATURED SUPPLEMENTS -->
