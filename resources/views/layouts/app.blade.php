@@ -11,37 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS (Using Vite in Laravel 12) -->
+    <!-- Ini adalah cara yang BENAR, ringan, dan tidak membebani HP -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- CDN Fallback -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    // GLOBAL SAFE AREA: Tambahan khusus untuk menghindari elemen nabrak navbar
-                    spacing: {
-                        'navbar': '120px', 
-                    },
-                    colors: {
-                        brand: { 
-                            dark: '#252322',
-                            olive: '#9A9587',
-                            sage: '#AAAB9A',
-                            gray: '#BDBBB9',
-                            warm: '#DAD5CC',
-                            light: '#E5E6D9',
-                            cream: '#EDE7D4'
-                        }
-                    },
-                    fontFamily: {
-                        serif: ['"Playfair Display"', 'serif'],
-                        sans: ['Lato', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- PENYEBAB HP PANAS (TAILWIND CDN & SCRIPT CONFIG) TELAH DIHAPUS DARI SINI -->
+
     <style>
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-sans { font-family: 'Lato', sans-serif; }
